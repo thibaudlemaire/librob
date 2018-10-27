@@ -1,0 +1,14 @@
+<launch>
+
+    <node pkg="teleop" name="teleop" type="main.py" />
+    <node pkg="joy" name="joy" type="joy_node">
+        <param name="dev" type="string" value="/dev/input/js2" />
+    </node>
+    <node pkg="p2os_driver" name="p2os" type="p2os_driver">
+        <param name="port" type="string" value="/dev/ttyS0" />
+    </node>
+
+    <!-- Enabling motors -->
+    <node name="rostopic" pkg="rostopic" type="rostopic" args="pub -1 /cmd_motor_state p2os_msgs/MotorState 1"/>
+
+</launch>
