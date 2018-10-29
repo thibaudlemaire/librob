@@ -18,7 +18,7 @@ class Adapter:
         rospy.init_node('joy_to_p2os_adapter', anonymous=True)
         rospy.Subscriber("joy", Joy, self.callback)
         rospy.loginfo("Listener ready")
-        rate = rospy.Rate(5)  # 5hz
+        rate = rospy.Rate(2)  # 2hz
         while not rospy.is_shutdown():
             self.cmd_vel_pub.publish(self.cur_velocity)
             rate.sleep()
