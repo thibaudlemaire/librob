@@ -22,7 +22,7 @@
         <node name="rostopic" pkg="rostopic" type="rostopic" args="pub -1 /cmd_motor_state p2os_msgs/MotorState 1"/>
     </group>
 
-    <node pkg="turtlesim" name="turtle" type="turtlesim_node">
+    <node pkg="turtlesim" name="turtle" type="turtlesim_node" unless="$(arg p2os)" >
         <remap from="/turtle1/cmd_vel" to="/cmd_vel"/>
     </node>
 
