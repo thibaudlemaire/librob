@@ -2,24 +2,26 @@
 
     <arg name="coef" default="0.1"/>
     <arg name="p2os" default="true"/>
+    <arg name="joy_port" default="/dev/input/js0"/>
+    <arg name="p2os_port" default="/dev/ttyUSB0" />
 
     <node pkg="teleop" name="teleop" type="main.py">
         <param name="coef" value="$(arg coef)" />
     </node>
 
     <node pkg="joy" name="joy" type="joy_node">
-        <param name="dev" type="string" value="/dev/input/js2" />
+        <param name="dev" type="string" value="$(arg joy_port)" />
     </node>
 
     <!-- If p2os enabled -->
     <group if="$(arg p2os)">
         <node pkg="p2os_driver" name="p2os" type="p2os_driver">
-            <param name="port" type="string" value="/dev/ttyUSB0" />
+            <param name="port" type="string" value="$(arg p2os_port)" />
             <param name="pulse" type="string" value="1.0" />
         </node>
 
         <!-- Enabling motors -->
-        <node name="rostopic" pkg="rostopic" type="rostopic" args="pub -1 /cmd_motor_state p2os_msgs/MotorState 1"/>
+        <node name="rostopic" pkg="rostopic" type="rostopic" args="pub /cmd_motor_state p2os_msgs/MotorState 1"/>
     </group>
 
     <node pkg="turtlesim" name="turtle" type="turtlesim_node" unless="$(arg p2os)" >
