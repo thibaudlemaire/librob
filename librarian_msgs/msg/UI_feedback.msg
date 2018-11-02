@@ -1,5 +1,6 @@
 # Types :
 int8 SEARCH_RESPONSE = 1 # Payload must be a dict with "books" as a list of dict with "title", "author", "code", "available" (bool) and floor (int) keys
+int8 LOADING = 2
 
 # Fields
 Header header
