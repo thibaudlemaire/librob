@@ -1,6 +1,8 @@
 # Types :
 int8 SEARCH_RESPONSE = 1 # Payload must be a JSON formated list, see below
+int8 LOADING = 2
 
+# Search response example payload :
 # { books: [
 #   {   title: "Machine learning",
 #        author: "Mitchell, Tom M. (Tom Michael)",
