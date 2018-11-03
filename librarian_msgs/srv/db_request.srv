@@ -1,5 +1,6 @@
-# Types :
-int8 SEARCH_RESPONSE = 1 # Payload must be a JSON formated list, see below
+string request
+---
+string books # JSON formated response. See example below :
 
 # { books: [
 #   {   title: "Machine learning",
@@ -14,8 +15,3 @@ int8 SEARCH_RESPONSE = 1 # Payload must be a JSON formated list, see below
 #        available: true }
 #   ]
 # }
-
-# Fields
-Header header
-int8 type       # Need a Type constant
-string payload  # Data, JSON formated
