@@ -1,0 +1,17 @@
+string request
+---
+string books # JSON formated response. See example below :
+
+# { books: [
+#   {   title: "Machine learning",
+#        author: "Mitchell, Tom M. (Tom Michael)",
+#        code: "006.31 MIT",
+#        floor: 1,
+#        available: true },
+#    {   title: "Red seas under red skies",
+#        author: "Lynch, Scott",
+#        code: "800 LYN"
+#        floor: 5,
+#        available: true }
+#   ]
+# }
