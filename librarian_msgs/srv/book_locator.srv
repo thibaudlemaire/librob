@@ -1,0 +1,4 @@
+string code                 # The book's code
+---
+geometry_msgs/Pose pose     # The book's position on this floor
+int8 floor                  # The book's floor
