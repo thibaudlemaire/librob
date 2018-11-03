@@ -9,6 +9,7 @@ project(librarian_msgs)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   std_msgs
+  geometry_msgs
   message_generation
 )
 
@@ -22,13 +23,13 @@ find_package(catkin REQUIRED COMPONENTS
 # catkin_python_setup()
 
 ################################################
-## Declare ROS messages, services and actions ##
+## Declare ROS messages, srv and actions ##
 ################################################
 
-## To declare and build messages, services or actions from within this
+## To declare and build messages, srv or actions from within this
 ## package, follow these steps:
 ## * Let MSG_DEP_SET be the set of packages whose message types you use in
-##   your messages/services/actions (e.g. std_msgs, actionlib_msgs, ...).
+##   your messages/srv/actions (e.g. std_msgs, actionlib_msgs, ...).
 ## * In the file package.xml:
 ##   * add a build_depend tag for "message_generation"
 ##   * add a build_depend and a exec_depend tag for each package in MSG_DEP_SET
@@ -49,14 +50,16 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
    FILES
    UI.msg
+   UI_feedback.msg
+   state.msg
  )
 
-## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+## Generate srv in the 'srv' folder
+add_service_files(
+   FILES
+   book_locator.srv
+   db_request.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -65,10 +68,11 @@ add_message_files(
 #   Action2.action
 # )
 
-## Generate added messages and services with any dependencies listed here
+## Generate added messages and srv with any dependencies listed here
 generate_messages(
   DEPENDENCIES
   std_msgs
+  geometry_msgs
 )
 
 ################################################
