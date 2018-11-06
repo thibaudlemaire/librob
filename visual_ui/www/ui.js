@@ -1,12 +1,22 @@
 
 
 const SPEECH_TRIGGER = 1;
+const SEARCH_REQUEST = 10;
+
+
 
 
 // This function connects to the rosbridge server running on the local computer on port 9090
 var rbServer = new ROSLIB.Ros({
     url : 'ws://localhost:9090'
  });
+
+ // These lines create a topic object as defined by roslibjs
+var UI_topic = new ROSLIB.Topic({
+    ros : rbServer,
+    name : '/UI',
+    messageType : 'librarian_msgs/UI'
+});
 
  // This function is called upon the rosbridge connection event
  rbServer.on('connection', function() {
@@ -29,25 +39,42 @@ rbServer.on('close', function() {
     fbDiv.innerHTML += "<p>Connection to websocket server closed.</p>";
  });
 
-// These lines create a topic object as defined by roslibjs
-var UI_topic = new ROSLIB.Topic({
-    ros : rbServer,
-    name : '/UI',
-    messageType : 'librarian_msgs/UI'
-});
 
-// These lines create a message that conforms to the structure of the Twist defined in our ROS installation
-// It initalizes all properties to zero. They will be set to appropriate values before we publish this message.
-var UI_msg = new ROSLIB.Message({
-    type: SPEECH_TRIGGER
-});
+
 
 /* This function:
  - publishes the message to the UI_topic topic.
  */
-function pubMessage() {
+function startButton_callback() {
+
+
+    var UI_msg = new ROSLIB.Message({
+        type: SPEECH_TRIGGER
+    });
 
 
     // Publish the message 
     UI_topic.publish(UI_msg);
+
+    var elem = document.getElementById("startButton");
+    elem.innerText="Insert book name" ;
+    var x=document.getElementById("textbox");
+    x.style.display= "block";
+}
+
+
+function searchButton_callback()
+{
+
+    var bookTitle = document.getElementById("textInput").value;
+
+    var UI_msg = new ROSLIB.Message({
+        type: SEARCH_REQUEST,
+        payload: JSON.stringify({
+            "request": bookTitle
+        }) 
+    });
+
+    UI_topic.publish(UI_msg);
+
 }

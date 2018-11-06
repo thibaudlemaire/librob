@@ -6,6 +6,7 @@
 http://wiki.ros.org/roslibjs/Tutorials/BasicRosFunctionality
 http://wiki.ros.org/roslibjs/Tutorials/BasicRosFunctionality
 -->
+<link rel="stylesheet" href="ui.css">
 
 <!--
 The next two lines bring in the JavaScript files that support rosbridge integration.
@@ -19,9 +20,24 @@ The next two lines bring in the JavaScript files that support rosbridge integrat
 
 <body>
 
-<button id="sendMsg" type="button" onclick="pubMessage()">FUCKING SEND SPEECH TRIGGER</button>
+    <h1 id="title">Hello I am LibRob!</h1>
+    <img src="robot.png" >
 
-<div id="feedback"></div>
+    <div>
+        <button id="startButton" type="button" onclick="startButton_callback()">Click to start</button>
+    </div>
+
+    <div id="feedback"></div>
+
+    <div id="textbox">
+
+        <form>
+            <input type="text" id="textInput"><br>    
+        </form>
+           
+        <button id="searchButton" onclick="searchButton_callback()">Search book title</button>
+
+    </div>
 
 </body>
 </html>
