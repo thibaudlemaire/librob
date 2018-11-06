@@ -5,7 +5,7 @@ body {
 h1 {
     text-align: center;
     color: rgb(75, 144, 165);
-    font-size: 4cm
+    font-size:2em;
 }
 
 button {
@@ -17,7 +17,7 @@ button {
     text-align: center;
     font-style: italic;
     cursor: pointer;
-    font-size: 2cm;
+    font-size: 1em;
 
 }
 
@@ -30,7 +30,7 @@ img {
         display: block;
         margin-left: auto;
         margin-right: auto;
-        width: 30%;
+        width: 25%;
     
     
 }
@@ -43,22 +43,22 @@ img {
 
 input[type=text]{
     width: 80%;
-    padding: 100px 20px;
+    padding: 20px 3px;
     margin: 8px 0;
     box-sizing: border-box;
     background-color: rgb(75, 144, 165);
     color: rgb(216, 208, 208);
     border-radius: 20px;
-    font-size: 2cm;
+    font-size: 1em;
 }
 
 #submit {
-    width: 40%;
-    padding: 100px 20px;
+    width: 30%;
+    padding: 20px 1px;
     margin: 8px 0;
     box-sizing: border-box;
     background-color: rgb(190, 217, 226);
     color: rgb(75, 144, 165);
     border-radius: 20px;
-    font-size: 2.5cm;
+    font-size: 1em;
 }
