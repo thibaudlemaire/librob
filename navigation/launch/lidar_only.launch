@@ -1,0 +1,4 @@
+<launch>
+        <include file="$(find navigation)/launch/nav_config.launch" pass_all_args="true"/>
+        <include file="$(find navigation)/launch/move_base.launch"/>
+</launch>
