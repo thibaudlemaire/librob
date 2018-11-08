@@ -1,0 +1,13 @@
+<launch>
+    <arg name="no_lidar" default="false" />
+
+    <!--
+    <node pkg="sensor_node_pkg" type="sensor_node_type" name="sensor_node_name" output="screen" />
+    <node pkg="odom_node_pkg" type="odom_node_type" name="odom_node" output="screen" />
+    -->
+    <node pkg="navigation" type="nav_node.py" name="nav_node" output="screen" />
+
+    <!-- Run RPlidar -->
+    <include file="$(find rplidar_ros)/launch/rplidar.launch" unless="$(arg no_lidar)"/>
+
+</launch>

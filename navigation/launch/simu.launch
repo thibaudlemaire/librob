@@ -1,0 +1,4 @@
+<launch>
+        <include file="$(find navigation)/launch/simu_config.launch" pass_all_args="true"/>
+        <include file="$(find navigation)/launch/simu_base_move.launch"/>
+</launch>

@@ -5,7 +5,7 @@
     <node pkg="sensor_node_pkg" type="sensor_node_type" name="sensor_node_name" output="screen" />
     <node pkg="odom_node_pkg" type="odom_node_type" name="odom_node" output="screen" />
     -->
-    <node pkg="navigation" type="config_nav_node.py" name="config_nav_node" output="screen" />
+    <node pkg="navigation" type="simu_nav_node.py" name="simu_nav_node" output="screen" />
 
     <!-- Run RPlidar -->
     <include file="$(find rplidar_ros)/launch/rplidar.launch" unless="$(arg no_lidar)"/>
@@ -14,7 +14,7 @@
     <include file="$(find hector_mapping)/launch/mapping_default.launch" >
         <arg name="odom_frame" default="odom"/>
         <arg name="base_frame" default="base_link"/>
-        <arg name="pub_map_odom_transform" default="true"/> <!-- Published by AMCL -->
+        <arg name="pub_map_odom_transform" default="true"/>
     </include>
 
 </launch>
