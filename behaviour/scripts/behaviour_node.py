@@ -44,6 +44,7 @@ class Behaviour:
             goal_msg.header.frame_id = "map"
             goal_msg.header.stamp = rospy.Time.now()
             goal_msg.pose = pose
+            self.simple_goal_publisher.publish(goal_msg)
             print("New goal set !")
 
     def start_node(self):
