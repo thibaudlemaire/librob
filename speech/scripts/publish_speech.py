@@ -19,7 +19,7 @@ class Speech:
     def publisher(self):
         msg = UI() #assigneda variable to the imported message object UI
         msg.type = UI.SEARCH_REQUEST
-        msg.payload = "{'request':'Costa book'}"
+        msg.payload = "{'request':'Cao An book'}"
         self.pub.publish(msg)
 
 
