@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<!-- Based on demo found here:
+http://wiki.ros.org/roslibjs/Tutorials/BasicRosFunctionality
+http://wiki.ros.org/roslibjs/Tutorials/BasicRosFunctionality
+-->
+<link rel="stylesheet" href="ui.css">
+
+<!--
+The next two lines bring in the JavaScript files that support rosbridge integration.
+-->
+<script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+<script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+
+<script type="text/javascript" src="ui.js"></script>
+
+</head>
+
+<body>
+
+    <h1 id="title">Hello I am LibRob!</h1>
+    <img src="robot.png" >
+
+    <div>
+        <button id="startButton" type="button" onclick="startButton_callback()">Click to start</button>
+    </div>
+
+    <div id="feedback"></div>
+
+    <div id="textbox">
+
+        <form>
+            <input type="text" id="textInput"><br>    
+        </form>
+           
+        <button id="searchButton" onclick="searchButton_callback()">Search book title</button>
+
+    </div>
+
+</body>
+</html>
