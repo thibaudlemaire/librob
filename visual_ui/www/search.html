@@ -2,19 +2,16 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<!-- Based on demo found here:
-http://wiki.ros.org/roslibjs/Tutorials/BasicRosFunctionality
-http://wiki.ros.org/roslibjs/Tutorials/BasicRosFunctionality
--->
-<link rel="stylesheet" href="ui.css">
+
+<link rel="stylesheet" href="search.css">
 
 <!--
-The next two lines bring in the JavaScript files that support rosbridge integration.
+JavaScript files that support rosbridge integration.
 -->
 <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
 <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
 
-<script type="text/javascript" src="ui.js"></script>
+<script type="text/javascript" src="search.js"></script>
 
 </head>
 
@@ -24,10 +21,9 @@ The next two lines bring in the JavaScript files that support rosbridge integrat
     <img src="robot.png" >
 
     <div>
-        <button id="startButton" type="button" onclick="startButton_callback()">Click to start</button>
+        <p id="insert">Insert book name</p>
     </div>
 
-    <div id="feedback"></div>
 
     <div id="textbox">
 
@@ -38,6 +34,8 @@ The next two lines bring in the JavaScript files that support rosbridge integrat
         <button id="searchButton" onclick="searchButton_callback()">Search book title</button>
 
     </div>
+
+    <table id="searchResults"></table>
 
 </body>
 </html>
