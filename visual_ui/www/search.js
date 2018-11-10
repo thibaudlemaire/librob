@@ -1,5 +1,8 @@
+// UI
 const SPEECH_TRIGGER = 1;
 const SEARCH_REQUEST = 10;
+// UI_feedback
+const SEARCH_RESPONSE = 1;
 
 
 
@@ -51,20 +54,36 @@ function searchButton_callback()
 
     UI_topic.publish(UI_msg);
 
-    constructTable();
+    //constructTable();
 }
 
 
 // Listened callback triggered by a ROS message
 UI_feedback_listener.subscribe(function(message) {
 
-    var books = JSON.parse(message.data).books;
+    message_json = JSON.parse(message.data)
+
+    if (message_json.type == SEARCH_RESPONSE) {
+        var books = message_json.payload.books;
+        createTable(books);
+    }
+    
+    UI_feedback_listener.unsubscribe();
+});
+
+
+
+function createTable(books) {
+
     var tableContent = '';
 
     for (var r = 0; r < books.length; r++){
+
         tableContent += '<tr>';
-        book = books[r]
+        book = books[r];
+
         for (var prop in book) {
+
             if (book.hasOwnProperty(prop)) {
                 tableContent += '<td>' + book[prop] + '</td>';
             }
@@ -73,30 +92,27 @@ UI_feedback_listener.subscribe(function(message) {
     }
 
     var table = document.getElementById('searchResults');
-    table.innerHTML +=  tableContent;
-    
-    UI_feedback_listener.unsubscribe();
-});
+
+    table.innerHTML =  tableContent;
+}
 
 
-
-
-testData = JSON.stringify({ books: [
-       {    title: 'Machine learning',
-            author: 'Mitchell, Tom M. (Tom Michael)',
-            code: '006.31 MIT',
-            floor: 1,
-            available: true },
-        {   title: 'Red seas under red skies',
-            author: 'Lynch, Scott',
-            code: '800 LYN',
-            floor: 5,
-            available: true }
-       ]
-     });
-
-
+/*
 function constructTable() {
+
+    testData = JSON.stringify({ books: [
+        {    title: 'Machine learning',
+             author: 'Mitchell, Tom M. (Tom Michael)',
+             code: '006.31 MIT',
+             floor: 1,
+             available: true },
+         {   title: 'Red seas under red skies',
+             author: 'Lynch, Scott',
+             code: '800 LYN',
+             floor: 5,
+             available: true }
+        ]
+      });
 
     var books = JSON.parse(testData).books;
     var tableContent = '';
@@ -116,3 +132,4 @@ function constructTable() {
     table.innerHTML +=  tableContent;
 
 }
+*/
