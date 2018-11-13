@@ -22,18 +22,22 @@ class Behaviour:
             print("Service proxy creation failed !")
 
     def process_ui(self, ui_msg):
-        payload = json.loads(ui_msg.payload)
+        if ui_msg.payload != "":
+            payload = json.loads(ui_msg.payload)
+        else:
+            payload = dict()
         if ui_msg.type == UI.SEARCH_REQUEST:
             feedback_msg = UI_feedback()
             feedback_msg.type = UI_feedback.SEARCH_RESPONSE
             try:
-                feedback_msg.payload = self.db_adapter_proxy(payload['request'])
+                feedback_msg.payload = str(self.db_adapter_proxy(payload['request']))
             except rospy.ServiceException:
                 print("Error during db_adapter call !")
             self.ui_feedback_publisher.publish(feedback_msg)
         elif ui_msg.type == UI.BOOK_CHOSEN:
             feedback_msg = UI_feedback()
             feedback_msg.type = UI_feedback.LOADING
+            feedback_msg.payload = ""
             self.ui_feedback_publisher.publish(feedback_msg)
             pose = Pose()
             try:
