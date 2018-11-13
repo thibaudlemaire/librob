@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import rospy
+import json
 from librarian_msgs.msg import UI #from package import message
 
 
@@ -21,7 +22,9 @@ class Speech:
     def publisher(self):
         msg = UI() #assigneda variable to the imported message object UI
         msg.type = UI.SEARCH_REQUEST
-        msg.payload = "{'request':'Cao An book'}"
+        payload = dict()
+        payload['request'] = "Cao An book"
+        msg.payload = json.dumps(payload)
         self.pub.publish(msg)
 
 
