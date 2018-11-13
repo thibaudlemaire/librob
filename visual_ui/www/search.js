@@ -14,13 +14,13 @@ var rbServer = new ROSLIB.Ros({
  // These lines create a topic object as defined by roslibjs
 var UI_topic = new ROSLIB.Topic({
     ros : rbServer,
-    name : '/UI',
+    name : '/ui_command',
     messageType : 'librarian_msgs/UI'
 });
 
 var UI_feedback_listener = new ROSLIB.Topic({
     ros : rbServer,
-    name : '/UI',
+    name : '/ui_feedback',
     messageType : 'librarian_msgs/UI_feedback'
     });
 
