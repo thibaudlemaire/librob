@@ -9,7 +9,7 @@ class Nav:
     def __init__(self):
         # self.nav_to_robot = tf.TransformBroadcaster()
         self.robot_to_laser = tf.TransformBroadcaster()
-        self.odom_publisher = rospy.Publisher('odom', Odometry, queue_size=10)
+        # self.odom_publisher = rospy.Publisher('odom', Odometry, queue_size=10)
 
     # def broadcast_odom(self, pose_msg):
     #     position = (pose_msg.pose.position.x, pose_msg.pose.position.y, pose_msg.pose.position.z)
