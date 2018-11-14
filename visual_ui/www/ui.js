@@ -40,6 +40,31 @@ rbServer.on('close', function() {
  });
 
 
+// Listener callback triggered by a ROS message
+UI_feedback_listener.subscribe(function(message) {
+
+    if (message.type == SEARCH_RESPONSE) {
+        var books = JSON.parse(message.payload).books;
+        createTable(books);
+    }
+});
+
+
+
+ function startButton_callback() {
+
+    var UI_msg = new ROSLIB.Message({
+        type: SPEECH_TRIGGER
+    });
+
+    // Publish the message
+    UI_topic.publish(UI_msg);
+
+    document.getElementById('textbox').style.visibility = 'visible';
+    document.getElementById('startDiv').style.visibility = 'hidden';
+
+}
+
 // Publisher function triggered by the search button
 function searchButton_callback()
 {
@@ -54,29 +79,9 @@ function searchButton_callback()
 
     UI_topic.publish(UI_msg);
 
-    constructTable();
+    //constructTable();
 
 }
-
-
-
-// Listener callback triggered by a ROS message
-UI_feedback_listener.subscribe(function(message) {
-
-    if (message.type == SEARCH_RESPONSE) {
-        var books = JSON.parse(message.payload).books;
-        createTable(books);
-        console.log(test);
-    }
-    
-    UI_feedback_listener.unsubscribe();
-});
-
-
-
-
-
-
 
 function createTable(books) {
 
@@ -101,6 +106,7 @@ function createTable(books) {
     table.innerHTML =  tableContent;
 }
 
+    /*
 function constructTable() {
     test = JSON.stringify({ books: [
         {   title: "Machine learning",
@@ -114,6 +120,8 @@ function constructTable() {
             floor: 5,
             available: true }
         ]
+
+        
     });
 
     books = JSON.parse(test).books;
@@ -138,5 +146,6 @@ function constructTable() {
 
     table.innerHTML =  tableContent;
 
-
 }
+
+*/

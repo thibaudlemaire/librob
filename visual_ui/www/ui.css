@@ -30,3 +30,13 @@ img {
      
 }
 
+#textbox{
+    visibility: hidden;
+}
+
+#startDiv{
+    visibility: visible;
+}
+
+
+

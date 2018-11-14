@@ -43,5 +43,5 @@ function startButton_callback() {
     // Publish the message
     UI_topic.publish(UI_msg);
 
-    window.location.href = 'search.html'
+    window.location.href = 'search.html';
 }
