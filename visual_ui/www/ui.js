@@ -79,31 +79,22 @@ function searchButton_callback()
 
     UI_topic.publish(UI_msg);
 
-    //constructTable();
-
 }
 
+
+
+
 function createTable(books) {
-
-    var tableContent = '';
-
-    for (var r = 0; r < books.length; r++){
-
-        tableContent += '<tr>';
-        book = books[r];
-
-        for (var prop in book) {
-
-            if (book.hasOwnProperty(prop)) {
-                tableContent += '<td>' + book[prop] + '</td>';
-            }
-        }
-        tableContent += '</tr>';
-    }
-
     var table = document.getElementById('searchResults');
+    for (var r = 0; r < books.length; r++){
+        book = books[r];
+        var row = table.insertRow();
 
-    table.innerHTML =  tableContent;
+        Object.keys(book).forEach(function(k){
+            var cell = row.insertCell();
+            cell.innerHTML = book[k];
+        });
+    }
 }
 
     /*
