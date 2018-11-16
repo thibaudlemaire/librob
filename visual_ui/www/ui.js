@@ -1,6 +1,7 @@
 // UI
 const SPEECH_TRIGGER = 1;
 const SEARCH_REQUEST = 10;
+const BOOK_CHOSEN = 20;
 // UI_feedback
 const SEARCH_RESPONSE = 1;
 
@@ -81,11 +82,9 @@ function searchButton_callback()
 
 }
 
-
-
-
 function createTable(books) {
     var table = document.getElementById('searchResults');
+    table.style.visibility = "visible";
     for (var r = 0; r < books.length; r++){
         book = books[r];
         var row = table.insertRow();
@@ -95,48 +94,18 @@ function createTable(books) {
             cell.innerHTML = book[k];
         });
     }
+    row.onclick =  sendBookCode;
 }
 
-    /*
-function constructTable() {
-    test = JSON.stringify({ books: [
-        {   title: "Machine learning",
-            author: "Mitchell, Tom M. (Tom Michael)",
-            code: "006.31 MIT",
-            floor: 1,
-            available: true },
-        {   title: "Red seas under red skies",
-            author: "Lynch, Scott",
-            code: "800 LYN",
-            floor: 5,
-            available: true }
-        ]
+function sendBookCode() {
 
-        
+    var UI_msg = new ROSLIB.Message({
+        type: BOOK_CHOSEN,
+        payload: JSON.stringify({
+            "chosen_code": this.childNodes[2].innerHTML
+        }) 
     });
 
-    books = JSON.parse(test).books;
-
-    var tableContent = '';
-
-    for (var r = 0; r < books.length; r++){
-
-        tableContent += '<tr>';
-        book = books[r];
-
-        for (var prop in book) {
-
-            if (book.hasOwnProperty(prop)) {
-                tableContent += '<td>' + book[prop] + '</td>';
-            }
-        }
-        tableContent += '</tr>';
-    }
-
-    var table = document.getElementById('searchResults');
-
-    table.innerHTML =  tableContent;
+    UI_topic.publish(UI_msg);
 
 }
-
-*/

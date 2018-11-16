@@ -38,5 +38,8 @@ img {
     visibility: visible;
 }
 
+#searchResults{
+    visibility: hidden;
+}
 
 
