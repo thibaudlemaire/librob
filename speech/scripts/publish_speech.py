@@ -2,7 +2,7 @@
 import rospy
 import json
 from librarian_msgs.msg import UI #from package import message
-
+import speech_recognition as sr
 
 #UI is the actual message
 class Speech:
@@ -13,6 +13,7 @@ class Speech:
     def callback(self, UI_msg): #message given by the data that is passed in this cadr UI_msg
         #UI_msg is the variable giving the function to the message
         if UI_msg.type == UI.SPEECH_TRIGGER:
+            print('start talking')
             self.publisher()
 
     def receiver(self):
@@ -20,12 +21,16 @@ class Speech:
         rospy.spin() #keeps python from exiting until this node is stopped
 
     def publisher(self):
-        msg = UI() #assigneda variable to the imported message object UI
-        msg.type = UI.SEARCH_REQUEST
-        payload = dict()
-        payload['request'] = "Cao An book"
-        msg.payload = json.dumps(payload)
-        self.pub.publish(msg)
+        r=sr.Recognizer()
+        with sr.Microphone() as source:
+            audio=r.listen(source)
+            text=r.recognize_google(audio)
+            msg = UI() #assigneda variable to the imported message object UI
+            msg.type = UI.SEARCH_REQUEST
+            payload = dict()
+            payload['request'] = text
+            msg.payload = json.dumps(payload)
+            self.pub.publish(msg)
 
 
 if __name__ == '__main__':
