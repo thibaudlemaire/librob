@@ -23,8 +23,8 @@ class Nav:
 
 
     def broadcast_static_transform(self):
-        self.robot_to_laser.sendTransform((0, 0, 0),
-                         tf.transformations.quaternion_from_euler(0, 0, 0),
+        self.robot_to_laser.sendTransform((0.05, 0, 0.2),
+                         (1, 0, 0, 0),
                          rospy.Time.now(),
                          "laser",
                          "base_link")
