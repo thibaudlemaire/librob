@@ -14,13 +14,13 @@ var rbServer = new ROSLIB.Ros({
  });
 
  // These lines create a topic object as defined by roslibjs
-var UI_topic = new ROSLIB.Topic({
+var UI = new ROSLIB.Topic({
     ros : rbServer,
     name : '/ui_command',
     messageType : 'librarian_msgs/UI'
 });
 
-var UI_feedback_listener = new ROSLIB.Topic({
+var UI_feedback = new ROSLIB.Topic({
     ros : rbServer,
     name : '/ui_feedback',
     messageType : 'librarian_msgs/UI_feedback'
@@ -43,7 +43,7 @@ rbServer.on('close', function() {
 
 
 // Listener callback triggered by a ROS message
-UI_feedback_listener.subscribe(function(message) {
+UI_feedback.subscribe(function(message) {
 
     var feedbackText = document.getElementById('uiFeedback')
 
@@ -63,6 +63,16 @@ UI_feedback_listener.subscribe(function(message) {
     
 });
 
+UI.subscribe(function(message){
+
+    var feedbackText = document.getElementById('uiFeedback')
+
+    if (message.type == SEARCH_REQUEST) {
+        feedbackText.innerHTML = 'Loading';
+    }
+
+});
+
 
 
  function speechButtonCallback() {
@@ -74,7 +84,7 @@ UI_feedback_listener.subscribe(function(message) {
     });
 
     // Publish the message
-    UI_topic.publish(UI_msg);
+    UI.publish(UI_msg);
 
 }
 
@@ -95,7 +105,7 @@ function searchButtonCallback()
         }) 
     });
 
-    UI_topic.publish(UI_msg);
+    UI.publish(UI_msg);
 
 }
 
@@ -123,6 +133,6 @@ function sendBookCode() {
         }) 
     });
 
-    UI_topic.publish(UI_msg);
+    UI.publish(UI_msg);
 
 }
