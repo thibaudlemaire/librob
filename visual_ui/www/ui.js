@@ -45,12 +45,18 @@ rbServer.on('close', function() {
 // Listener callback triggered by a ROS message
 UI_feedback_listener.subscribe(function(message) {
 
+    var feedbackText = document.getElementById('uiFeedback')
+
     if (message.type == LISTENING) {
-        document.getElementById('uiFeedback').innerHTML = 'Loading';
+        feedbackTextinnerHTML = 'Listening';
+    }
+    
+    else if (message.type == NOT_UNDERSTOOD) {
+        feedbackText.innerHTML = 'Not understood';
     }
 
     else if (message.type == SEARCH_RESPONSE) {
-        document.getElementById('uiFeedback').innerHTML = 'Search Response';
+        feedbackText.innerHTML = 'Search Response';
         var books = JSON.parse(message.payload).books;
         createTable(books);
     }

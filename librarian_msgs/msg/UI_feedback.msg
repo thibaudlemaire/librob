@@ -6,6 +6,7 @@ int8 ERROR_NOT_FOUND = 4
 int8 SUCESS_FOUND = 5
 int8 DIRECTION = 6 # Payload must be a dict with a "direction" (JSON string) key
 int8 LISTENING = 7
+int8 NOT_UNDERSTOOD = 8
 
 
 # SEARCH_RESPONSE example payload :
