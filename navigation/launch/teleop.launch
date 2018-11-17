@@ -1,11 +1,11 @@
 <launch>
 
-    <arg name="coef" default="0.1"/>
+    <arg name="coef" default="0.5"/>
     <arg name="p2os" default="true"/>
     <arg name="joy_port" default="/dev/input/js0"/>
     <arg name="p2os_port" default="/dev/ttyUSB0" />
 
-    <node pkg="teleop" name="teleop" type="teleop.py">
+    <node pkg="navigation" name="teleop" type="teleop.py">
         <param name="coef" value="$(arg coef)" />
     </node>
 
@@ -17,7 +17,7 @@
     <group if="$(arg p2os)">
         <node pkg="p2os_driver" name="p2os" type="p2os_driver">
             <param name="port" type="string" value="$(arg p2os_port)" />
-            <param name="pulse" type="string" value="1.0" />
+            <param name="pulse" value="1.0" />
         </node>
 
         <!-- Enabling motors -->

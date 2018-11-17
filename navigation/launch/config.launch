@@ -8,7 +8,7 @@
     <node pkg="navigation" type="nav_node.py" name="nav_node" output="screen" />
 
     <!-- Run RPlidar -->
-    <include file="$(find rplidar_ros)/launch/rplidar.launch" unless="$(arg no_lidar)"/>
+    <include file="$(find navigation)/launch/rplidar.launch" unless="$(arg no_lidar)"/>
 
     <!--<node pkg="laser_scan_matcher" type="laser_scan_matcher_node" name="laser_scan_matcher_node" output="screen">
         <param name="fixed_frame" value="odom_corrected" />
