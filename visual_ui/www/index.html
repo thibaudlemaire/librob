@@ -24,17 +24,21 @@ JavaScript files that support rosbridge integration.
     <img src="robot.png" >
 
     <div id='startDiv'>
-        <button id="startButton" type="button" onclick="startButton_callback()">Click to start</button>
+        <button id="speechButton" type="button" onclick="speechButtonCallback()">Speech</button>
+        <button id="textButton" type="button" onclick="textButtonCallback()">Text</button>
     </div>
 
+    <div>
+        <p id="uiFeedback"></p>
+    </div> 
 
     <div id="textbox">
 
         <form>
-            <input type="text" id="textInput"><br>    
+            <input typse="text" id="textInput"><br>    
         </form>
            
-        <button id="searchButton" onclick="searchButton_callback()">Search book title</button>
+        <button id="searchButton" onclick="searchButtonCallback()">Search book title</button>
 
     </div>
 

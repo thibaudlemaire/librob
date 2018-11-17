@@ -4,6 +4,7 @@ const SEARCH_REQUEST = 10;
 const BOOK_CHOSEN = 20;
 // UI_feedback
 const SEARCH_RESPONSE = 1;
+const LISTENING = 7;
 
 
 
@@ -44,15 +45,23 @@ rbServer.on('close', function() {
 // Listener callback triggered by a ROS message
 UI_feedback_listener.subscribe(function(message) {
 
-    if (message.type == SEARCH_RESPONSE) {
+    if (message.type == LISTENING) {
+        document.getElementById('uiFeedback').innerHTML = 'Loading';
+    }
+
+    else if (message.type == SEARCH_RESPONSE) {
+        document.getElementById('uiFeedback').innerHTML = 'Search Response';
         var books = JSON.parse(message.payload).books;
         createTable(books);
     }
+    
 });
 
 
 
- function startButton_callback() {
+ function speechButtonCallback() {
+
+    document.getElementById('startDiv').style.visibility = 'hidden';
 
     var UI_msg = new ROSLIB.Message({
         type: SPEECH_TRIGGER
@@ -61,13 +70,15 @@ UI_feedback_listener.subscribe(function(message) {
     // Publish the message
     UI_topic.publish(UI_msg);
 
+}
+
+function textButtonCallback() {
     document.getElementById('textbox').style.visibility = 'visible';
     document.getElementById('startDiv').style.visibility = 'hidden';
-
 }
 
 // Publisher function triggered by the search button
-function searchButton_callback()
+function searchButtonCallback()
 {
     var bookTitle = document.getElementById("textInput").value;
 
