@@ -27,7 +27,14 @@ class Speech:
 
                 try:
                     audio=r.listen(source)
-                    text=r.recognize_google(audio)
+
+                    # Tell the UI_feedback that the search is being processed with message type LOADING
+                    msg = UI_feedback()
+                    msg.type = UI_feedback.LOADING
+                    self.pub_feedback.publish(msg)
+
+                    text = r.recognize_google(audio)
+            
                     # Send a search request to the UI
                     msg = UI()
                     msg.type = UI.SEARCH_REQUEST
