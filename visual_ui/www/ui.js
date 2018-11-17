@@ -4,7 +4,9 @@ const SEARCH_REQUEST = 10;
 const BOOK_CHOSEN = 20;
 // UI_feedback
 const SEARCH_RESPONSE = 1;
+const LOADING = 2;
 const LISTENING = 7;
+const NOT_UNDERSTOOD = 8;
 
 
 
@@ -55,22 +57,17 @@ UI_feedback.subscribe(function(message) {
         feedbackText.innerHTML = 'Not understood';
     }
 
+    else if (message.type == LOADING) {
+        feedbackText.innerHTML = 'Loading';
+    }
+
     else if (message.type == SEARCH_RESPONSE) {
         feedbackText.innerHTML = 'Search Response';
         var books = JSON.parse(message.payload).books;
         createTable(books);
     }
+
     
-});
-
-UI.subscribe(function(message){
-
-    var feedbackText = document.getElementById('uiFeedback')
-
-    if (message.type == SEARCH_REQUEST) {
-        feedbackText.innerHTML = 'Loading';
-    }
-
 });
 
 
