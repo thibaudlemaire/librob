@@ -5,7 +5,7 @@
     <arg name="joy_port" default="/dev/input/js0"/>
     <arg name="p2os_port" default="/dev/ttyUSB0" />
 
-    <node pkg="teleop" name="teleop" type="main.py">
+    <node pkg="teleop" name="teleop" type="teleop.py">
         <param name="coef" value="$(arg coef)" />
     </node>
 
