@@ -1,0 +1,10 @@
+<launch>
+    <include file="$(find roswww)/launch/start_bridge.launch"/>
+</launch>
+
+<!--
+start_bridge.launch already includes
+   rosbridge/rosbridge_websocket.launch
+  and
+   roswww/roswww.launch
+ -->
