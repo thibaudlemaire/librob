@@ -50,7 +50,7 @@ UI_feedback.subscribe(function(message) {
     var feedbackText = document.getElementById('uiFeedback')
 
     if (message.type == LISTENING) {
-        feedbackTextinnerHTML = 'Listening';
+        feedbackText.innerHTML = 'Listening';
     }
     
     else if (message.type == NOT_UNDERSTOOD) {
@@ -67,15 +67,13 @@ UI_feedback.subscribe(function(message) {
         createTable(books);
     }
 
-    
 });
 
 
 
  function speechButtonCallback() {
 
-    document.getElementById('startDiv').style.visibility = 'hidden';
-
+    alert("speechcallback");
     var UI_msg = new ROSLIB.Message({
         type: SPEECH_TRIGGER
     });
@@ -95,6 +93,8 @@ function searchButtonCallback()
 {
     var bookTitle = document.getElementById("textInput").value;
 
+    alert("searchcallback");
+
     var UI_msg = new ROSLIB.Message({
         type: SEARCH_REQUEST,
         payload: JSON.stringify({
@@ -109,14 +109,20 @@ function searchButtonCallback()
 function createTable(books) {
     var table = document.getElementById('searchResults');
     table.style.visibility = "visible";
+    var tbody = document.getElementsByTagName('tbody');
     for (var r = 0; r < books.length; r++){
         book = books[r];
-        var row = table.insertRow();
+        var row = tbody.insertRow(-1);
 
         Object.keys(book).forEach(function(k){
             var cell = row.insertCell();
+            cell.class = "align-middle";
+            cell.class = "book-" + k;
             cell.innerHTML = book[k];
         });
+        var cell = row.insertCell();
+        cell.class = "align-middle";
+        cell.innerHTML = "<button class='btn btn-md btn-primary'><i class='fas fa-walking'></i></button>";
     }
     row.onclick =  sendBookCode;
 }
