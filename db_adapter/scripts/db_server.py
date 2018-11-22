@@ -2,22 +2,16 @@
 
 from librarian_msgs.srv import *
 import rospy
-<<<<<<< HEAD
 import requests
-=======
->>>>>>> 0f75fea0fd89ec8446b2a833d0419143857566c4
 import json
 
 
 def handle_db_comms(req):
-<<<<<<< HEAD
 	print "Returning code"
 	
 	book_list = {'books': []}
 	
 	payload = {'vid' : 'ICL_VU1', 'tab' : 'all', 'scope' : 'LRSCOP_44IMP', 'q' : 'title,contains,%s'%(req.request), 'lang': 'eng', 'offset' : '0', 'limit' : '5', 'sort' : 'rank', 'inst' : '44IMP', 'mfacet' : 'tlevel,include,available,2', 'mfacet' : 'library,include,44IMP_CENTRAL_LIB,3', 'mfacet' : 'rtype,include,books,1', 'lang' : 'en_US', 'mode' : 'Basic', 'apikey' : 'l7xx84a80e38fc0f482c9fdee23e3ede69f1', 'pcAvailability' : 'true',  'conVoc' : 'true'}
-
-	#,
 	
 
 	resp = requests.get('https://api-eu.hosted.exlibrisgroup.com/primo/v1/search', params = payload)
@@ -26,10 +20,7 @@ def handle_db_comms(req):
 		raise ApiError('GET /primo/v1/search/ {}' .format(resp.status_code))	
 	
 	
-	
 	data = resp.json()
-	#print(len(data["docs"]))
-
 
 	for i in range(len(data["docs"])):
 		book = dict()
@@ -45,12 +36,11 @@ def handle_db_comms(req):
 	
 	json_list = json.dumps(book_list, indent = 4, sort_keys = True)
 	
-	print json_list
-	print(resp.url)
+	#print json_list
+	#print(resp.url)
 	return db_requestResponse(json.dumps(book_list))
-=======
 	print("Returning code")
-	books = {'books': [
+	#books = {'books': [
 		{
 			'title': 'Machine learning',
 			'author': 'Mitchell, Tom M. (Tom Michael)',
@@ -64,9 +54,7 @@ def handle_db_comms(req):
 			'available': True
 		}
 	]}
-	return db_requestResponse(json.dumps(books))
-
->>>>>>> 0f75fea0fd89ec8446b2a833d0419143857566c4
+	#return db_requestResponse(json.dumps(books))
 
 def db_comms_server():
 	rospy.init_node('db_comms_server')
