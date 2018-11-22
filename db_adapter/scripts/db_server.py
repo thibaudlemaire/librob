@@ -41,19 +41,19 @@ def handle_db_comms(req):
 	return db_requestResponse(json.dumps(book_list))
 	print("Returning code")
 	#books = {'books': [
-		{
-			'title': 'Machine learning',
-			'author': 'Mitchell, Tom M. (Tom Michael)',
-			'code': '006.31 MIT',
-			'floor': 1,
-			'available': True
-		},{
-			'title': 'Red seas under red skies',
-			'author': 'Lynch, Scott', 'code': '800 LYN',
-			'floor': 5,
-			'available': True
-		}
-	]}
+	#	{
+	#		'title': 'Machine learning',
+	#		'author': 'Mitchell, Tom M. (Tom Michael)',
+	#		'code': '006.31 MIT',
+	#		'floor': 1,
+	#		'available': True
+	#	},{
+	#		'title': 'Red seas under red skies',
+	#		'author': 'Lynch, Scott', 'code': '800 LYN',
+	#		'floor': 5,
+	#		'available': True
+	#	}
+	#]}
 	#return db_requestResponse(json.dumps(books))
 
 def db_comms_server():
