@@ -5,9 +5,8 @@ const BOOK_CHOSEN = 20;
 // UI_feedback
 const SEARCH_RESPONSE = 1;
 const LOADING = 2;
+const COMMUNICATION = 3;
 const LISTENING = 7;
-const NOT_UNDERSTOOD = 8;
-
 
 
 // Connect to the rosbridge server running on the local computer on port 9090
@@ -44,30 +43,36 @@ rbServer.on('close', function() {
     console.log('Connection to websocket server closed.');
  });
 
+
+
 // Subscriber of the UI_feedback topic
 UI_feedback.subscribe(function(message) {
 
-    var feedbackText = document.getElementById('uiFeedback')
+    var uiFeedbackText = document.getElementById('uiFeedback')
+    var communicationFeedbackText = document.getElementById('communicationFeedback')
 
     if (message.type == LISTENING) {
-        feedbackText.innerHTML = 'Listening';
-    }
-    
-    else if (message.type == NOT_UNDERSTOOD) {
-        feedbackText.innerHTML = 'Not understood';
+        uiFeedbackText.innerHTML = 'Listening';
     }
 
     else if (message.type == LOADING) {
-        feedbackText.innerHTML = 'Loading';
+        uiFeedbackText.innerHTML = 'Loading';
     }
 
     else if (message.type == SEARCH_RESPONSE) {
-        feedbackText.innerHTML = 'Search Response';
+        uiFeedbackText.innerHTML = 'Search Response';
         var books = JSON.parse(message.payload).books;
         createTable(books);
     }
 
+    else if (message.type == COMMUNICATION) {
+        var msg = JSON.parse(message.payload).message;
+        communicationFeedbackText.innerHTML = msg;
+    }
+
 });
+
+
 
 // Callback when speech icon is clicked
  function speechButtonCallback() {
@@ -81,6 +86,7 @@ UI_feedback.subscribe(function(message) {
     UI.publish(UI_msg);
 
 }
+
 
 
 // Publisher: publishes on UI topic a SEARCH_REQUEST message
@@ -101,27 +107,37 @@ function searchButtonCallback()
 
 }
 
+
+
+
 // Visual feedback: populate a table with books from the SEARCH_RESPONSE message
 function createTable(books) {
     var table = document.getElementById('searchResults');
     table.style.visibility = "visible";
     var tbody = document.getElementsByTagName('tbody');
+    // Iterate over list of books
     for (var r = 0; r < books.length; r++){
         book = books[r];
+        // Insert a row <tr></tr> for each book
         var row = tbody.insertRow(-1);
 
+        // Iterate over keys of each book
         Object.keys(book).forEach(function(k){
+            // Insert a cell <td></td> for each key
             var cell = row.insertCell();
             cell.class = "align-middle";
             cell.class = "book-" + k;
             cell.innerHTML = book[k];
         });
+        // Add one last cell which an icon button
         var cell = row.insertCell();
         cell.class = "align-middle";
         cell.innerHTML = "<button class='btn btn-md btn-primary'><i class='fas fa-walking'></i></button>";
     }
     row.onclick =  sendBookCode;
 }
+
+
 
 // Publisher: publishes on UI topic a BOOK_CHOSEN message
 function sendBookCode() {
