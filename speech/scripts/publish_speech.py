@@ -10,7 +10,19 @@ class Speech:
         rospy.init_node('speech_node', anonymous=True)
         self.pub_command = rospy.Publisher('ui_command', UI, queue_size=10) #speechrequest is the name of the topic you publishing on,UI is our custom message
         self.pub_feedback = rospy.Publisher('ui_feedback', UI_feedback, queue_size=10)
+        self.r = sr.Recognizer()
         print('node ready')
+
+    def recogTest(self, source):
+        print('start listening')
+        try:
+            audio = self.r.listen(source)
+            print('start recognition')
+            text = r.recognize_google(audio)
+            print('stop recognition')
+            return True, text
+        except Exception as e:
+            return False, e
         
 
     # callback when node reecives a message on the ui_command topic
@@ -18,42 +30,33 @@ class Speech:
 
         if UI_msg.type == UI.SPEECH_TRIGGER:
             # start speech recognition
-            r=sr.Recognizer()
 
             with sr.Microphone() as source:
-                print('start speaking')
-                
+            
                 # Tell the UI_feedback that his speech is being listened with ui_feedback message of type LISTENING
                 msg = UI_feedback()
                 msg.type = UI_feedback.LISTENING
                 self.pub_feedback.publish(msg)
 
-                try:
-                    audio=r.listen(source)
+                self.r.adjust_for_ambient_noise(source)
+                self.r.dynamic_energy_threshold = True
 
-                    # Tell the UI_feedback that the search is being processed with ui_feedback message of type LOADING
-                    msg = UI_feedback()
-                    msg.type = UI_feedback.LOADING
-                    self.pub_feedback.publish(msg)
+                recognised, txt = recogTest(source)
 
-                    text = r.recognize_google(audio)
-            
-                    # If understood, send a search request to the UI with ui message of type SEARCH_REQUEST
+                if recognised:
                     msg = UI()
                     msg.type = UI.SEARCH_REQUEST
-                    msg.payload = json.dumps({'request': text})
+                    msg.payload = json.dumps({'request': txt})
                     self.pub_command.publish(msg)
-
-                    print('you said:', text)
-
-                except:
+                    print('you said:', txt)
+                else:
                     msg = UI()
                     msg.type = UI.NOT_UNDERSTOOD
                     self.pub_feedback.publish(msg)
+                    print('error:', txt)
 
-                    print('Error: speech not recognised')
-                    
 
+        
             
     def startNode(self):
         # subscriber object of the ui_command topic
