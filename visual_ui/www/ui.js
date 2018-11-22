@@ -10,41 +10,41 @@ const NOT_UNDERSTOOD = 8;
 
 
 
-// This function connects to the rosbridge server running on the local computer on port 9090
+// Connect to the rosbridge server running on the local computer on port 9090
 var rbServer = new ROSLIB.Ros({
     url : 'ws://localhost:9090'
  });
 
- // These lines create a topic object as defined by roslibjs
+ // Create a UI topic object
 var UI = new ROSLIB.Topic({
     ros : rbServer,
     name : '/ui_command',
     messageType : 'librarian_msgs/UI'
 });
 
+ // Create a UI_feedback topic object
 var UI_feedback = new ROSLIB.Topic({
     ros : rbServer,
     name : '/ui_feedback',
     messageType : 'librarian_msgs/UI_feedback'
     });
 
- // This function is called upon the rosbridge connection event
+ // Upon the rosbridge connection event
  rbServer.on('connection', function() {
     console.log('Connected to websocket server.');
  });
 
-// This function is called when there is an error attempting to connect to rosbridge
+// Error attempting to connect to rosbridge
 rbServer.on('error', function(error) {
     console.log('Error connecting to websocket server.');
 });
 
-// This function is called when the connection to rosbridge is closed
+// Connection to rosbridge is closed
 rbServer.on('close', function() {
     console.log('Connection to websocket server closed.');
  });
 
-
-// Listener callback triggered by a ROS message
+// Subscriber of the UI_feedback topic
 UI_feedback.subscribe(function(message) {
 
     var feedbackText = document.getElementById('uiFeedback')
@@ -69,8 +69,7 @@ UI_feedback.subscribe(function(message) {
 
 });
 
-
-
+// Callback when speech icon is clicked
  function speechButtonCallback() {
 
     alert("speechcallback");
@@ -83,12 +82,8 @@ UI_feedback.subscribe(function(message) {
 
 }
 
-function textButtonCallback() {
-    document.getElementById('textbox').style.visibility = 'visible';
-    document.getElementById('startDiv').style.visibility = 'hidden';
-}
 
-// Publisher function triggered by the search button
+// Publisher: publishes on UI topic a SEARCH_REQUEST message
 function searchButtonCallback()
 {
     var bookTitle = document.getElementById("textInput").value;
@@ -106,6 +101,7 @@ function searchButtonCallback()
 
 }
 
+// Visual feedback: populate a table with books from the SEARCH_RESPONSE message
 function createTable(books) {
     var table = document.getElementById('searchResults');
     table.style.visibility = "visible";
@@ -127,6 +123,7 @@ function createTable(books) {
     row.onclick =  sendBookCode;
 }
 
+// Publisher: publishes on UI topic a BOOK_CHOSEN message
 function sendBookCode() {
 
     var UI_msg = new ROSLIB.Message({
