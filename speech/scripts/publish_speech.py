@@ -11,14 +11,26 @@ class Speech:
         self.pub_command = rospy.Publisher('ui_command', UI, queue_size=10) #speechrequest is the name of the topic you publishing on,UI is our custom message
         self.pub_feedback = rospy.Publisher('ui_feedback', UI_feedback, queue_size=10)
         self.r = sr.Recognizer()
-        print('node ready')
+	self.mic = sr.Microphone(2, 44100)
+	self.r.energy_threshold = 500
+	
+	print(self.mic.SAMPLE_RATE)
+	print(self.mic.format)
+
+        self.r.dynamic_energy_threshold = True
+	
+	print('node ready')
 
     def recogTest(self, source):
         print('start listening')
         try:
-            audio = self.r.listen(source)
+            audio = self.r.listen(source, timeout=2.0, phrase_time_limit=3.0)
+	    #audio = self.r.record(source)
+	    f = open('/home/ubuntu/foo.wav', 'wb')
+	    f.write(audio.get_wav_data())
+	    f.close()
             print('start recognition')
-            text = r.recognize_google(audio)
+            text = self.r.recognize_google(audio, language='fr-FR')
             print('stop recognition')
             return True, text
         except Exception as e:
@@ -28,9 +40,9 @@ class Speech:
         if topic == 'ui_command':
             msg = UI()
             msg.type = msg_type
-            msg.paylod = msg_payload
+            msg.payload = msg_payload
             self.pub_command.publish(msg)
-        else topic == 'ui_feedback':
+        elif topic == 'ui_feedback':
             msg = UI_feedback()
             msg.type = msg_type
             msg.payload = msg_payload
@@ -45,21 +57,19 @@ class Speech:
         if UI_msg.type == UI.SPEECH_TRIGGER:
             # start speech recognition
 
-            with sr.Microphone() as source:
-            
+            with self.mic as source:
+            #with sr.AudioFile("/home/ubuntu/foo.wav") as source: 
+
                 # Tell the UI_feedback that his speech is being listened with ui_feedback message of type LISTENING
-                publish('ui_command', UI.LISTENING, '')
+                self.publish('ui_command', UI_feedback.LISTENING, '')
 
-                self.r.adjust_for_ambient_noise(source)
-                self.r.dynamic_energy_threshold = True
-
-                recognised, txt = recogTest(source)
+                recognised, txt = self.recogTest(source)
 
                 if recognised:
-                    publish('ui_command', UI.SEARCH_REQUEST, json.dumps({'request': txt}))
-                    print('you said:', txt)
+                    self.publish('ui_command', UI.SEARCH_REQUEST, json.dumps({'request': txt}))
+                    print('you said: ', txt)
                 else:
-                    publish('ui_feedback', UI.NOT_UNDERSTOOD, '')
+                    self.publish('ui_feedback', UI.NOT_UNDERSTOOD, '')
                     print('error:', txt)
 
             
