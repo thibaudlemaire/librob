@@ -1,0 +1,3 @@
+<launch>
+	<node name='speech' pkg='speech' type='publish_speech.py' output='screen'/>
+</launch>
