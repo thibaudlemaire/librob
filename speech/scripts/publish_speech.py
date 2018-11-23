@@ -21,7 +21,7 @@ class Speech:
 	
 	print('node ready')
 
-    def recogTest(self, source):
+    def recogTest(self, source, language):
         print('start listening')
         try:
             audio = self.r.listen(source, timeout=2.0, phrase_time_limit=3.0)
@@ -30,7 +30,7 @@ class Speech:
 	    f.write(audio.get_wav_data())
 	    f.close()
             print('start recognition')
-            text = self.r.recognize_google(audio, language='fr-FR')
+            text = self.r.recognize_google(audio, language)
             print('stop recognition')
             return True, text
         except Exception as e:
@@ -57,13 +57,15 @@ class Speech:
         if UI_msg.type == UI.SPEECH_TRIGGER:
             # start speech recognition
 
+            language = json.loads(UI_msg.payload)['language']
+            
             with self.mic as source:
             #with sr.AudioFile("/home/ubuntu/foo.wav") as source: 
 
                 # Tell the UI_feedback that his speech is being listened with ui_feedback message of type LISTENING
                 self.publish('ui_command', UI_feedback.LISTENING, '')
 
-                recognised, txt = self.recogTest(source)
+                recognised, txt = self.recogTest(source, language)
 
                 if recognised:
                     self.publish('ui_command', UI.SEARCH_REQUEST, json.dumps({'request': txt}))
