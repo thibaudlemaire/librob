@@ -1,3 +1,3 @@
 <launch>
-	<node pkg="db_adapter" type="db_server.py" name="db_server.py"/>
+	<node pkg="db_adapter" type="db_server.py" name="db_server"/>
 </launch>
