@@ -30,7 +30,7 @@ class Behaviour:
             feedback_msg = UI_feedback()
             feedback_msg.type = UI_feedback.SEARCH_RESPONSE
             try:
-                feedback_msg.payload = str(self.db_adapter_proxy(payload['request']))
+                feedback_msg.payload = self.db_adapter_proxy(payload['request']).books
             except rospy.ServiceException:
                 print("Error during db_adapter call !")
             self.ui_feedback_publisher.publish(feedback_msg)
@@ -41,7 +41,8 @@ class Behaviour:
             self.ui_feedback_publisher.publish(feedback_msg)
             pose = Pose()
             try:
-                (pose, floor) = self.locator_proxy(payload['chosen_code'])
+                pose = self.locator_proxy(payload['chosen_code']).pose
+                floor = self.locator_proxy(payload['chosen_code']).floor
             except rospy.ServiceException:
                 print("Error during locator call !")
             goal_msg = PoseStamped()
