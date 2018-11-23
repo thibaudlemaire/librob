@@ -11,7 +11,8 @@ const LISTENING = 7;
 
 // Connect to the rosbridge server running on the local computer on port 9090
 var rbServer = new ROSLIB.Ros({
-    url : 'ws://localhost:9090'
+    url : 'ws://ros-pi.lan:9090'
+    //url: 'ws://localhost:9090'
  });
 
  // Create a UI topic object
@@ -121,7 +122,7 @@ function searchButtonCallback()
 function createTable(books) {
     var table = document.getElementById('searchResults');
     table.style.visibility = "visible";
-    var tbody = document.getElementsByTagName('tbody');
+    var tbody = document.getElementsByTagName('tbody')[0];
     // Iterate over list of books
     for (var r = 0; r < books.length; r++){
         book = books[r];
@@ -140,8 +141,9 @@ function createTable(books) {
         var cell = row.insertCell();
         cell.class = "align-middle";
         cell.innerHTML = "<button class='btn btn-md btn-primary'><i class='fas fa-walking'></i></button>";
-    }
+    
     row.onclick =  sendBookCode;
+    }
 }
 
 
