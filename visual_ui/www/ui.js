@@ -78,8 +78,15 @@ UI_feedback.subscribe(function(message) {
  function speechButtonCallback() {
 
     alert("speechcallback");
+
+    selector = document.getElementById('selector');
+    language = selector.options[selector.selectedIndex].value;
+
     var UI_msg = new ROSLIB.Message({
         type: SPEECH_TRIGGER
+        payload: JSON.stringify({
+            'language': language
+        })
     });
 
     // Publish the message
