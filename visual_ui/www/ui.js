@@ -83,7 +83,7 @@ UI_feedback.subscribe(function(message) {
     language = selector.options[selector.selectedIndex].value;
 
     var UI_msg = new ROSLIB.Message({
-        type: SPEECH_TRIGGER
+        type: SPEECH_TRIGGER,
         payload: JSON.stringify({
             'language': language
         })
