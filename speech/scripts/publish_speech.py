@@ -30,7 +30,7 @@ class Speech:
 	    f.write(audio.get_wav_data())
 	    f.close()
             print('start recognition')
-            text = self.r.recognize_google(audio, language)
+            text = self.r.recognize_google(audio, language=language)
             print('stop recognition')
             return True, text
         except Exception as e:
@@ -57,7 +57,7 @@ class Speech:
         if UI_msg.type == UI.SPEECH_TRIGGER:
             # start speech recognition
 
-            language = json.loads(UI_msg.payload)['language']
+            language = str(json.loads(UI_msg.payload)['language'])
             
             with self.mic as source:
             #with sr.AudioFile("/home/ubuntu/foo.wav") as source: 
