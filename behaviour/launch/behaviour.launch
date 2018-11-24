@@ -1,0 +1,3 @@
+<launch>
+	<node name='behaviour' pkg='behaviour' type='behaviour_node.py' output='screen'/>
+</launch>
