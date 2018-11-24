@@ -10,18 +10,14 @@ class Locator:
     MAX_CODE_LENGTH = 9
 
     def __init__(self,shelveCatalogue):
-        self.dictBookList = yaml.load(open(shelveCatalogue))
         self.shelves = list()
-        for key in self.dictBookList:
-            self.presentShelve = list()
-            self.numericalCode = self.numericalCodeGenerator(key)
-            self.presentShelve.append(self.numericalCode)
-            self.presentShelve.extend(self.dictBookList[key])
-            self.shelves.append(self.presentShelve)
-            #print(self.shelves)
-            #print (dictBookList[key])
+        book_list = yaml.load(open(shelveCatalogue))
+        for key in book_list:
+            numerical_code = self.numericalCodeGenerator(key)
+            self.shelves.append([numerical_code,
+                                 [float(i) for i in book_list[key][0]],
+                                 [float(i) for i in book_list[key][1]]])
         self.shelves.sort()
-        #print(self.shelves)
 
     def numericalCodeGenerator(self, key):
         """Takes code relating to a book and returns numerical format for ordering
@@ -49,7 +45,6 @@ class Locator:
         that contains it
         """
         numericalBookCode = self.numericalCodeGenerator(bookCode)
-        #print(numericalBookCode)
         location, orientation = ([0,0,0], [0,0,0,1])
         for indexShelve in range(len(self.shelves)):
             if numericalBookCode < self.shelves[indexShelve][0]:
