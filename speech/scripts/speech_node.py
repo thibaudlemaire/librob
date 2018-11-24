@@ -12,13 +12,10 @@ class Speech:
         self.pub_command = rospy.Publisher('ui_command', UI,
                                            queue_size=10)  # speechrequest is the name of the topic you publishing on,UI is our custom message
         self.pub_feedback = rospy.Publisher('ui_feedback', UI_feedback, queue_size=10)
+
         self.r = sr.Recognizer()
         self.mic = sr.Microphone(2, 44100)
         self.r.energy_threshold = 500
-
-        print(self.mic.SAMPLE_RATE)
-        print(self.mic.format)
-
         self.r.dynamic_energy_threshold = True
 
         print('Speech node ready')
@@ -27,10 +24,11 @@ class Speech:
         print('Speech starts listening')
         try:
             audio = self.r.listen(source, timeout=2.0, phrase_time_limit=3.0)
-            # audio = self.r.record(source)
+
             #f = open('/home/ubuntu/foo.wav', 'wb')
             #f.write(audio.get_wav_data())
             #f.close()
+
             print('Speech starts recognition')
             text = self.r.recognize_google(audio, language=language)
             print('Speech stops recognition')
@@ -61,8 +59,6 @@ class Speech:
             language = str(json.loads(UI_msg.payload)['language'])
 
             with self.mic as source:
-                # with sr.AudioFile("/home/ubuntu/foo.wav") as source:
-
                 # Tell the UI_feedback that his speech is being listened with ui_feedback message of type LISTENING
                 self.publish('ui_command', UI_feedback.LISTENING, '')
 
