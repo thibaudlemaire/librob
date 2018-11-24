@@ -8,11 +8,9 @@ const LOADING = 2;
 const COMMUNICATION = 3;
 const LISTENING = 7;
 
-
 // Connect to the rosbridge server running on the local computer on port 9090
 var rbServer = new ROSLIB.Ros({
-    url : 'ws://ros-pi.lan:9090'
-    //url: 'ws://localhost:9090'
+    url : 'ws://' + window.location.hostname + ':9090'
  });
 
  // Create a UI topic object
@@ -77,9 +75,7 @@ UI_feedback.subscribe(function(message) {
 
 // Callback when speech icon is clicked
  function speechButtonCallback() {
-
-    alert("speechcallback");
-
+     
     selector = document.getElementById('selector');
     language = selector.options[selector.selectedIndex].value;
 
@@ -101,8 +97,6 @@ UI_feedback.subscribe(function(message) {
 function searchButtonCallback()
 {
     var bookTitle = document.getElementById("textInput").value;
-
-    alert("searchcallback");
 
     var UI_msg = new ROSLIB.Message({
         type: SEARCH_REQUEST,
