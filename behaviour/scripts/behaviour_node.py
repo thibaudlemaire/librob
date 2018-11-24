@@ -39,18 +39,16 @@ class Behaviour:
             feedback_msg.type = UI_feedback.LOADING
             feedback_msg.payload = ""
             self.ui_feedback_publisher.publish(feedback_msg)
-            pose = Pose()
             try:
-                pose = self.locator_proxy(payload['chosen_code']).pose
-                floor = self.locator_proxy(payload['chosen_code']).floor
+                book_location = self.locator_proxy(payload['chosen_code'])
+                goal_msg = PoseStamped()
+                goal_msg.header.frame_id = "map"
+                goal_msg.header.stamp = rospy.Time.now()
+                goal_msg.pose = book_location.pose
+                self.simple_goal_publisher.publish(goal_msg)
+                print("New goal set !")
             except rospy.ServiceException:
                 print("Error during locator call !")
-            goal_msg = PoseStamped()
-            goal_msg.header.frame_id = "map"
-            goal_msg.header.stamp = rospy.Time.now()
-            goal_msg.pose = pose
-            self.simple_goal_publisher.publish(goal_msg)
-            print("New goal set !")
 
     def start_node(self):
         rospy.init_node('behaviour_node', anonymous=True)
