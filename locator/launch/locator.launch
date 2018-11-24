@@ -1,0 +1,7 @@
+<launch>
+    <arg name="path" default="$(find locator)/lib_ICL_5_floor.yaml" />
+
+	<node name='locator' pkg='locator' type='locator_node.py' output='screen'>
+            <param name="books_location" type="string" value="$(arg path)" />
+    </node>
+</launch>
