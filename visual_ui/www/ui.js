@@ -10,8 +10,7 @@ const LISTENING = 7;
 
 // Connect to the rosbridge server running on the local computer on port 9090
 var rbServer = new ROSLIB.Ros({
-    //url : 'ws://' + window.location.hostname + ':9090'
-    url :'ws://localhost:9090'
+    url : 'ws://' + window.location.hostname + ':9090'
  });
 
  // Create a UI topic object
@@ -49,7 +48,7 @@ rbServer.on('close', function() {
 UI_feedback.subscribe(function(message) {
 
     var uiFeedbackText = document.getElementById('uiFeedback')
-    var communicationFeedbackText = document.getElementById('communicationFeedback')
+    var bubbleSpeechText = document.getElementById('bubble-speech')
 
     if (message.type == LISTENING) {
         uiFeedbackText.innerHTML = 'Listening';
@@ -68,7 +67,7 @@ UI_feedback.subscribe(function(message) {
 
     else if (message.type == COMMUNICATION) {
         var msg = JSON.parse(message.payload).message;
-        communicationFeedbackText.innerHTML = msg;
+        bubbleSpeechText.innerHTML = msg;
     }
 
 });
@@ -108,16 +107,13 @@ function searchButtonCallback()
     });
 
     UI.publish(UI_msg);
-
 }
 
 
 
-
 // Visual feedback: populate a table with books from the SEARCH_RESPONSE message
+
 function createTable(books) {
-    var table = document.getElementById('searchResults');
-    table.style.visibility = "visible";
     var tbody = document.getElementsByTagName('tbody')[0];
     // Iterate over list of books
     for (var r = 0; r < books.length; r++){
@@ -129,34 +125,40 @@ function createTable(books) {
         Object.keys(book).forEach(function(k){
             // Insert a cell <td></td> for each key
             var cell = row.insertCell();
-            cell.class = "align-middle";
-            cell.class = "book-" + k;
+            cell.setAttribute('class', 'align-middle')
+            if (k == 'code') {
+                cell.setAttribute('class','code');
+            }
             cell.innerHTML = book[k];
         });
         // Add one last cell which an icon button
         var cell = row.insertCell();
-        cell.class = "align-middle";
+        cell.setAttribute('class', 'align-middle');
         cell.innerHTML = "<button class='btn btn-md btn-primary'><i class='fas fa-walking'></i></button>";
-    
-    row.onclick =  sendBookCode;
-    //$("table tbody tr button").on('click', function(e){
-        //alert($(this).closest('td').parent()[0].sectionRowIndex);
-    // });​
+        
     }
+
+    $("table tbody tr td button").on('click', function(e){
+        var rowIndex = $(this).closest('td').parent()[0].sectionRowIndex;
+        console.log(rowIndex);
+        var codes = $('.code');
+        console.log(codes);
+        var code = codes[rowIndex].innerText
+        console.log(code);
+        sendBookCode(code);
+    })
 }
 
 
-
 // Publisher: publishes on UI topic a BOOK_CHOSEN message
-function sendBookCode() {
+function sendBookCode(code) {
 
     var UI_msg = new ROSLIB.Message({
         type: BOOK_CHOSEN,
         payload: JSON.stringify({
-            "chosen_code": this.childNodes[2].innerHTML
+            "chosen_code": code
         }) 
     });
 
     UI.publish(UI_msg);
-
 }
