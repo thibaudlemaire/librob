@@ -62,7 +62,12 @@ UI_feedback.subscribe(function(message) {
         uiFeedbackText.innerHTML = 'Search Response';
         $('#result_modal').modal('show');
         var books = JSON.parse(message.payload).books;
-        createTable(books);
+        if books.length != 0 {
+            createTable(books);
+        }
+        else {
+            alert('no book found!');
+        }
     }
 
     else if (message.type == COMMUNICATION) {
@@ -121,15 +126,30 @@ function createTable(books) {
         // Insert a row <tr></tr> for each book
         var row = tbody.insertRow(-1);
 
+        var cell = row.insertCell();
+        cell.setAttribute('class', 'align-middle');
+        cell.setAttribute('class', 'title');
+
+        var cell = row.insertCell();
+        cell.setAttribute('class', 'align-middle');
+        cell.setAttribute('class', 'author');
+
+        var cell = row.insertCell();
+        cell.setAttribute('class', 'align-middle');
+        cell.setAttribute('class', 'code');
+
+        var cell = row.insertCell();
+        cell.setAttribute('class', 'align-middle');
+        cell.setAttribute('class', 'floor');
+
+        var cell = row.insertCell();
+        cell.setAttribute('class', 'align-middle');
+        cell.setAttribute('class', 'available');
+
+
         // Iterate over keys of each book
         Object.keys(book).forEach(function(k){
-            // Insert a cell <td></td> for each key
-            var cell = row.insertCell();
-            cell.setAttribute('class', 'align-middle')
-            if (k == 'code') {
-                cell.setAttribute('class','code');
-            }
-            cell.innerHTML = book[k];
+            $('#searchResults tbody tr:last td.'+k).innerHTML = book[k];
         });
         // Add one last cell which an icon button
         var cell = row.insertCell();
