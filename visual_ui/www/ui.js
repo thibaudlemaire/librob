@@ -10,8 +10,7 @@ const LISTENING = 7;
 
 // Connect to the rosbridge server running on the local computer on port 9090
 var rbServer = new ROSLIB.Ros({
-    //url : 'ws://' + window.location.hostname + ':9090'
-    url :'ws://localhost:9090'
+    url : 'ws://' + window.location.hostname + ':9090'
  });
 
  // Create a UI topic object
@@ -49,7 +48,7 @@ rbServer.on('close', function() {
 UI_feedback.subscribe(function(message) {
 
     var uiFeedbackText = document.getElementById('uiFeedback')
-    var communicationFeedbackText = document.getElementById('communicationFeedback')
+    var bubbleSpeechText = document.getElementById('bubble-speech')
 
     if (message.type == LISTENING) {
         uiFeedbackText.innerHTML = 'Listening';
@@ -61,14 +60,20 @@ UI_feedback.subscribe(function(message) {
 
     else if (message.type == SEARCH_RESPONSE) {
         uiFeedbackText.innerHTML = 'Search Response';
+        $('#search_modal').modal('hide');
         $('#result_modal').modal('show');
         var books = JSON.parse(message.payload).books;
-        createTable(books);
+        if (books.length != 0) {
+            createTable(books);
+        }
+        else {
+            alert('no book found!');
+        }
     }
 
     else if (message.type == COMMUNICATION) {
         var msg = JSON.parse(message.payload).message;
-        communicationFeedbackText.innerHTML = msg;
+        bubbleSpeechText.innerHTML = msg;
     }
 
 });
@@ -77,7 +82,7 @@ UI_feedback.subscribe(function(message) {
 
 // Callback when speech icon is clicked
  function speechButtonCallback() {
-     
+
     selector = document.getElementById('selector');
     language = selector.options[selector.selectedIndex].value;
 
@@ -108,55 +113,71 @@ function searchButtonCallback()
     });
 
     UI.publish(UI_msg);
-
 }
 
 
 
-
 // Visual feedback: populate a table with books from the SEARCH_RESPONSE message
+
 function createTable(books) {
-    var table = document.getElementById('searchResults');
-    table.style.visibility = "visible";
     var tbody = document.getElementsByTagName('tbody')[0];
+    tbody.innerHtml = '';
+
     // Iterate over list of books
     for (var r = 0; r < books.length; r++){
         book = books[r];
         // Insert a row <tr></tr> for each book
         var row = tbody.insertRow(-1);
 
-        // Iterate over keys of each book
-        Object.keys(book).forEach(function(k){
-            // Insert a cell <td></td> for each key
-            var cell = row.insertCell();
-            cell.class = "align-middle";
-            cell.class = "book-" + k;
-            cell.innerHTML = book[k];
-        });
+        var cell = row.insertCell();
+        cell.setAttribute('class', 'align-middle title');
+        cell.innerHTML = book['title'];
+
+        var cell = row.insertCell();
+        cell.setAttribute('class', 'align-middle author');
+        cell.innerHTML = book['author'];
+
+        var cell = row.insertCell();
+        cell.setAttribute('class', 'align-middle code');
+        cell.innerHTML = book['code'];
+
+        var cell = row.insertCell();
+        cell.setAttribute('class', 'align-middle floor');
+        cell.innerHTML = book['floor'];
+
         // Add one last cell which an icon button
         var cell = row.insertCell();
-        cell.class = "align-middle";
-        cell.innerHTML = "<button class='btn btn-md btn-primary'><i class='fas fa-walking'></i></button>";
-    
-    row.onclick =  sendBookCode;
-    //$("table tbody tr button").on('click', function(e){
-        //alert($(this).closest('td').parent()[0].sectionRowIndex);
-    // });​
+        cell.setAttribute('class', 'align-middle');
+        if (book['available'] == true){
+            cell.innerHTML = "<button class='btn btn-md btn-primary'><i class='fas fa-walking'></i></button>";
+        }
+        else {
+            row.classList.add('table-secondary');
+            cell.innerHTML = "<button class='btn btn-md btn-primary' disabled><i class='fas fa-walking'></i></button>";
+        }
+        
     }
+
+    $("table tbody tr td button").on('click', function(e){
+        var rowIndex = $(this).closest('td').parent()[0].sectionRowIndex;
+        var codes = $('.code');
+        var code = codes[rowIndex].innerText;
+        sendBookCode(code);
+        $('#result_modal').modal('hide');
+
+    })
 }
 
 
-
 // Publisher: publishes on UI topic a BOOK_CHOSEN message
-function sendBookCode() {
+function sendBookCode(code) {
 
     var UI_msg = new ROSLIB.Message({
         type: BOOK_CHOSEN,
         payload: JSON.stringify({
-            "chosen_code": this.childNodes[2].innerHTML
+            "chosen_code": code
         }) 
     });
 
     UI.publish(UI_msg);
-
 }
