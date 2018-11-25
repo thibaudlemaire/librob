@@ -22,6 +22,7 @@
 
         <p id="uiFeedback"></p>
         <p id="communicationFeedback"></p>
+
         <div id="search_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content p-2">
@@ -36,7 +37,7 @@
             </div>
         </div>
 
-        <div id="result_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div id="result_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-show="false">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content p-2">
                     <div class="input-group">
@@ -46,30 +47,11 @@
                                     <th scope="col">Title</th>
                                     <th scope="col">Author</th>
                                     <th scope="col">Code</th>
-                                    <th scope="col"></th>
+                                    <th scope="col">Floor</th>
+                                    <th scope="col">Available</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!--
-                                <tr>
-                                    <td class="align-middle">Harry Potter</td>
-                                    <td class="align-middle">J.K. Rowling</td>
-                                    <td class="align-middle">800 ROW</td>
-                                    <td class="align-middle"><button class="btn btn-md btn-primary"><i class="fas fa-walking"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td class="align-middle">Machine Learning</td>
-                                    <td class="align-middle">Thomas Mitt</td>
-                                    <td class="align-middle">403.2 MIT</td>
-                                    <td class="align-middle"><button class="btn btn-md btn-primary"><i class="fas fa-walking"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td class="align-middle">Power for dummies</td>
-                                    <td class="align-middle">Donald Trump</td>
-                                    <td class="align-middle">404 TRU</td>
-                                    <td class="align-middle"><button class="btn btn-md btn-primary"><i class="fas fa-walking"></i></button></td>
-                                </tr>
-                                -->
                                 </tbody>
                             </table>
                     </div>
@@ -84,11 +66,11 @@
         <div class="fixed-bottom row justify-content-between m-2">
             <div class="col-3">
                 <a href="#" data-toggle="modal" data-target="#search_modal" style="color: #e06055;">
-                    <i class="fas fa-search fa-10x"></i></a>
+                    <i class="fas fa-search fa-10x"></i>
+                </a>
             </div>
             <div class="col-3">
-                <a href="#" data-toggle="modal" data-target="#result_modal"
-                   onclick="speechButtonCallback()" style="color: #e06055;">
+                <a href="#" data-toggle="modal" onclick="speechButtonCallback()" style="color: #e06055;">
                     <i class="fas fa-microphone fa-10x"></i>
                 </a>
             </div>
