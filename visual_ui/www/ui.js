@@ -103,6 +103,8 @@ UI_feedback.subscribe(function(message) {
 // Publisher: publishes on UI topic a SEARCH_REQUEST message
 function searchButtonCallback()
 {
+    resetTable();
+
     var bookTitle = document.getElementById("textInput").value;
 
     var UI_msg = new ROSLIB.Message({
@@ -181,3 +183,4 @@ function sendBookCode(code) {
 
     UI.publish(UI_msg);
 }
+
