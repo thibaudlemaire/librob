@@ -41,11 +41,11 @@ class DbAdapter:
             book = dict()
             if (data["docs"][i]["pnx"]["display"]["type"][0] == "book" and data["docs"][i]["delivery"]["bestlocation"][
                 "subLocation"].startswith("L")):
-                book['code'] = data["docs"][i]["delivery"]["bestlocation"]["callNumber"][1:-2]
                 book['title'] = data["docs"][i]["pnx"]["display"]["title"][0]
                 book['author'] = data["docs"][i]["pnx"]["sort"]["author"][0]
-                book['available'] = (data["docs"][i]["delivery"]["bestlocation"]["availabilityStatus"] == "available")
+                book['code'] = data["docs"][i]["delivery"]["bestlocation"]["callNumber"][1:-2]
                 book['floor'] = int(data["docs"][i]["delivery"]["bestlocation"]["subLocation"].split(" ")[1])
+                book['available'] = (data["docs"][i]["delivery"]["bestlocation"]["availabilityStatus"] == "available")
                 book_list["books"].append(book)
 
         dumped_list = json.dumps(book_list)
