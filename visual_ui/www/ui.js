@@ -60,6 +60,7 @@ UI_feedback.subscribe(function(message) {
 
     else if (message.type == SEARCH_RESPONSE) {
         uiFeedbackText.innerHTML = 'Search Response';
+        $('#search_modal').modal('hide');
         $('#result_modal').modal('show');
         var books = JSON.parse(message.payload).books;
         if (books.length != 0) {
@@ -82,8 +83,6 @@ UI_feedback.subscribe(function(message) {
 // Callback when speech icon is clicked
  function speechButtonCallback() {
 
-    resetTable();
-     
     selector = document.getElementById('selector');
     language = selector.options[selector.selectedIndex].value;
 
@@ -124,6 +123,8 @@ function searchButtonCallback()
 
 function createTable(books) {
     var tbody = document.getElementsByTagName('tbody')[0];
+    tbody.innerHtml = '';
+
     // Iterate over list of books
     for (var r = 0; r < books.length; r++){
         book = books[r];
@@ -162,8 +163,9 @@ function createTable(books) {
     $("table tbody tr td button").on('click', function(e){
         var rowIndex = $(this).closest('td').parent()[0].sectionRowIndex;
         var codes = $('.code');
-        var code = codes[rowIndex].innerText
+        var code = codes[rowIndex].innerText;
         sendBookCode(code);
+        $('#result_modal').modal('hide');
     })
 }
 
@@ -179,9 +181,4 @@ function sendBookCode(code) {
     });
 
     UI.publish(UI_msg);
-}
-
-function resetTable() {
-    var tbody = document.getElementsByTagName('tbody')[0];
-    tbody.innerHtml = '';
 }
