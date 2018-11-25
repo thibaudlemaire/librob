@@ -62,7 +62,7 @@ UI_feedback.subscribe(function(message) {
         uiFeedbackText.innerHTML = 'Search Response';
         $('#result_modal').modal('show');
         var books = JSON.parse(message.payload).books;
-        if books.length != 0 {
+        if (books.length != 0) {
             createTable(books);
         }
         else {
@@ -81,6 +81,8 @@ UI_feedback.subscribe(function(message) {
 
 // Callback when speech icon is clicked
  function speechButtonCallback() {
+
+    resetTable();
      
     selector = document.getElementById('selector');
     language = selector.options[selector.selectedIndex].value;
@@ -102,6 +104,8 @@ UI_feedback.subscribe(function(message) {
 // Publisher: publishes on UI topic a SEARCH_REQUEST message
 function searchButtonCallback()
 {
+    resetTable();
+
     var bookTitle = document.getElementById("textInput").value;
 
     var UI_msg = new ROSLIB.Message({
@@ -127,44 +131,38 @@ function createTable(books) {
         var row = tbody.insertRow(-1);
 
         var cell = row.insertCell();
-        cell.setAttribute('class', 'align-middle');
-        cell.setAttribute('class', 'title');
+        cell.setAttribute('class', 'align-middle title');
+        cell.innerHTML = book['title'];
 
         var cell = row.insertCell();
-        cell.setAttribute('class', 'align-middle');
-        cell.setAttribute('class', 'author');
+        cell.setAttribute('class', 'align-middle author');
+        cell.innerHTML = book['author'];
 
         var cell = row.insertCell();
-        cell.setAttribute('class', 'align-middle');
-        cell.setAttribute('class', 'code');
+        cell.setAttribute('class', 'align-middle code');
+        cell.innerHTML = book['code'];
 
         var cell = row.insertCell();
-        cell.setAttribute('class', 'align-middle');
-        cell.setAttribute('class', 'floor');
+        cell.setAttribute('class', 'align-middle floor');
+        cell.innerHTML = book['floor'];
 
-        var cell = row.insertCell();
-        cell.setAttribute('class', 'align-middle');
-        cell.setAttribute('class', 'available');
-
-
-        // Iterate over keys of each book
-        Object.keys(book).forEach(function(k){
-            $('#searchResults tbody tr:last td.'+k).innerHTML = book[k];
-        });
         // Add one last cell which an icon button
         var cell = row.insertCell();
         cell.setAttribute('class', 'align-middle');
-        cell.innerHTML = "<button class='btn btn-md btn-primary'><i class='fas fa-walking'></i></button>";
+        if (book['available'] == true){
+            cell.innerHTML = "<button class='btn btn-md btn-primary'><i class='fas fa-walking'></i></button>";
+        }
+        else {
+            row.classList.add('table-secondary');
+            cell.innerHTML = "<button class='btn btn-md btn-primary' disabled><i class='fas fa-walking'></i></button>";
+        }
         
     }
 
     $("table tbody tr td button").on('click', function(e){
         var rowIndex = $(this).closest('td').parent()[0].sectionRowIndex;
-        console.log(rowIndex);
         var codes = $('.code');
-        console.log(codes);
         var code = codes[rowIndex].innerText
-        console.log(code);
         sendBookCode(code);
     })
 }
@@ -181,4 +179,9 @@ function sendBookCode(code) {
     });
 
     UI.publish(UI_msg);
+}
+
+function resetTable() {
+    var tbody = document.getElementsByTagName('tbody')[0];
+    tbody.innerHtml = '';
 }
