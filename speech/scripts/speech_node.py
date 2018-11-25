@@ -14,7 +14,7 @@ class Speech:
         self.pub_feedback = rospy.Publisher('ui_feedback', UI_feedback, queue_size=10)
 
         self.r = sr.Recognizer()
-        self.mic = sr.Microphone(2, 44100)
+        self.mic = sr.Microphone(device_index = 2, sample_rate = 44100, chunk_size = 512)
         self.r.energy_threshold = 500
         self.r.dynamic_energy_threshold = True
 
