@@ -34,7 +34,7 @@ class Nav:
         # rospy.Subscriber("slam_out_pose", PoseStamped, self.broadcast_odom)
         print("Ready to transform")
 
-        rate = rospy.Rate(10)
+        rate = rospy.Rate(30)
         while not rospy.is_shutdown():
             self.broadcast_static_transform()
             rate.sleep()
