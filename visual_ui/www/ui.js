@@ -77,42 +77,13 @@ UI_feedback.subscribe(function(message) {
     else if (message.type === COMMUNICATION) {
         $('#loading_modal').modal('hide');
         var msg = JSON.parse(message.payload).message;
-        $('#speech-bubble').fadeIn();
-        //$('#speech-bubble').text(msg);
-        $(".typed").typed({
-            strings: [msg],
-            // Optionally use an HTML element to grab strings from (must wrap each string in a <p>)
-            stringsElement: null,
-            // typing speed
-            typeSpeed: 30,
-            // time before typing starts
-            startDelay: 200,
-            // backspacing speed
-            backSpeed: 20,
-            // time before backspacing
-            backDelay: 1000,
-            // loop
-            loop: false,
-            // false = infinite
-            loopCount: 5,
-            // show cursor
-            showCursor: false,
-            // character for cursor
-            cursorChar: "|",
-            // attribute to type (null == text)
-            attr: null,
-            // either html or text
-            contentType: 'text',
-            // call when done callback function
-            callback: function() {$('#speech-bubble').fadeOut()},
-            // starting callback function before each string
-            preStringTyped: function() {},
-            //callback for every typed string
-            onStringTyped: function() {},
-            // callback for reset
-            resetCallback: function() {}
-        });
-        //$('#speech-bubble').fadeIn().delay(3000 + msg.length * 50).fadeOut();
+        var bubble = $('#speech-bubble');
+        if (bubble.is(':visible')) {
+            bubble.stop(true).show().delay(3000 + msg.length * 50).fadeOut();
+        } else {
+            bubble.fadeIn().delay(3000 + msg.length * 50).fadeOut();
+        }
+        bubble.text(msg);
     }
 
 });

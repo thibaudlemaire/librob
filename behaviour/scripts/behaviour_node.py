@@ -36,6 +36,7 @@ class Behaviour:
                 if books == '{"books": []}':
                     self.feedback_message(Messages.NOT_FOUND)
                 else:
+                    self.feedback_message(Messages.FOUND)
                     self.feedback_books(books)
             except rospy.ServiceException:
                 print("Error during db_adapter call !")
