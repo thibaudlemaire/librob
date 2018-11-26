@@ -4,6 +4,7 @@ import json
 from librarian_msgs.msg import UI, UI_feedback
 from librarian_msgs.srv import *
 from geometry_msgs.msg import PoseStamped, Pose
+from messages import Messages
 
 
 class Behaviour:
@@ -28,39 +29,55 @@ class Behaviour:
             payload = dict()
 
         if ui_msg.type == UI.SEARCH_REQUEST:
-            feedback_msg = UI_feedback()
-            feedback_msg.type = UI_feedback.LOADING
-            feedback_msg.payload = json.dumps(True)
-            self.ui_feedback_publisher.publish(feedback_msg)
-
-            feedback_msg = UI_feedback()
+            self.feedback_message(Messages.SEARCHING)
+            self.feedback_loading()
             try:
-                feedback_msg.type = UI_feedback.SEARCH_RESPONSE
-                feedback_msg.payload = self.db_adapter_proxy(payload['request']).books
-                if feedback_msg.payload == '{"books": []}':
-                    feedback_msg.type = UI_feedback.COMMUNICATION
-                    feedback_msg.payload = json.dumps({'message': "No book found"})
+                books = self.db_adapter_proxy(payload['request']).books
+                if books == '{"books": []}':
+                    self.feedback_message(Messages.NOT_FOUND)
+                else:
+                    self.feedback_books(books)
             except rospy.ServiceException:
                 print("Error during db_adapter call !")
-                feedback_msg.type = UI_feedback.COMMUNICATION
-                feedback_msg.payload = json.dumps({'message': "Can't connect to the database"})
-            self.ui_feedback_publisher.publish(feedback_msg)
+                self.feedback_message(Messages.DB_ERROR)
         elif ui_msg.type == UI.BOOK_CHOSEN:
             try:
-                book_location = self.locator_proxy(payload['chosen_code'])
-                goal_msg = PoseStamped()
-                goal_msg.header.frame_id = "map"
-                goal_msg.header.stamp = rospy.Time.now()
-                goal_msg.pose = book_location.pose
-                self.simple_goal_publisher.publish(goal_msg)
-                print("New goal set !")
+                self.new_goal(self.locator_proxy(payload['chosen_code']))
             except rospy.ServiceException:
                 print("Error during locator call !")
+                self.feedback_message(Messages.LOCATOR_ERROR)
+        elif ui_msg.type == UI.BOOK_CHOSEN:
+            self.feedback_message(Messages.NOT_UNDERSTOOD)
+
+    def feedback_books(self, books_string):
+        feedback_msg = UI_feedback()
+        feedback_msg.type = UI_feedback.SEARCH_RESPONSE
+        feedback_msg.payload = books_string
+        self.ui_feedback_publisher.publish(feedback_msg)
+
+    def feedback_message(self, msg):
+        feedback_msg = UI_feedback()
+        feedback_msg.type = UI_feedback.COMMUNICATION
+        feedback_msg.payload = json.dumps({'message': msg})
+        self.ui_feedback_publisher.publish(feedback_msg)
+
+    def feedback_loading(self, state=True):
+        feedback_msg = UI_feedback()
+        feedback_msg.type = UI_feedback.LOADING
+        feedback_msg.payload = json.dumps(state)
+        self.ui_feedback_publisher.publish(feedback_msg)
+
+    def new_goal(self, book_location):
+        goal_msg = PoseStamped()
+        goal_msg.header.frame_id = "map"
+        goal_msg.header.stamp = rospy.Time.now()
+        goal_msg.pose = book_location.pose
+        self.simple_goal_publisher.publish(goal_msg)
+        print("New goal set !")
 
     def start_node(self):
         rospy.init_node('behaviour_node', anonymous=True)
         rospy.Subscriber("ui_command", UI, self.process_ui)
-
         print("Behaviour ready !")
         rospy.spin()
 
