@@ -42,3 +42,49 @@ img {
 #selector{
     color:#e06055;
 }
+
+.bd-example-modal-lg .modal-dialog{
+    display: table;
+    position: relative;
+    margin: 0 auto;
+    top: calc(50% - 24px);
+}
+
+.bd-example-modal-lg .modal-dialog .modal-content{
+background-color: transparent;
+border: none;
+}
+
+.blinking{
+	animation:blinkingText 2s infinite;
+}
+@keyframes blinkingText{
+	0%{		color: #e06055;	}
+	50%{	color: #ff0000;	}
+	100%{	color: #e06055;	}
+}
+
+.speech-bubble {
+	position: absolute;
+	background: white;
+	border-radius: .4em;
+    width: 15em;
+    height: 10em;
+    top: 10em;
+    right: 5em;
+}
+
+.speech-bubble:after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 50px solid transparent;
+	border-right-color: white;
+	border-left: 0;
+	border-bottom: 0;
+	margin-top: -25px;
+	margin-left: -50px;
+}
