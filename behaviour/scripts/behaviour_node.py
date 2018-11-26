@@ -26,19 +26,26 @@ class Behaviour:
             payload = json.loads(ui_msg.payload)
         else:
             payload = dict()
+
         if ui_msg.type == UI.SEARCH_REQUEST:
             feedback_msg = UI_feedback()
-            feedback_msg.type = UI_feedback.SEARCH_RESPONSE
+            feedback_msg.type = UI_feedback.LOADING
+            feedback_msg.payload = json.dumps(True)
+            self.ui_feedback_publisher.publish(feedback_msg)
+
+            feedback_msg = UI_feedback()
             try:
+                feedback_msg.type = UI_feedback.SEARCH_RESPONSE
                 feedback_msg.payload = self.db_adapter_proxy(payload['request']).books
+                if feedback_msg.payload == '{"books": []}':
+                    feedback_msg.type = UI_feedback.COMMUNICATION
+                    feedback_msg.payload = json.dumps({'message': "No book found"})
             except rospy.ServiceException:
                 print("Error during db_adapter call !")
+                feedback_msg.type = UI_feedback.COMMUNICATION
+                feedback_msg.payload = json.dumps({'message': "Can't connect to the database"})
             self.ui_feedback_publisher.publish(feedback_msg)
         elif ui_msg.type == UI.BOOK_CHOSEN:
-            feedback_msg = UI_feedback()
-            feedback_msg.type = UI_feedback.LOADING
-            feedback_msg.payload = ""
-            self.ui_feedback_publisher.publish(feedback_msg)
             try:
                 book_location = self.locator_proxy(payload['chosen_code'])
                 goal_msg = PoseStamped()
