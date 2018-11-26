@@ -75,7 +75,8 @@ UI_feedback.subscribe(function(message) {
     }
     else if (message.type === COMMUNICATION) {
         $('#loading_modal').modal('hide');
-        alert(JSON.parse(message.payload).message);
+        $('.speech-bubble').val(JSON.parse(message.payload).message);
+        $('.speech-bubble').removeClass('d-none');
     }
 
 });
