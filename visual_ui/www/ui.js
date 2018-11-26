@@ -8,6 +8,8 @@ const LOADING = 2;
 const COMMUNICATION = 3;
 const LISTENING = 7;
 
+$('#speech-bubble').hide();
+
 // Connect to the rosbridge server running on the local computer on port 9090
 var rbServer = new ROSLIB.Ros({
     url : 'ws://' + window.location.hostname + ':9090'
@@ -42,7 +44,6 @@ rbServer.on('close', function() {
     console.log('Connection to websocket server closed.');
  });
 
-
 // Subscriber of the UI_feedback topic
 UI_feedback.subscribe(function(message) {
 
@@ -75,11 +76,11 @@ UI_feedback.subscribe(function(message) {
     }
     else if (message.type === COMMUNICATION) {
         $('#loading_modal').modal('hide');
-        alert(JSON.parse(message.payload).message);
+        $('#speech-bubble').text(JSON.parse(message.payload).message);
+        $('#speech-bubble').fadeIn().delay(5000).fadeOut();
     }
 
 });
-
 
 
 // Callback when speech icon is clicked
