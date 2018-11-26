@@ -60,9 +60,9 @@ class Speech:
 
             with self.mic as source:
                 # Tell the UI_feedback that his speech is being listened with ui_feedback message of type LISTENING
-                self.publish('ui_command', UI_feedback.LISTENING, '')
-
+                self.publish('ui_feedback', UI_feedback.LISTENING, json.dumps(True))
                 recognised, txt = self.recogTest(source, language)
+                self.publish('ui_feedback', UI_feedback.LISTENING, json.dumps(False))
 
                 if recognised:
                     self.publish('ui_command', UI.SEARCH_REQUEST, json.dumps({'request': txt}))
