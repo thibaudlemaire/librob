@@ -43,37 +43,39 @@ rbServer.on('close', function() {
  });
 
 
-
 // Subscriber of the UI_feedback topic
 UI_feedback.subscribe(function(message) {
 
-    var uiFeedbackText = document.getElementById('uiFeedback')
-    var bubbleSpeechText = document.getElementById('bubble-speech')
-
-    if (message.type == LISTENING) {
-        uiFeedbackText.innerHTML = 'Listening';
-    }
-
-    else if (message.type == LOADING) {
-        uiFeedbackText.innerHTML = 'Loading';
-    }
-
-    else if (message.type == SEARCH_RESPONSE) {
-        uiFeedbackText.innerHTML = 'Search Response';
-        $('#search_modal').modal('hide');
-        $('#result_modal').modal('show');
-        var books = JSON.parse(message.payload).books;
-        if (books.length != 0) {
-            createTable(books);
+    if (message.type === LISTENING) {
+        if (JSON.parse(message.payload) === true) {
+            $('#mic_icon').addClass('blinking');
         }
         else {
-            alert('no book found!');
+            $('#mic_icon').removeClass('blinking');
         }
     }
-
-    else if (message.type == COMMUNICATION) {
-        var msg = JSON.parse(message.payload).message;
-        bubbleSpeechText.innerHTML = msg;
+    else if (message.type === LOADING) {
+        if (JSON.parse(message.payload) === true) {
+            $('#mic_icon').removeClass('blinking');
+            $('#search_modal').modal('hide');
+            $('#loading_modal').modal('show');
+        }
+        else {
+            $('#loading_modal').modal('hide');
+        }
+    }
+    else if (message.type === SEARCH_RESPONSE) {
+        var books = JSON.parse(message.payload).books;
+        if (books.length !== 0) {
+            $('#loading_modal').modal('hide');
+            $('#search_modal').modal('hide');
+            $('#result_modal').modal('show');
+            createTable(books);
+        }
+    }
+    else if (message.type === COMMUNICATION) {
+        $('#loading_modal').modal('hide');
+        alert(JSON.parse(message.payload).message);
     }
 
 });
@@ -103,18 +105,16 @@ UI_feedback.subscribe(function(message) {
 // Publisher: publishes on UI topic a SEARCH_REQUEST message
 function searchButtonCallback()
 {
-    resetTable();
-
-    var bookTitle = document.getElementById("textInput").value;
+    var textfield = $("#textInput");
 
     var UI_msg = new ROSLIB.Message({
         type: SEARCH_REQUEST,
         payload: JSON.stringify({
-            "request": bookTitle
+            "request": textfield.val()
         }) 
     });
-
     UI.publish(UI_msg);
+    textfield.val("");
 }
 
 
@@ -122,8 +122,9 @@ function searchButtonCallback()
 // Visual feedback: populate a table with books from the SEARCH_RESPONSE message
 
 function createTable(books) {
+
     var tbody = document.getElementsByTagName('tbody')[0];
-    tbody.innerHtml = '';
+    tbody.innerHTML = "";
 
     // Iterate over list of books
     for (var r = 0; r < books.length; r++){
@@ -150,7 +151,7 @@ function createTable(books) {
         // Add one last cell which an icon button
         var cell = row.insertCell();
         cell.setAttribute('class', 'align-middle');
-        if (book['available'] == true){
+        if (book['available'] === true){
             cell.innerHTML = "<button class='btn btn-md btn-primary'><i class='fas fa-walking'></i></button>";
         }
         else {
