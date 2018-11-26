@@ -13,15 +13,12 @@ class Locator:
         self.shelves = list()
         book_list = yaml.load(open(shelveCatalogue))
         for key, value in book_list.items():
-            print(key)
-            print(value)
             numerical_code = self.numericalCodeGenerator(key)
             self.shelves.append([numerical_code,
                                  [float(i) for i in value[0]],
                                  [float(i) for i in value[1]]])
         self.shelves.sort()
-        for key in range(len(self.shelves)):
-            print(self.shelves[key])
+
 
     def numericalCodeGenerator(self, key):
         """Takes code relating to a book and returns numerical format for ordering
