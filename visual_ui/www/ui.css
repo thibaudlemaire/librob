@@ -68,23 +68,27 @@ border: none;
 	position: absolute;
 	background: white;
 	border-radius: .4em;
-    width: 15em;
-    height: 10em;
-    top: 10em;
-    right: 5em;
+    width: 40em;
+    height: 3em;
+    top: 2em;
+    right: 0;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 2000;
+    box-shadow: 2px 2px 5px grey;
 }
 
 .speech-bubble:after {
 	content: '';
 	position: absolute;
-	left: 0;
-	top: 50%;
+	bottom: 0;
+	left: 50%;
 	width: 0;
 	height: 0;
-	border: 50px solid transparent;
-	border-right-color: white;
-	border-left: 0;
+	border: 0.688em solid transparent;
+	border-top-color: white;
 	border-bottom: 0;
-	margin-top: -25px;
-	margin-left: -50px;
+	margin-left: -0.687em;
+	margin-bottom: -0.687em;
 }

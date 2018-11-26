@@ -57,8 +57,8 @@
         </div>
 
         <div class="d-flex align-items-center mx-2 mw-100" style="height: 100vh; overflow: auto;">
-            <img src="./robot.png" />
             <p class="speech-bubble d-none">Hello there !</p>
+            <img src="./robot.png" />
         </div>
 
         <div class="fixed-bottom row justify-content-between m-2">
@@ -68,11 +68,13 @@
                 </a>
             </div>
             <div class="col-3">
-               <select id="selector">
+                <div class="d-flex align-items-end justify-content-center h-100">
+                    <select id="selector">
                     <option value="en-US">English</option>
                     <option value="fr-FR">Français</option>
                     <option value="it-IT">Italian</option>
                 </select>
+                </div>
             </div>
             <div class="col-3">
                 <a id="mic_icon" href="#" data-toggle="modal" onclick="speechButtonCallback()" style="color: #e06055;">
