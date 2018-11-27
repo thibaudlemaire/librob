@@ -15,19 +15,16 @@ class Speech:
 
         self.r = sr.Recognizer()
         self.mic = sr.Microphone(device_index = 2, sample_rate = 44100, chunk_size = 512)
-        self.r.energy_threshold = 500
         self.r.dynamic_energy_threshold = True
+        with self.mic as source:
+            self.r.adjust_for_ambient_noise(source)
 
         print('Speech node ready')
 
     def recogTest(self, source, language):
         print('Speech starts listening')
         try:
-            audio = self.r.listen(source, timeout=2.0, phrase_time_limit=3.0)
-
-            #f = open('/home/ubuntu/foo.wav', 'wb')
-            #f.write(audio.get_wav_data())
-            #f.close()
+            audio = self.r.listen(source, timeout=2.0, phrase_time_limit=8.0)
 
             print('Speech starts recognition')
             text = self.r.recognize_google(audio, language=language)
@@ -68,7 +65,7 @@ class Speech:
                     self.publish('ui_command', UI.SEARCH_REQUEST, json.dumps({'request': txt}))
                     print('You said: ', txt)
                 else:
-                    self.publish('ui_feedback', UI.NOT_UNDERSTOOD, '')
+                    self.publish('ui_command', UI.NOT_UNDERSTOOD, '')
                     print('Speech error:', txt)
 
     def startNode(self):
