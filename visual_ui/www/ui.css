@@ -60,7 +60,7 @@ border: none;
 }
 @keyframes blinkingText{
 	0%{		color: #e06055;	}
-	50%{	color: #ff0000;	}
+	50%{	color: transparent;	}
 	100%{	color: #e06055;	}
 }
 
@@ -68,15 +68,16 @@ border: none;
 	position: absolute;
 	background: white;
 	border-radius: .4em;
-    width: 40em;
-    height: 3em;
-    top: 2em;
+    width: 70%;
+    top: 5vh;
     right: 0;
     left: 0;
     margin-left: auto;
     margin-right: auto;
     z-index: 2000;
     box-shadow: 2px 2px 5px grey;
+    font-size: 30px;
+    padding: 10px;
 }
 
 .speech-bubble:after {
