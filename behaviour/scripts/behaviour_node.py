@@ -29,14 +29,14 @@ class Behaviour:
             payload = dict()
 
         if ui_msg.type == UI.SEARCH_REQUEST:
-            self.feedback_message(Messages.SEARCHING)
+            self.feedback_message(Messages.SEARCHING + ' "' + payload['request'] + '"')
             self.feedback_loading()
             try:
                 books = self.db_adapter_proxy(payload['request']).books
                 if books == '{"books": []}':
-                    self.feedback_message(Messages.NOT_FOUND)
+                    self.feedback_message(Messages.NOT_FOUND + ' "' + payload['request'] + '"')
                 else:
-                    self.feedback_message(Messages.FOUND)
+                    self.feedback_message(Messages.FOUND + ' "' + payload['request'] + '"')
                     self.feedback_books(books)
             except rospy.ServiceException:
                 print("Error during db_adapter call !")
@@ -44,10 +44,11 @@ class Behaviour:
         elif ui_msg.type == UI.BOOK_CHOSEN:
             try:
                 self.new_goal(self.locator_proxy(payload['chosen_code']))
+                self.feedback_message(Messages.FOLLOW_ME)
             except rospy.ServiceException:
                 print("Error during locator call !")
                 self.feedback_message(Messages.LOCATOR_ERROR)
-        elif ui_msg.type == UI.BOOK_CHOSEN:
+        elif ui_msg.type == UI.NOT_UNDERSTOOD:
             self.feedback_message(Messages.NOT_UNDERSTOOD)
 
     def feedback_books(self, books_string):
