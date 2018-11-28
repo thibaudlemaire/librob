@@ -4,6 +4,7 @@ import json
 from librarian_msgs.msg import UI, UI_feedback
 from librarian_msgs.srv import *
 from geometry_msgs.msg import PoseStamped, Pose
+from state_machine import StateMachine
 from messages import Messages
 
 
@@ -21,12 +22,10 @@ class Behaviour:
             self.locator_proxy = rospy.ServiceProxy('locate_book', book_locator)
         except rospy.ServiceException:
             print("Service proxy creation failed !")
+        self.state_machine = StateMachine(self)
 
     def process_ui(self, ui_msg):
-        if ui_msg.payload != "":
-            payload = json.loads(ui_msg.payload)
-        else:
-            payload = dict()
+        payload = json.loads(ui_msg.payload) if ui_msg != "" else {}
 
         if ui_msg.type == UI.SEARCH_REQUEST:
             self.feedback_message(Messages.SEARCHING + ' "' + payload['request'] + '"')
@@ -81,7 +80,10 @@ class Behaviour:
         rospy.init_node('behaviour_node', anonymous=True)
         rospy.Subscriber("ui_command", UI, self.process_ui)
         print("Behaviour ready !")
-        rospy.spin()
+        rate = rospy.Rate(10)
+        while not rospy.is_shutdown():
+            self.state_machine.process_state_machine()
+            rate.sleep()
 
 
 if __name__ == '__main__':
