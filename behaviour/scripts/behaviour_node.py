@@ -5,7 +5,6 @@ from librarian_msgs.msg import UI, UI_feedback
 from librarian_msgs.srv import *
 from geometry_msgs.msg import PoseStamped, Pose
 from state_machine import StateMachine
-from messages import Messages
 
 
 class Behaviour:
@@ -22,33 +21,7 @@ class Behaviour:
             self.locator_proxy = rospy.ServiceProxy('locate_book', book_locator)
         except rospy.ServiceException:
             print("Service proxy creation failed !")
-        self.state_machine = StateMachine()
-
-    def process_ui(self, ui_msg):
-        payload = json.loads(ui_msg.payload) if ui_msg != "" else {}
-
-        if ui_msg.type == UI.SEARCH_REQUEST:
-            self.feedback_message(Messages.SEARCHING + ' "' + payload['request'] + '"')
-            self.feedback_loading()
-            try:
-                books = self.db_adapter_proxy(payload['request']).books
-                if books == '{"books": []}':
-                    self.feedback_message(Messages.NOT_FOUND + ' "' + payload['request'] + '"')
-                else:
-                    self.feedback_message(Messages.FOUND + ' "' + payload['request'] + '"')
-                    self.feedback_books(books)
-            except rospy.ServiceException:
-                print("Error during db_adapter call !")
-                self.feedback_message(Messages.DB_ERROR)
-        elif ui_msg.type == UI.BOOK_CHOSEN:
-            try:
-                self.new_goal(self.locator_proxy(payload['chosen_code']))
-                self.feedback_message(Messages.FOLLOW_ME)
-            except rospy.ServiceException:
-                print("Error during locator call !")
-                self.feedback_message(Messages.LOCATOR_ERROR)
-        elif ui_msg.type == UI.NOT_UNDERSTOOD:
-            self.feedback_message(Messages.NOT_UNDERSTOOD)
+        self.state_machine = StateMachine(self)
 
     def feedback_books(self, books_string):
         feedback_msg = UI_feedback()
@@ -78,12 +51,9 @@ class Behaviour:
 
     def start_node(self):
         rospy.init_node('behaviour_node', anonymous=True)
-        rospy.Subscriber("ui_command", UI, self.process_ui)
+        rospy.Subscriber("ui_command", UI, self.state_machine.on_event)
         print("Behaviour ready !")
-        rate = rospy.Rate(10)
-        while not rospy.is_shutdown():
-            self.state_machine.process_state_machine()
-            rate.sleep()
+        rospy.spin()
 
 
 if __name__ == '__main__':
