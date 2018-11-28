@@ -1,0 +1,6 @@
+<launch>
+    <env name="ROS_IP" value="192.168.2.30" />
+    <env name="ROS_MASTER_URI" value="http://ros-pi.lan:11311" />
+
+    <include file="$(find navigation)/launch/base_move.launch"/>
+</launch>
