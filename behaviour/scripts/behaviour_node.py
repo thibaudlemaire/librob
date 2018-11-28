@@ -22,7 +22,7 @@ class Behaviour:
             self.locator_proxy = rospy.ServiceProxy('locate_book', book_locator)
         except rospy.ServiceException:
             print("Service proxy creation failed !")
-        self.state_machine = StateMachine(self)
+        self.state_machine = StateMachine()
 
     def process_ui(self, ui_msg):
         payload = json.loads(ui_msg.payload) if ui_msg != "" else {}
