@@ -4,5 +4,6 @@
     <include file="$(find db_adapter)/launch/db_adapter.launch"/>
     <include file="$(find locator)/launch/locator.launch"/>
     <include file="$(find navigation)/launch/config.launch" />
+    <include file="$(find navigation)/launch/teleop.launch" />
     <include file="$(find behaviour)/launch/behaviour.launch"/>
 </launch>
