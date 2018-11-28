@@ -5,7 +5,11 @@ from messages import Messages
 from state import State
 from librarian_msgs.msg import UI
 
-station_floor = 5
+LIFT_GOAL = None
+STATION_GOAL = None
+DOOR_OPEN_EVENT = object
+GOAL_REACHED_EVENT = object
+
 
 class InitState(State):
     def on_event(self, event):
@@ -44,52 +48,55 @@ class InitState(State):
 
 
 class MovingState(State):
+    TO_BOOK = 1
+    TO_LIFT = 2
+    WAIT = 3
+    ENTER_LIFT = 4
+    USING_LIFT = 5
+
     def __init__(self, node, floor_number, goal):
         super(MovingState, self).__init__(node, floor_number)
         self.global_goal = goal
-        if goal.floor = self.floor:
-        # Compute here the staps to achieve this goal (i.e : go to lift, jump in lift, go to book)
-            self.current_goal = goal # For now we use the global goal as current goal
-            self.substate = "TO_BOOK"
+        if goal.floor == self.floor:
+            self.current_goal = goal
+            self.substate = MovingState.TO_BOOK
         else:
-            self.current_goal = (xyz)#NEED LIFT DOOR COORDINATES
-            self.substate = "TO_LIFT"
+            self.current_goal = LIFT_GOAL
+            self.substate = MovingState.TO_LIFT
         self.node.new_goal(self.current_goal)
         self.node.feedback_message(Messages.FOLLOW_ME)
 
     def on_event(self, event):
         if isinstance(event, UI):
             self.node.feedback_message(Messages.BUSY)
-        elif isinstance(event, "inserttype"): #NEED ARRIVE AT GOAL TYPE MESSAGE
-            if self.substate == "TO_BOOK":
+        elif isinstance(event, GOAL_REACHED_EVENT):
+            if self.substate == MovingState.TO_BOOK:
                 return ReturnState(self.node, self.floor)
-            elif self.substate == "TO_LIFT":
-                self.substate = "WAIT"
-            elif self.substate == "ENTER_LIFT":
-                self.substate = "USING_LIFT"
-        elif isinstance(event, "inserttype") #NEED LIFT DOOR OPEN MESSAGE
-            if self.substate == "WAIT":
-                self.current_goal = (xyz) #NEED LIFT COORDINATES
+            elif self.substate == MovingState.TO_LIFT:
+                self.substate = MovingState.WAIT
+            elif self.substate == MovingState.ENTER_LIFT:
+                self.substate = MovingState.ENTER_LIFT
+        elif isinstance(event, DOOR_OPEN_EVENT):
+            if self.substate == MovingState.WAIT:
+                self.current_goal = LIFT_GOAL
                 self.node.new_goal(self.current_goal)
-                self.substate = "ENTER_LIFT"
-            elif self.substate = "USING_LIFT":
-                self.current_goal = (self.global_goal)
-                self.node.new_goal)self.current_goal)
-                self.substate = "TO_BOOK"
+                self.substate = MovingState.ENTER_LIFT
+            elif self.substate == MovingState.USING_LIFT:
+                self.current_goal = self.global_goal
+                self.node.new_goal(self.current_goal)
+                self.substate = MovingState.TO_BOOK
         return self
 
 
 class ReturnState(State):
     def __init__(self, node, floor_number):
-        super(MovingState, self).__init__(node, floor_number)
-        goal = (xyz) #NEED STATION COORDINATES
-        self.global_goal = goal
-        if goal.floor = self.floor:
-        # Compute here the staps to achieve this goal (i.e : go to lift, jump in lift, go to book)
-            self.current_goal = goal # For now we use the global goal as current goal
+        super(ReturnState, self).__init__(node, floor_number)
+        self.global_goal = STATION_GOAL
+        if self.global_goal.floor == self.floor:
+            self.current_goal = STATION_GOAL
             self.substate = "TO_STATION"
         else:
-            self.current_goal = (xyz)#NEED LIFT DOOR COORDINATES
+            self.current_goal = LIFT_GOAL
             self.substate = "TO_LIFT"
         self.node.new_goal(self.current_goal)
         self.node.feedback_message(Messages.FOLLOW_ME)
@@ -97,35 +104,29 @@ class ReturnState(State):
     def on_event(self, event):
         if isinstance(event, UI):
             self.node.feedback_message(Messages.BUSY)
-        elif isinstance(event, "inserttype"): #NEED ARRIVE AT GOAL TYPE MESSAGE
+        elif isinstance(event, GOAL_REACHED_EVENT):
             if self.substate == "TO_STATION":
                 return InitState(self.node, self.floor)
             elif self.substate == "TO_LIFT":
                 self.substate = "WAIT"
             elif self.substate == "ENTER_LIFT":
                 self.substate = "USING_LIFT"
-        elif isinstance(event, "inserttype") #NEED LIFT DOOR OPEN MESSAGE
+        elif isinstance(event, DOOR_OPEN_EVENT):
             if self.substate == "WAIT":
-                self.current_goal = (xyz) #NEED LIFT COORDINATES
+                self.current_goal = LIFT_GOAL
                 self.node.new_goal(self.current_goal)
                 self.substate = "ENTER_LIFT"
-            elif self.substate = "USING_LIFT":
-                self.current_goal = (self.global_goal)
-                self.node.new_goal)self.current_goal)
+            elif self.substate == "USING_LIFT":
+                self.current_goal = self.global_goal
+                self.node.new_goal(self.current_goal)
                 self.substate = "TO_STATION"
         return self
-    
 
 
 class StateMachine(object):
     def __init__(self, behaviour_node):
         self.node = behaviour_node
-        self.floor = station_floor
-        self.current_state = InitState(self.node,self.floor)
+        self.current_state = InitState(self.node, STATION_GOAL.floor)
 
     def on_event(self, event):
         self.current_state = self.current_state.on_event(event)
-
-
-
-
