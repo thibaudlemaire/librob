@@ -11,10 +11,11 @@ class InitState(State):
         if isinstance(event, UI):
             ui_msg = event
             if ui_msg.type == UI.BOOK_CHOSEN:
-                payload = json.loads(ui_msg.payload) if ui_msg != "" else {}
+                payload = json.loads(ui_msg.payload) if ui_msg.payload != "" else {}
                 try:
                     goal = self.node.locator_proxy(payload['chosen_code'])
-                    return MovingState(self.node, goal)
+                    # return MovingState(self.node, goal)
+                    MovingState(self.node, goal) # For the demo, we do not change state
                 except rospy.ServiceException:
                     print("Error during locator call !")
                     self.node.feedback_message(Messages.LOCATOR_ERROR)
@@ -23,7 +24,7 @@ class InitState(State):
         return self
 
     def process_ui(self, ui_msg):
-        payload = json.loads(ui_msg.payload) if ui_msg != "" else {}
+        payload = json.loads(ui_msg.payload) if ui_msg.payload != "" else {}
 
         if ui_msg.type == UI.SEARCH_REQUEST:
             self.node.feedback_message(Messages.SEARCHING + ' "' + payload['request'] + '"')
