@@ -10,6 +10,7 @@ const LISTENING = 7;
 
 $('#speech-bubble').hide();
 
+
 // Connect to the rosbridge server running on the local computer on port 9090
 var rbServer = new ROSLIB.Ros({
     url : 'ws://' + window.location.hostname + ':9090'
@@ -84,6 +85,7 @@ UI_feedback.subscribe(function(message) {
             bubble.fadeIn().delay(3000 + msg.length * 50).fadeOut();
         }
         bubble.text(msg);
+        responsiveVoice.speak(msg,"UK English Male", {pitch:9},{volume: 1},{rate: 10});
     }
 
 });
@@ -91,9 +93,11 @@ UI_feedback.subscribe(function(message) {
 
 // Callback when speech icon is clicked
  function speechButtonCallback() {
+     
 
     selector = document.getElementById('selector');
     language = selector.options[selector.selectedIndex].value;
+    
 
     var UI_msg = new ROSLIB.Message({
         type: SPEECH_TRIGGER,
