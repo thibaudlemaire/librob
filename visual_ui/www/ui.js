@@ -10,7 +10,6 @@ const LISTENING = 7;
 
 $('#speech-bubble').hide();
 
-
 // Connect to the rosbridge server running on the local computer on port 9090
 var rbServer = new ROSLIB.Ros({
     url : 'ws://' + window.location.hostname + ':9090'
@@ -94,11 +93,9 @@ UI_feedback.subscribe(function(message) {
 // Callback when speech icon is clicked
  function speechButtonCallback() {
      
-
     selector = document.getElementById('selector');
     language = selector.options[selector.selectedIndex].value;
     
-
     var UI_msg = new ROSLIB.Message({
         type: SPEECH_TRIGGER,
         payload: JSON.stringify({
@@ -106,7 +103,6 @@ UI_feedback.subscribe(function(message) {
         })
     });
 
-    // Publish the message
     UI.publish(UI_msg);
 
 }
@@ -124,6 +120,7 @@ function searchButtonCallback()
             "request": textfield.val()
         }) 
     });
+    
     UI.publish(UI_msg);
     textfield.val("");
 }

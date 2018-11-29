@@ -16,15 +16,13 @@
 
     <body>
 
-        <div id="search_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div id="search_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content p-2">
                     <div class="input-group">
                         <input class="form-control form-control-lg" type="text" id="textInput" placeholder="Search a book...">
                         <div class="input-group-append align-middle">
-                            <button class="btn btn-lg btn-primary" onclick="searchButtonCallback()">Search book title
-                            </button>
-                            
+                            <button class="btn btn-lg btn-primary" onclick="searchButtonCallback()">Search book title</button>    
                         </div>
                     </div>
                 </div>
@@ -35,18 +33,18 @@
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content p-2">
                     <div class="input-group">
-                            <table class="table" id="searchResults">
-                                <thead>
+                        <table class="table" id="searchResults">
+                            <thead>
                                 <tr>
                                     <th scope="col">Title</th>
                                     <th scope="col">Author</th>
                                     <th scope="col">Code</th>
                                     <th scope="col">Floor</th>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -62,25 +60,22 @@
 
         <div class="d-flex align-items-center mx-2 mw-100" style="height: 100vh; overflow: auto;">
             <p id="speech-bubble" class="speech-bubble"></p>
-            <img src="./robot.png" />
+            <img src="./robot.png"/>
         </div>
 
         <div class="fixed-bottom row justify-content-between m-2">
             <div class="col-3">
                 <a  href="#" data-toggle="modal" data-target="#search_modal" style="color: #e06055;">
-                    <i class="fas fa-search fa-10x">
-
-                    </i>
-                    
+                    <i class="fas fa-search fa-10x"></i>
                 </a>
             </div>
             <div class="col-3">
                 <div class="d-flex align-items-end justify-content-center h-100">
                     <select id="selector">
-                    <option value="en-US">English</option>
-                    <option value="fr-FR">Français</option>
-                    <option value="it-IT">Italian</option>
-                </select>
+                        <option value="en-US">English</option>
+                        <option value="fr-FR">Français</option>
+                        <option value="it-IT">Italian</option>
+                    </select>
                 </div>
             </div>
             <div class="col-3">
