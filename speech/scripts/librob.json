@@ -1,0 +1,1162 @@
+{
+  "entities": {
+    "authorName": {
+      "automatically_extensible": true, 
+      "data": [
+        {
+          "synonyms": [], 
+          "value": "Tom Pike"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "Edward"
+        }
+      ], 
+      "matching_strictness": 0.2, 
+      "use_synonyms": false
+    }, 
+    "bookTitle": {
+      "automatically_extensible": true, 
+      "data": [
+        {
+          "synonyms": [], 
+          "value": "machine learning"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "digital image processing"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "system design"
+        }, 
+        {
+          "synonyms": [
+            "maths"
+          ], 
+          "value": "mathematics"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "robotics"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "biology"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "physics"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "chemistry"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "chemical Engineering"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "mechanical Engineering"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "electrical Circuits"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "digital Design"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "fluid mechanics"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "computer science"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "fluid dynamics"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "aerospace engineering"
+        }, 
+        {
+          "synonyms": [
+            "dsp"
+          ], 
+          "value": "digital signal processing"
+        }, 
+        {
+          "synonyms": [], 
+          "value": "music"
+        }
+      ], 
+      "matching_strictness": 0.2, 
+      "use_synonyms": true
+    }
+  }, 
+  "intents": {
+    "searchBook": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "find me the book "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "machine learning"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "where is the book "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "digital image processing"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "lead me to the "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "system design"
+            }, 
+            {
+              "text": " textbook."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "where can I find the book "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "mathematics"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "can you tell me where the "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "maths"
+            }, 
+            {
+              "text": " book is please?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "I'm looking for a "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "robotics"
+            }, 
+            {
+              "text": " book."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "I need to find a book on "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "biology"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "please take me to the "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "physics"
+            }, 
+            {
+              "text": " book."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Hi, I'm in search of a book called "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "chemistry"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Find me a "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "chemical Engineering"
+            }, 
+            {
+              "text": " book."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Could you please direct me to a "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "mechanical Engineering"
+            }, 
+            {
+              "text": " book?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Guide me to the book named "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "electrical Circuits"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "I'd like to find a book on "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "digital Design"
+            }, 
+            {
+              "text": " please."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Can you get me the book called "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "fluid mechanics"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "I want to read about "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "computer science"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Where is the book on "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "fluid dynamics"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "I'd like to know more about "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "aerospace engineering"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "I\u2019m looking for a book written called "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "digital signal processing"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Could you find me "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "dsp"
+            }, 
+            {
+              "text": " written?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Could you find me the book "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "music"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Could you find me the book with the title "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "machine learning"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Where do I find the book "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "digital image processing"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "What is the location of "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "system design"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Take me to the book "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "mathematics"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "I really need a book on "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "maths"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "I need to study "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "robotics"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "I wanna know more about "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "biology"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "I need study material for "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "physics"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "I would like more info on "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "chemistry"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "A book about "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "chemical Engineering"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Can you find any books called "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "mechanical Engineering"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Can you find any books relating to "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "electrical Circuits"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Can you find any books on "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "digital Design"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Bring me to a book called "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "fluid mechanics"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Bring me to a book relating to "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "computer science"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Bring me to a book on "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "fluid dynamics"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "I can\u2019t find the book "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "aerospace engineering"
+            }, 
+            {
+              "text": ", can you look it up for me?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "I'd like to find the book of "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "digital signal processing"
+            }, 
+            {
+              "text": " by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Tom Pike"
+            }, 
+            {
+              "text": " please."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "find me the book "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "dsp"
+            }, 
+            {
+              "text": " by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Edward"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "where is the book "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "music"
+            }, 
+            {
+              "text": " by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Tom Pike"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "where can I find the book "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "machine learning"
+            }, 
+            {
+              "text": " by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Edward"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "can you tell me where the "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "digital image processing"
+            }, 
+            {
+              "text": " book by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Tom Pike"
+            }, 
+            {
+              "text": " is please?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "I need to find a book on "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "system design"
+            }, 
+            {
+              "text": " by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Edward"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "please take me to the "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "mathematics"
+            }, 
+            {
+              "text": " book by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Tom Pike"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Hi, I'm in search of a book called "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "maths"
+            }, 
+            {
+              "text": " by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Edward"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Guide me to the book named "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "robotics"
+            }, 
+            {
+              "text": " by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Tom Pike"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Can you get me the book called "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "biology"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "I\u2019m looking for a book written by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Edward"
+            }, 
+            {
+              "text": " called "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "physics"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Could you find me "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "chemistry"
+            }, 
+            {
+              "text": " written by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Tom Pike"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Could you find me the book "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "chemical Engineering"
+            }, 
+            {
+              "text": " written by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Edward"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Could you find me the book with the title "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "mechanical Engineering"
+            }, 
+            {
+              "text": " and author "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Tom Pike"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Could you find me the book with the title "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "electrical Circuits"
+            }, 
+            {
+              "text": " and writer "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Edward"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Can you find me the book with the title "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "digital Design"
+            }, 
+            {
+              "text": " and written by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Tom Pike"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Hi, can you find me the book with the title "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "fluid mechanics"
+            }, 
+            {
+              "text": " and written by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Edward"
+            }, 
+            {
+              "text": " please."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Where do I find the book "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "computer science"
+            }, 
+            {
+              "text": " by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Tom Pike"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "What is the location of "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "fluid dynamics"
+            }, 
+            {
+              "text": " by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Edward"
+            }, 
+            {
+              "text": "?"
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Take me to the book "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "aerospace engineering"
+            }, 
+            {
+              "text": " written by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Tom Pike"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Could you guide me to the book "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "digital signal processing"
+            }, 
+            {
+              "text": " written by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Edward"
+            }, 
+            {
+              "text": " please."
+            }
+          ]
+        }, 
+        {
+          "data": [
+            {
+              "text": "Take me to a book on "
+            }, 
+            {
+              "entity": "bookTitle", 
+              "slot_name": "title", 
+              "text": "dsp"
+            }, 
+            {
+              "text": " written by "
+            }, 
+            {
+              "entity": "authorName", 
+              "slot_name": "author", 
+              "text": "Tom Pike"
+            }, 
+            {
+              "text": "."
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  "language": "en"
+}
