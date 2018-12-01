@@ -20,7 +20,7 @@ class DbAdapter:
                    'q': 'title,contains,%s' % (req.request),
                    'lang': 'eng',
                    'offset': '0',
-                   'limit': '5',
+                   'limit': '20',
                    'sort': 'rank',
                    'inst': '44IMP',
                    'mfacet': 'tlevel,include,available,2;library,include,44IMP_CENTRAL_LIB,3;rtype,include,books,1',
@@ -36,11 +36,12 @@ class DbAdapter:
             raise ApiError('GET /primo/v1/search/ {}'.format(resp.status_code))
 
         data = resp.json()
+        book_type = data["docs"][i]["pnx"]["display"]["type"][0]
+
 
         for i in range(len(data["docs"])):
             book = dict()
-            if (data["docs"][i]["pnx"]["display"]["type"][0] == "book" and data["docs"][i]["delivery"]["bestlocation"][
-                "subLocation"].startswith("L")):
+            if (data["docs"][i]["pnx"]["display"]["type"][0] == "book" and data["docs"][i]["delivery"]["bestlocation"]["subLocation"].startswith("L")):
                 book['title'] = data["docs"][i]["pnx"]["display"]["title"][0]
                 book['author'] = data["docs"][i]["pnx"]["sort"]["author"][0]
                 book['code'] = data["docs"][i]["delivery"]["bestlocation"]["callNumber"][1:-2]
