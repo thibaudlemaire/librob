@@ -1,4 +1,4 @@
-// UI
+f// UI
 const SPEECH_TRIGGER = 1;
 const SEARCH_REQUEST = 10;
 const BOOK_CHOSEN = 20;
@@ -117,7 +117,10 @@ function searchButtonCallback()
     var UI_msg = new ROSLIB.Message({
         type: SEARCH_REQUEST,
         payload: JSON.stringify({
-            "request": textfield.val()
+            "request": {
+                'author': '',
+                'title': textfield.val()
+            }
         }) 
     });
     
