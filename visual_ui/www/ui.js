@@ -1,4 +1,4 @@
-f// UI
+// UI
 const SPEECH_TRIGGER = 1;
 const SEARCH_REQUEST = 10;
 const BOOK_CHOSEN = 20;
