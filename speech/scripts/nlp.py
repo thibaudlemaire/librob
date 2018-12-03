@@ -7,27 +7,32 @@ from snips_nlu.default_configs import CONFIG_EN
 class NLP():
 
     def __init__(self):
-
-        # load language specific resources
+        # load language resources
         load_resources(u"en")
-
-        # create a Snips NLU Engine
+        # create NLU Engine
         self.engine = SnipsNLUEngine(config=CONFIG_EN)
-
-        # train the engine
+        # train engine
         with io.open("librob.json") as f:
             dataset = json.load(f)
-        self.engine.fit(dataset)
-        print('NLP class ready!')
-
-    def parse(self):
+        self.engine.fit(dataset=dataset)
+ 
+    def parse(self, txt):
         
-        #parse
-        request = raw_input('what do you want?\n')
-        parsed = self.engine.parse(request.decode("utf-8"))
-        print(json.dumps(parsed, indent=2))
+        parsed = self.engine.parse(txt.decode("utf-8"))
+        #print(json.dumps(parsed['slots'], indent=2))
+
+        slots = parsed['slots']
+        pair = dict()
+
+        try:
+            for slot in slots:
+                pair[slot['slotName'].encode("ascii")] = slot['value']['value'].encode("ascii")
+            return True, pair
+                    
+        except Exception as e:
+            return False, e
 
 
 if __name__ == '__main__':
     nlp = NLP()
-    nlp.parse()
+    nlp.parse('dsp book by Mike Brookes')

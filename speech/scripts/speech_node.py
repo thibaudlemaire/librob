@@ -3,14 +3,14 @@ import rospy
 import json
 from librarian_msgs.msg import UI, UI_feedback  # from package import message
 import speech_recognition as sr
+import NLP
 
 
 # UI is the actual message
 class Speech:
     def __init__(self):
         rospy.init_node('speech_node', anonymous=True)
-        self.pub_command = rospy.Publisher('ui_command', UI,
-                                           queue_size=10)  # speechrequest is the name of the topic you publishing on,UI is our custom message
+        self.pub_command = rospy.Publisher('ui_command', UI, queue_size=10)
         self.pub_feedback = rospy.Publisher('ui_feedback', UI_feedback, queue_size=10)
 
         self.r = sr.Recognizer()
@@ -18,10 +18,11 @@ class Speech:
         self.r.dynamic_energy_threshold = True
         with self.mic as source:
             self.r.adjust_for_ambient_noise(source)
+        self.nlp = NLP()
 
         print('Speech node ready')
 
-    def recogTest(self, source, language):
+    def recognize(self, source, language):
         print('Speech starts listening')
         try:
             audio = self.r.listen(source, timeout=2.0, phrase_time_limit=8.0)
@@ -33,6 +34,7 @@ class Speech:
         except Exception as e:
             return False, e
 
+    # function to publish a given message on a given topic
     def publish(self, topic, msg_type, msg_payload):
         if topic == 'ui_command':
             msg = UI()
@@ -47,31 +49,39 @@ class Speech:
         else:
             print('Speech error: attempt to publish on unknown topic.')
 
-    # callback when node reecives a message on the ui_command topic
-    def sub_command_callback(self, UI_msg):  # UI_msg: message given by the data that is passed
+    # ui_command listener calback
+    def sub_command_callback(self, UI_msg): 
 
         if UI_msg.type == UI.SPEECH_TRIGGER:
-            # start speech recognition
 
             language = str(json.loads(UI_msg.payload)['language'])
 
+            # speech recognition
             with self.mic as source:
-                # Tell the UI_feedback that his speech is being listened with ui_feedback message of type LISTENING
                 self.publish('ui_feedback', UI_feedback.LISTENING, json.dumps(True))
-                recognised, txt = self.recogTest(source, language)
+                recognised, recog_txt = self.recognize(source, language)
                 self.publish('ui_feedback', UI_feedback.LISTENING, json.dumps(False))
 
                 if recognised:
-                    self.publish('ui_command', UI.SEARCH_REQUEST, json.dumps({'request': txt}))
-                    print('You said: ', txt)
+                    
+                    print('You said: ', recog_txt)
+                    # natural language processing
+                    understood, nlp_txt = self.nlp.parse(recog_txt)
+
+                    if understood:
+                        print('Information extracted from NLP: ', nlp_txt)
+                        self.publish('ui_command', UI.SEARCH_REQUEST, json.dumps({'request': nlp_txt}))
+                    else:
+                        self.publish('ui_command', UI.NOT_UNDERSTOOD, '')
+                        print('Natural Language Processing error: ', nlp_txt)
+
                 else:
                     self.publish('ui_command', UI.NOT_UNDERSTOOD, '')
-                    print('Speech error:', txt)
+                    print('Speech recognition error:', recog_txt)
 
     def startNode(self):
-        # subscriber object of the ui_command topic
-        self.sub_command = rospy.Subscriber('ui_command', UI, self.sub_command_callback)  # (topic, messsage, callback)
-        rospy.spin()  # keeps python from exiting until this node is stopped
+        self.sub_command = rospy.Subscriber('ui_command', UI, self.sub_command_callback)
+        rospy.spin()
 
 
 if __name__ == '__main__':
