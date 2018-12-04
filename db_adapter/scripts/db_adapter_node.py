@@ -23,7 +23,8 @@ class DbAdapter:
                    'limit': '20',
                    'sort': 'rank',
                    'inst': '44IMP',
-                   'mfacet': 'tlevel,include,available,2;library,include,44IMP_CENTRAL_LIB,3;rtype,include,books,1',
+                   'multiFacets': 'facet_library,include,44IMP_CENTRAL_LIB|,|facet_rtype,include,books',
+                   #facet_tlevel,include,available|,|
                    'mode': 'Basic',
                    'apikey': 'l7xx84a80e38fc0f482c9fdee23e3ede69f1',
                    'pcAvailability': 'true',
@@ -36,21 +37,21 @@ class DbAdapter:
             raise ApiError('GET /primo/v1/search/ {}'.format(resp.status_code))
 
         data = resp.json()
-        book_type = data["docs"][i]["pnx"]["display"]["type"][0]
 
 
         for i in range(len(data["docs"])):
             book = dict()
-            if (data["docs"][i]["pnx"]["display"]["type"][0] == "book" and data["docs"][i]["delivery"]["bestlocation"]["subLocation"].startswith("L")):
+            if (data["docs"][i]["delivery"]["bestlocation"]["subLocation"].startswith("L")):
                 book['title'] = data["docs"][i]["pnx"]["display"]["title"][0]
                 book['author'] = data["docs"][i]["pnx"]["sort"]["author"][0]
                 book['code'] = data["docs"][i]["delivery"]["bestlocation"]["callNumber"][1:-2]
-                book['floor'] = int(data["docs"][i]["delivery"]["bestlocation"]["subLocation"].split(" ")[1])
+                book['floor'] = int(data["docs"][i]["delivery"]["bestlocation"]["subLocation"].split(" ")[1])                    
                 book['available'] = (data["docs"][i]["delivery"]["bestlocation"]["availabilityStatus"] == "available")
                 book_list["books"].append(book)
 
         dumped_list = json.dumps(book_list)
         print(dumped_list)
+        #print resp.url
         return db_requestResponse(dumped_list)
 
     def spin_node(self):
