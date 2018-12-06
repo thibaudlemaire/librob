@@ -19,7 +19,7 @@ class Speech:
         with self.mic as source:
             self.r.adjust_for_ambient_noise(source)
         self.nlp = NLP()
-
+	
         print('Speech node ready')
 
     def recognize(self, source, language):
@@ -78,6 +78,53 @@ class Speech:
                 else:
                     self.publish('ui_command', UI.NOT_UNDERSTOOD, '')
                     print('Speech recognition error:', recog_txt)
+	if UI_msg.type == UI.LIFT_TRIGGER:
+		r=sr.Recognizer()
+		r.listen_in_background(sr.Microphone(), callback)
+    def callback(recognizer, audio): 
+
+		              # this is called from the background thread
+
+	    try:
+
+		string= recognizer.recognize_google(audio)
+
+		substring= "floor"
+
+		print("You said " + string)  # received audio data, now need to recognize it
+
+		if substring in string:
+
+		    a=string.find(substring) 
+
+		    newstring = string[a:]
+
+		    if "1" in newstring:
+
+		        print("floor 1")
+
+		    elif "2" in newstring:
+
+		        print("floor 2")
+
+		    elif "3" in newstring:
+
+		        print("floor 3")
+
+		    elif "4" in newstring:
+
+		        print("floor 4"
+
+		    elif "5" in newstring:
+
+		        print("floor 5")
+
+		    
+
+	    except LookupError:
+
+		print("Oops! Didn't catch that")
+	 		
 
     def startNode(self):
         self.sub_command = rospy.Subscriber('ui_command', UI, self.sub_command_callback)
