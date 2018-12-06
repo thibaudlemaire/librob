@@ -3,6 +3,7 @@ int8 SPEECH_TRIGGER = 1 # Payload must be a dict with a "language" (JSON string)
 int8 SEARCH_REQUEST = 10 # Payload must be a dict with a "request" (JSON string) key
                         # "request" must be a dict with "author" and "title" as keys
 int8 BOOK_CHOSEN = 20 # Payload must be a dict with a "chosen_code" (JSON string) key
+int8 NOT_UNDERSTOOD = 30 # Used by speech node when it doesn't understand
 
 # Fields
 Header header
