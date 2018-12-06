@@ -1,0 +1,268 @@
+# searchBook Intent
+---
+type: intent
+name: searchBook
+slots:
+  - name: title
+    entity: bookTitle
+  - name: author
+    entity: authorName
+utterances:
+  - find me the book [title].
+  - where is the book [title]?
+  - lead me to the [title] textbook.
+  - Can you find any books on [title]?
+  - where can I find the book [title]?
+  - can you tell me where the [title] book is please?
+  - please take me to the [title] book.
+  - Hi, I'm in search of a book called [title].
+  - Guide me to the book named [title].
+  - Can you get me the book called [title]?
+  - I’m looking for a book written called [title].
+  - Could you find me [title] written by [author]?
+  - I'm looking for a [title] book.
+  - Could you find me the book [title]?
+  - Could you find me the book with the title [title]?
+  - Where do I find the book [title] by [author]?
+  - What is the location of [title] by [author]?
+  - Take me to the book [title] written by [author].
+  - Can you find any books called [title]?
+  - Bring me to a book called [title].
+  - I can’t find the book [title], can you look it up for me?
+  - I'd like to find the book [title] by [author] please.
+  - I'd like to find a book on [title] please.
+  - find me the book [title] by [author].
+  - A book about [title].
+  - I need a book on [title].
+  - where is the book [title] by [author]?
+  - Can you find any books relating to [title]?
+  - where can I find the book [title] by [author]?
+  - I would like more info on [title].
+  - can you tell me where the [title] book by [author] is please?
+  - I want to read about [title].
+  - please take me to the [title] book by [author].
+  - Where is the book on [title] [author]?
+  - Hi, I'm in search of a book called [title] by [author].
+  - I'd like to know more about [title].
+  - Guide me to the book named [title] by [author].
+  - Can you get me the book called [title]?
+  - I’m looking for a book written by [author] called [title].
+  - Could you find me [title] written by [author]?
+  - I need to find a book on [title].
+  - Could you find me the book [title] written by [author]?
+  - Could you find me the book with the title [title] and author [author]?
+  - Find me a [title] book.
+  - Could you find me the book with the title [title] and writer [author]?
+  - Could you please direct me to a [title] book?
+  - Can you find me the book with the title [title] and written by [author].
+  - Bring me to a book on [title].
+  - Hi, can you find me the book with the title [title] and written by [author] please.
+  - Bring me to a book relating to [title].
+  - Where do I find the book [title] by [author]?
+  - I need to study [title].
+  - What is the location of [title] by [author]?
+  - I need study material for [title].
+  - Take me to the book [title] written by [author].
+  - I wanna know more about [title].
+  - Could you guide me to the book [title] written by [author] please.
+
+
+
+# Subject Entity
+---
+type: entity
+name: bookTitle
+automatically_extensible: true
+use_synonyms: true #default value is true
+matching_strictness: 0.5 # default value is 1.0
+values:
+  - machine learning
+  - digital image processing
+  - system design
+  - [mathematics, maths]
+  - robotics
+  - biology
+  - physics
+  - chemistry
+  - chemical engineering
+  - mechanical engineering
+  - electrical circuits
+  - digital design
+  - fluid mechanics
+  - computer science
+  - fluid dynamics
+  - aerospace engineering
+  - [digital signal processing, dsp]
+  - music
+  - arts
+  - languages
+  - philosophy
+  - politics
+  - aeronautics
+  - geography
+  - economics
+  - geology
+  - natural sciences
+  - business
+  - technology
+  - logic
+  - medecine
+  - law
+  - architecture
+  - history
+  - NET framework
+  - modern analysis
+  - calculus
+  - fortran
+  - french
+  - german
+  - linear algebra
+  - statistics
+  - arithmetic
+  - ecology
+  - pattern recognition
+  - computer vision
+  - accounting
+  - magnetic fields
+  - acoustic
+  - adaptive filter
+  - aerodynamics
+  - algebra
+  - algorithms
+  - america
+  - amino acids
+  - proteins
+  - astronomy
+  - atlas
+  - atoms
+  - bayes theory
+  - bayesian
+  - biochemistry
+  - biodiversity
+  - bioinformatics
+  - biostatistics
+  - catalysis
+  - civil engineering
+  - cloud
+  - computer architecture
+  - computer graphics 
+  - control engineering
+  - control systems
+  - corporate finance
+  - cosmology
+  - DNA
+  - data analysis
+  - data science
+  - data structures
+  - deep learning
+  - design
+  - design engineering
+  - differential calculus
+  - differential equations
+  - diffraction
+  - diffusion
+  - digital control systems
+  - digital filters
+  - digital electronics
+  - digital image processing
+  - digital logic
+  - digital system design
+  - distributed systems
+  - dynamical systems
+  - eigenvalues 
+  - electric circuits
+  - electric power systems
+  - electromagnetic field
+  - electromagnetic theory
+  - electromagnetic waves
+  - electromagnetics
+  - electronic circuits
+  - energy conversion
+  - entrepreneurship
+  - fields
+  - fluid dynamics
+  - fluid control
+  - Fourier series
+  - Fourier transform
+  - France
+  - functional programming
+  - genes
+  - genetics
+  - geochemistry
+  - geometry
+  - global warming
+  - graph theory
+  - graphics
+  - group theory
+  - hydraulics
+  - image processing
+  - industrial design
+  - inorganic chemistry
+  - integrated circuits
+  - international relations
+  - internet
+  - investment
+  - waves
+  - wavelets
+  - volcanoes
+  - unix
+  - ubuntu
+  - transistors
+  - trading
+  - thermodynamics
+  - system theory
+  - sustainable
+  - sustainability
+  - semiconductors
+  - stochastic processes
+  - stochastic models
+  - statistical theory
+  - statistical methods
+  - stable adaptive systems
+  - stability theory
+  - speech
+  - speech synthesis
+  - speech recognition
+  - spectroscopy
+  - spectral theory
+  - software design
+  - software engineering
+  - signals and systems
+  - signal processing
+  - set theory
+  - semiconductor devices
+  - relativity
+  - quantum physics
+  - quantum theory
+  - quantum computing
+  - python
+  - protein structure
+  - power systems
+  - power electrnoics
+  - parallel computing
+  - organic chemistry
+  - optimisation
+  - optics
+  - number theory
+  - numerical analysis
+  - nonlinear systems
+  - network routing
+  - network analysis
+  - neural networks
+
+
+
+
+
+  # Author Entity
+---
+type: entity
+name: authorName
+automatically_extensible: true
+use_synonyms: false # default value is true
+matching_strictness: 0.2 # default value is 1.0
+values:
+  - Jean Patrick
+  - Mike Brookes
+  - Patrick Naylor
+  - John Newman
