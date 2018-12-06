@@ -84,6 +84,7 @@ UI_feedback.subscribe(function(message) {
             bubble.fadeIn().delay(3000 + msg.length * 50).fadeOut();
         }
         bubble.text(msg);
+        responsiveVoice.speak(msg,"UK English Male", {pitch:9},{volume: 1},{rate: 10});
     }
 
 });
@@ -91,10 +92,10 @@ UI_feedback.subscribe(function(message) {
 
 // Callback when speech icon is clicked
  function speechButtonCallback() {
-
+     
     selector = document.getElementById('selector');
     language = selector.options[selector.selectedIndex].value;
-
+    
     var UI_msg = new ROSLIB.Message({
         type: SPEECH_TRIGGER,
         payload: JSON.stringify({
@@ -102,7 +103,6 @@ UI_feedback.subscribe(function(message) {
         })
     });
 
-    // Publish the message
     UI.publish(UI_msg);
 
 }
@@ -117,9 +117,13 @@ function searchButtonCallback()
     var UI_msg = new ROSLIB.Message({
         type: SEARCH_REQUEST,
         payload: JSON.stringify({
-            "request": textfield.val()
+            "request": {
+                'author': '',
+                'title': textfield.val()
+            }
         }) 
     });
+    
     UI.publish(UI_msg);
     textfield.val("");
 }
