@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import rospy
 import json
-from librarian_msgs.msg import UI, UI_feedback  # from package import message
+from librarian_msgs.msg import UI, UI_feedback, lift  # from package import message
 import speech_recognition as sr
+from nlp import NLP
 
 
 # UI is the actual message
@@ -12,12 +13,13 @@ class Speech:
         self.pub_command = rospy.Publisher('ui_command', UI,
                                            queue_size=10)  # speechrequest is the name of the topic you publishing on,UI is our custom message
         self.pub_feedback = rospy.Publisher('ui_feedback', UI_feedback, queue_size=10)
-
+        self.pub_floor= rospy.Publisher('lift', lift, queue_size=10)
         self.r = sr.Recognizer()
         self.mic = sr.Microphone(device_index = 2, sample_rate = 44100, chunk_size = 512)
         self.r.dynamic_energy_threshold = True
         with self.mic as source:
             self.r.adjust_for_ambient_noise(source)
+        self.nlp = NLP()
 
         print('Speech node ready')
 
@@ -44,6 +46,11 @@ class Speech:
             msg.type = msg_type
             msg.payload = msg_payload
             self.pub_feedback.publish(msg)
+        elif topic == 'lift':
+            msg = lift()
+            msg.type = msg_type
+            msg.payload = msg_payload
+            self.pub_floor.publish(msg)
         else:
             print('Speech error: attempt to publish on unknown topic.')
 
@@ -66,12 +73,50 @@ class Speech:
                     print('You said: ', txt)
                 else:
                     self.publish('ui_command', UI.NOT_UNDERSTOOD, '')
-                    print('Speech error:', txt)
+                    print('Speech recognition error:', txt)
+
+    def sub_lift_callback(self, lift_msg):
+
+        if lift_msg.type == lift.LIFT_TRIGGER:
+            if json.loads(lift_msg.payload)['state'] == True:
+                r = sr.Recognizer()
+                self.stop_function = r.listen_in_background(sr.Microphone(), backgroundCallback)
+            else:
+                self.stop_function()
+
+    def backgroundCallback(recognizer, audio): 
+
+        try:
+            string = recognizer.recognize_google(audio).lower()
+            substring= "floor"
+            print("Background listening recognised: " + string)  
+
+            if substring in string:
+                idx = string.find(substring) 
+                newstring = string[idx:]
+
+                if "1" in newstring: 
+                    self.publish('lift', lift_msg.CURRENT_FLOOR, json.dumps({'floor': 1}))
+
+                elif "2" in newstring:
+                    self.publish('lift', lift_msg.CURRENT_FLOOR, json.dumps({'floor': 2}))
+
+                elif "3" in newstring:
+                    self.publish('lift', lift_msg.CURRENT_FLOOR, json.dumps({'floor': 3}))
+
+                elif "4" in newstring:
+                    self.publish('lift', lift_msg.CURRENT_FLOOR, json.dumps({'floor': 4}))
+
+                elif "5" in newstring:
+                    self.publish('lift', lift_msg.CURRENT_FLOOR, json.dumps({'floor': 5}))
+
+        except LookupError:
+            print("Oops! Didn't catch that")
 
     def startNode(self):
-        # subscriber object of the ui_command topic
-        self.sub_command = rospy.Subscriber('ui_command', UI, self.sub_command_callback)  # (topic, messsage, callback)
-        rospy.spin()  # keeps python from exiting until this node is stopped
+        self.sub_command = rospy.Subscriber('ui_command', UI, self.sub_command_callback)
+        self.sub_lift = rospy.Subscriber('lift', lift, self.sub_lift_callback )
+        rospy.spin()
 
 
 if __name__ == '__main__':

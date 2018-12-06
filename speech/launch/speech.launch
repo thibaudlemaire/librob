@@ -1,3 +1,6 @@
 <launch>
-	<node name='speech' pkg='speech' type='speech_node.py' output='screen'/>
+	<arg name="path" default="$(find speech)/scripts/nlu_engine" />
+	<node name='speech' pkg='speech' type='speech_node.py' output='screen'>
+		<param name="engine_location" type="string" value="$(arg path)" />
+	</node>
 </launch>
