@@ -3,14 +3,14 @@ import rospy
 import json
 from librarian_msgs.msg import UI, UI_feedback  # from package import message
 import speech_recognition as sr
-import NLP
 
 
 # UI is the actual message
 class Speech:
     def __init__(self):
         rospy.init_node('speech_node', anonymous=True)
-        self.pub_command = rospy.Publisher('ui_command', UI, queue_size=10)
+        self.pub_command = rospy.Publisher('ui_command', UI,
+                                           queue_size=10)  # speechrequest is the name of the topic you publishing on,UI is our custom message
         self.pub_feedback = rospy.Publisher('ui_feedback', UI_feedback, queue_size=10)
 
         self.r = sr.Recognizer()
@@ -18,11 +18,10 @@ class Speech:
         self.r.dynamic_energy_threshold = True
         with self.mic as source:
             self.r.adjust_for_ambient_noise(source)
-        self.nlp = NLP()
-	
+
         print('Speech node ready')
 
-    def recognize(self, source, language):
+    def recogTest(self, source, language):
         print('Speech starts listening')
         try:
             audio = self.r.listen(source, timeout=2.0, phrase_time_limit=8.0)
@@ -34,7 +33,6 @@ class Speech:
         except Exception as e:
             return False, e
 
-    # function to publish a given message on a given topic
     def publish(self, topic, msg_type, msg_payload):
         if topic == 'ui_command':
             msg = UI()
@@ -49,86 +47,31 @@ class Speech:
         else:
             print('Speech error: attempt to publish on unknown topic.')
 
-    # ui_command listener calback
-    def sub_command_callback(self, UI_msg): 
+    # callback when node reecives a message on the ui_command topic
+    def sub_command_callback(self, UI_msg):  # UI_msg: message given by the data that is passed
 
         if UI_msg.type == UI.SPEECH_TRIGGER:
+            # start speech recognition
 
             language = str(json.loads(UI_msg.payload)['language'])
 
-            # speech recognition
             with self.mic as source:
+                # Tell the UI_feedback that his speech is being listened with ui_feedback message of type LISTENING
                 self.publish('ui_feedback', UI_feedback.LISTENING, json.dumps(True))
-                recognised, recog_txt = self.recognize(source, language)
+                recognised, txt = self.recogTest(source, language)
                 self.publish('ui_feedback', UI_feedback.LISTENING, json.dumps(False))
 
                 if recognised:
-                    
-                    print('You said: ', recog_txt)
-                    # natural language processing
-                    understood, nlp_txt = self.nlp.parse(recog_txt)
-
-                    if understood:
-                        print('Information extracted from NLP: ', nlp_txt)
-                        self.publish('ui_command', UI.SEARCH_REQUEST, json.dumps({'request': nlp_txt}))
-                    else:
-                        self.publish('ui_command', UI.NOT_UNDERSTOOD, '')
-                        print('Natural Language Processing error: ', nlp_txt)
-
+                    self.publish('ui_command', UI.SEARCH_REQUEST, json.dumps({'request': txt}))
+                    print('You said: ', txt)
                 else:
                     self.publish('ui_command', UI.NOT_UNDERSTOOD, '')
-                    print('Speech recognition error:', recog_txt)
-	if UI_msg.type == UI.LIFT_TRIGGER:
-		r=sr.Recognizer()
-		r.listen_in_background(sr.Microphone(), callback)
-    def callback(recognizer, audio): 
-
-		              # this is called from the background thread
-
-	    try:
-
-		string= recognizer.recognize_google(audio)
-
-		substring= "floor"
-
-		print("You said " + string)  # received audio data, now need to recognize it
-
-		if substring in string:
-
-		    a=string.find(substring) 
-
-		    newstring = string[a:]
-
-		    if "1" in newstring:
-
-		        print("floor 1")
-
-		    elif "2" in newstring:
-
-		        print("floor 2")
-
-		    elif "3" in newstring:
-
-		        print("floor 3")
-
-		    elif "4" in newstring:
-
-		        print("floor 4"
-
-		    elif "5" in newstring:
-
-		        print("floor 5")
-
-		    
-
-	    except LookupError:
-
-		print("Oops! Didn't catch that")
-	 		
+                    print('Speech error:', txt)
 
     def startNode(self):
-        self.sub_command = rospy.Subscriber('ui_command', UI, self.sub_command_callback)
-        rospy.spin()
+        # subscriber object of the ui_command topic
+        self.sub_command = rospy.Subscriber('ui_command', UI, self.sub_command_callback)  # (topic, messsage, callback)
+        rospy.spin()  # keeps python from exiting until this node is stopped
 
 
 if __name__ == '__main__':
