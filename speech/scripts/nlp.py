@@ -21,8 +21,9 @@ class NLP():
         print('finished training')
         self.engine.persist('nlu_engine')
         """  
+        engine_location = rospy.get_param("~engine_location")
 
-        self.engine = SnipsNLUEngine.from_path('nlu_engine')
+        self.engine = SnipsNLUEngine.from_path(engine_location)
         print('snips engine ready')
         
         
