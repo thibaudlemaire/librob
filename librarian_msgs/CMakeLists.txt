@@ -52,6 +52,7 @@ add_message_files(
    UI.msg
    UI_feedback.msg
    state.msg
+   lift.msg
  )
 
 ## Generate srv in the 'srv' folder
