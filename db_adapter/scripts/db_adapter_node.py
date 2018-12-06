@@ -14,13 +14,48 @@ class DbAdapter:
         print("DB Adapter " + str(req))
         book_list = {'books': []}
 
-        payload = {'vid': 'ICL_VU1',
+        if(req.request.get("title") and req.request.get("author"))
+            payload = {'vid': 'ICL_VU1',
                    'tab': 'all',
                    'scope': 'LRSCOP_44IMP',
-                   'q': 'title,contains,%s' % (req.request),
+                   'q': 'title,contains,%s,AND;author,contains,%s' % (req.request.get("title"),req.request.get("author"))
                    'lang': 'eng',
                    'offset': '0',
-                   'limit': '20',
+                   'limit': '100',
+                   'sort': 'rank',
+                   'inst': '44IMP',
+                   'multiFacets': 'facet_library,include,44IMP_CENTRAL_LIB|,|facet_rtype,include,books',
+                   #facet_tlevel,include,available|,|
+                   'mode': 'Basic',
+                   'apikey': 'l7xx84a80e38fc0f482c9fdee23e3ede69f1',
+                   'pcAvailability': 'true',
+                   'conVoc': 'true'
+                   }
+        elif(req.request.get("title") == None)
+            payload = {'vid': 'ICL_VU1',
+                   'tab': 'all',
+                   'scope': 'LRSCOP_44IMP',
+                   'q': 'author,contains,%s' % (req.request.get("author"))
+                   'lang': 'eng',
+                   'offset': '0',
+                   'limit': '100',
+                   'sort': 'rank',
+                   'inst': '44IMP',
+                   'multiFacets': 'facet_library,include,44IMP_CENTRAL_LIB|,|facet_rtype,include,books',
+                   #facet_tlevel,include,available|,|
+                   'mode': 'Basic',
+                   'apikey': 'l7xx84a80e38fc0f482c9fdee23e3ede69f1',
+                   'pcAvailability': 'true',
+                   'conVoc': 'true'
+                   }
+        elif(req.request.get("author") == None)
+            payload = {'vid': 'ICL_VU1',
+                   'tab': 'all',
+                   'scope': 'LRSCOP_44IMP',
+                   'q': 'title,contains,%s' % (req.request.get("title"))
+                   'lang': 'eng',
+                   'offset': '0',
+                   'limit': '100',
                    'sort': 'rank',
                    'inst': '44IMP',
                    'multiFacets': 'facet_library,include,44IMP_CENTRAL_LIB|,|facet_rtype,include,books',
