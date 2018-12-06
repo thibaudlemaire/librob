@@ -12,9 +12,18 @@ class NLP():
         # create NLU Engine
         self.engine = SnipsNLUEngine(config=CONFIG_EN)
         # train engine
-        with io.open("librob.json") as f:
+        
+        print('start opening')
+        with io.open("snips/testlibrob.json") as f:
             dataset = json.load(f)
+        print('start training')
         self.engine.fit(dataset=dataset)
+        print('finished training')
+        #self.engine.persist('engine')
+        #self.engine.from_path('engine')
+        print('snips engine ready')
+        
+        
  
     def parse(self, txt):
         
@@ -35,4 +44,17 @@ class NLP():
 
 if __name__ == '__main__':
     nlp = NLP()
-    nlp.parse('dsp book by Mike Brookes')
+    print('Is the engine fitted?', nlp.engine.fitted)
+    
+    stop = False
+
+    while not stop:
+        request = raw_input('input request:\n')
+        if request == 'stop':
+            stop = True
+        else:
+            success, data = nlp.parse(request)
+            if success:
+                print(data)
+            else:
+                print('error:', data)

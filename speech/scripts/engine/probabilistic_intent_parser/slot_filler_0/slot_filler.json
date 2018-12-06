@@ -156,7 +156,7 @@
     "tagging_scheme": 1, 
     "unit_name": "crf_slot_filler"
   }, 
-  "crf_model_file": "modelettrkC.crfsuite", 
+  "crf_model_file": "modelD0SFBF.crfsuite", 
   "intent": "searchBook", 
   "language_code": "en", 
   "slot_name_mapping": {
