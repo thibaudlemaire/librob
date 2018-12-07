@@ -5,12 +5,15 @@ from librarian_msgs.msg import UI, UI_feedback
 from librarian_msgs.srv import *
 from geometry_msgs.msg import PoseStamped, Pose
 from state_machine import StateMachine
+from events import TimeOutEvent
 
 
 class Behaviour:
     def __init__(self):
+        rospy.init_node('behaviour_node', anonymous=True)
         self.ui_feedback_publisher = rospy.Publisher('ui_feedback', UI_feedback, queue_size=10)
         self.simple_goal_publisher = rospy.Publisher('move_base_simple/goal', PoseStamped, queue_size=10)
+        self.timer = None
         # Creation of service proxies
         print("Waiting for db_adapter and locator services...")
         rospy.wait_for_service('perform_database_request', timeout=10)
@@ -22,6 +25,7 @@ class Behaviour:
         except rospy.ServiceException:
             print("Service proxy creation failed !")
         self.state_machine = StateMachine(self)
+        rospy.Subscriber("ui_command", UI, self.state_machine.on_event)
 
     def feedback_books(self, books_string):
         feedback_msg = UI_feedback()
@@ -49,13 +53,20 @@ class Behaviour:
         self.simple_goal_publisher.publish(goal_msg)
         print("New goal set !")
 
-    def start_node(self):
-        rospy.init_node('behaviour_node', anonymous=True)
-        rospy.Subscriber("ui_command", UI, self.state_machine.on_event)
+    def timeout_callback(self, event):
+        self.timer = None
+        self.state_machine.on_event(TimeOutEvent())
+
+    def set_timer(self, duration):
+        if isinstance(self.timer, rospy.Timer):
+            self.timer.shutdown()
+        self.timer = rospy.Timer(rospy.Duration(duration), self.timeout_callback)
+
+    def spin_node(self):
         print("Behaviour ready !")
         rospy.spin()
 
 
 if __name__ == '__main__':
     behaviour = Behaviour()
-    behaviour.start_node()
+    behaviour.spin_node()

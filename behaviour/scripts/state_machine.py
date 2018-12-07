@@ -4,6 +4,13 @@ import rospy
 from messages import Messages
 from state import State
 from librarian_msgs.msg import UI
+from events import TimeOutEvent
+
+
+LIFT_GOAL = None
+STATION_GOAL = None
+DOOR_OPEN_EVENT = object
+GOAL_REACHED_EVENT = object
 
 
 class InitState(State):
@@ -14,8 +21,7 @@ class InitState(State):
                 payload = json.loads(ui_msg.payload) if ui_msg.payload != "" else {}
                 try:
                     goal = self.node.locator_proxy(payload['chosen_code'])
-                    # return MovingState(self.node, goal)
-                    MovingState(self.node, goal) # For the demo, we do not change state
+                    return MovingState(self.node, self.floor, goal)
                 except rospy.ServiceException:
                     print("Error during locator call !")
                     self.node.feedback_message(Messages.LOCATOR_ERROR)
@@ -28,17 +34,12 @@ class InitState(State):
         if ui_msg.type == UI.SEARCH_REQUEST:
             self.node.feedback_message(Messages.SEARCHING, False)
             self.node.feedback_loading()
-            search_text = ''
-            if 'title' in payload['request']:
-                search_text += ' about ' + payload['request'].get('title')
-            if 'author' in payload['request']:
-                search_text += ' by ' + payload['request'].get('author')
             try:
                 books = self.node.db_adapter_proxy(json.dumps(payload['request'])).books
                 if books == '{"books": []}':
-                    self.node.feedback_message(Messages.NOT_FOUND + search_text)
+                    self.node.feedback_message(Messages.NOT_FOUND(payload['request']))
                 else:
-                    self.node.feedback_message(Messages.FOUND + search_text)
+                    self.node.feedback_message(Messages.FOUND(payload['request']))
                     self.node.feedback_books(books)
             except rospy.ServiceException:
                 print("Error during db_adapter call !")
@@ -50,33 +51,62 @@ class InitState(State):
 
 
 class MovingState(State):
-    def __init__(self, node, goal):
-        super(MovingState, self).__init__(node)
+    TO_BOOK = 1
+    TO_LIFT = 2
+    WAIT = 3
+    ENTER_LIFT = 4
+    USING_LIFT = 5
+
+    def __init__(self, node, current_floor, goal):
+        super(MovingState, self).__init__(node, current_floor)
         self.global_goal = goal
-        # Compute here the staps to achieve this goal (i.e : go to lift, jump in lift, go to book)
-        self.current_goal = goal # For now we use the global goal as current goal
+        if goal.floor == self.floor:
+            self.current_goal = goal
+            self.substate = MovingState.TO_BOOK
+        else:
+            self.current_goal = LIFT_GOAL
+            self.substate = MovingState.TO_LIFT
         self.node.new_goal(self.current_goal)
         self.node.feedback_message(Messages.FOLLOW_ME)
+        self.node.set_timer(2)
 
     def on_event(self, event):
         if isinstance(event, UI):
             self.node.feedback_message(Messages.BUSY)
+        elif isinstance(event, GOAL_REACHED_EVENT):
+            if self.substate == MovingState.TO_BOOK:
+                return FinalState(self.node, self.floor)
+            elif self.substate == MovingState.TO_LIFT:
+                self.substate = MovingState.WAIT
+            elif self.substate == MovingState.ENTER_LIFT:
+                self.substate = MovingState.ENTER_LIFT
+        elif isinstance(event, DOOR_OPEN_EVENT):
+            if self.substate == MovingState.WAIT:
+                self.current_goal = LIFT_GOAL
+                self.node.new_goal(self.current_goal)
+                self.substate = MovingState.ENTER_LIFT
+            elif self.substate == MovingState.USING_LIFT:
+                self.current_goal = self.global_goal
+                self.node.new_goal(self.current_goal)
+                self.substate = MovingState.TO_BOOK
+        elif isinstance(event, TimeOutEvent):
+            self.node.feedback_message(Messages.TIME_OUT)
+            return InitState(self.node, self.floor)
         return self
 
 
 class FinalState(State):
+    def __init__(self, node, current_floor):
+        super(FinalState, self).__init__(node, current_floor)
+
     def on_event(self, event):
-        return self
+        pass
 
 
 class StateMachine(object):
     def __init__(self, behaviour_node):
         self.node = behaviour_node
-        self.current_state = InitState(self.node)
+        self.current_state = InitState(self.node, 1)
 
     def on_event(self, event):
         self.current_state = self.current_state.on_event(event)
-
-
-
-
