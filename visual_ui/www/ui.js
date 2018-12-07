@@ -146,8 +146,8 @@ function createTable(books) {
         var row = tbody.insertRow(-1);
 
         var cell = row.insertCell();
-        cell.setAttribute('class', 'align-middle thumbnail');
-        cell.innterHTML = "<img class='img-rounded img-responsive' src='" + book['thumbnail'] + "' >";
+        cell.setAttribute('class', 'align-middle thumbnail p-1');
+        cell.innerHTML = '<img class="img-rounded img-responsive" src="' + book['thumbnail'] + '" />';
 
         var cell = row.insertCell();
         cell.setAttribute('class', 'align-middle title');
