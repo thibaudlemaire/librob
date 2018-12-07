@@ -1,0 +1,72 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica, Arial, sans-serif;
+  }
+  
+  .demo-container {
+    width: 25%;
+    height: 300px;
+    position: absolute;
+    overflow: hidden;
+  }
+  
+  .dg.ac {
+    z-index: 100 !important;
+    top: 50px !important;
+  }
+  
+  .move-area{/*normally use body*/
+    width: 100%;
+    position: relative;
+  }
+  .container {
+    width: 100%;
+    position: absolute;
+    padding-left: 16vw;
+    padding-bottom: 11vh;
+  }
+  .eye1 {
+    position: relative;
+    display: inline-block;
+    border-radius: 50%;
+    height: 120px;
+    width: 120px;
+    background: #B8E9F4;
+    margin-right: 19vw;
+  }
+  .eye2 {
+    position: relative;
+    display: inline-block;
+    border-radius: 50%;
+    height: 120px;
+    width: 120px;
+    background: #B8E9F4;
+  }
+  /*pupil*/
+  /*.eye:after {
+    position: absolute;
+    bottom: 17px;
+    right: 10px;
+    width: 10px;
+    height: 10px;
+    background: #000;
+    border-radius: 50%;
+    content: " ";
+  }*/
+  
+  .pupil{
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    width: 40px;
+    height: 40px;
+    background: #698087;
+    border-radius: 50%;
+    content: " ";
+  }
+  
+  canvas {
+    
+  }
+  

@@ -12,7 +12,18 @@
         <link rel="stylesheet" href="./ui.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
               integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    </head>
+    
+        <script src="tracking.js-master/build/tracking-min.js"></script>
+        <script src="tracking.js-master/build/data/face-min.js"></script>
+        <script src="jquery-3.3.1.min.js"></script>
+        
+        <style>
+            video, canvas {
+                position: absolute;
+                visibility: hidden;
+                    }
+        </style>
+        </head>
 
     <body>
 
@@ -61,6 +72,18 @@
         <div class="d-flex align-items-center mx-2 mw-100" style="height: 100vh; overflow: auto;">
             <p id="speech-bubble" class="speech-bubble"></p>
             <img src="./robot.png"/>
+            <div class="demo-container">
+                <video id="video" width="360" height="270" preload autoplay loop muted></video>
+                <canvas id="canvas" width="360" height="270"></canvas>
+            </div>
+            <div class='container'>
+                <div class='eye1'>
+                    <div class="pupil"></div>
+                </div>
+                <div class='eye2'>
+                    <div class="pupil"></div>
+                </div>
+            </div>
         </div>
 
         <div class="fixed-bottom row justify-content-between m-2">
@@ -84,6 +107,39 @@
                 </a>
             </div>
         </div>
+
+        <script>
+            window.onload = function() {
+            var video = document.getElementById('video');
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+            var eye = $(".pupil");
+            var tracker = new tracking.ObjectTracker('face');
+            tracker.setInitialScale(4);
+            tracker.setStepSize(2);
+            tracker.setEdgesDensity(0.1);
+            tracking.track('#video', tracker, { camera: true });
+            tracker.on('track', function(event) {
+                context.clearRect(0, 0, 360, 270);
+                event.data.forEach(function(rect) {
+                context.strokeStyle = '#a64ceb';
+                context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+                context.font = '11px Helvetica';
+                context.fillStyle = "#fff";
+                context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+                context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+                var trans_x = (rect.x)/((360-rect.width)/40) - 20;
+                var trans_y = (rect.y)/((270-rect.height)/40) - 20;
+                eye.css({
+                    '-webkit-transform': 'translate(' + -trans_x + 'px, ' + trans_y + 'px)',
+                    '-moz-transform': 'translate(' + -trans_x + 'px, ' + trans_y + 'px)',
+                    '-ms-transform': 'translate(' + -trans_x + 'px, ' + trans_y + 'px)',
+                    'transform': 'translate(' + -trans_x + 'px, ' + trans_y + 'px)'
+                });
+                });
+            });
+            };
+        </script>
 
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
