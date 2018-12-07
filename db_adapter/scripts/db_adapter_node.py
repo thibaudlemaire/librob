@@ -11,6 +11,7 @@ class DbAdapter:
         self.s = rospy.Service('perform_database_request', db_request, self.handle_requests)
 
     def handle_requests(self, req):
+        request = json.loads(req.request)
         print("DB Adapter " + str(req))
         book_list = {'books': []}
         payload = {'vid': 'ICL_VU1',
@@ -29,12 +30,12 @@ class DbAdapter:
                    'conVoc': 'true'
                    }
 
-        if 'title' in req.request and 'author' in req.request:
-            payload['q'] = 'title,contains,%s,AND;author,contains,%s' % (req.request.get("title"), req.request.get("author"))
-        elif 'title' not in req.request:
-            payload['q'] = 'author,contains,%s' % (req.request.get("author"))
-        elif 'author' not in req.request:
-            payload['q'] = 'title,contains,%s' % (req.request.get("title"))
+        if request.get('title', '') != '' and request.get('author', '') != '':
+            payload['q'] = 'title,contains,%s,AND;author,contains,%s' % (request.get("title"), request.get("author"))
+        elif request.get('author', '') != '':
+            payload['q'] = 'author,contains,%s' % (request.get("author"))
+        elif request.get('title', '') != '':
+            payload['q'] = 'title,contains,%s' % (request.get("title"))
 
         resp = requests.get('https://api-eu.hosted.exlibrisgroup.com/primo/v1/search', params=payload)
 
