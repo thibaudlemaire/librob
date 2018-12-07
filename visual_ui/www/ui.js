@@ -89,6 +89,12 @@ UI_feedback.subscribe(function(message) {
             responsiveVoice.speak(msg, "UK English Male",  {pitch:9},{volume: 1},{rate: 10});
         }
     }
+    else if (message.type === RESET) {
+        $('#loading_modal').modal('hide');
+        $('#search_modal').modal('hide');
+        $('#result_modal').modal('hide');
+        $('#mic_icon').removeClass('blinking');
+    }
 
 });
 
