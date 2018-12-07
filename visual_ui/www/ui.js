@@ -76,7 +76,8 @@ UI_feedback.subscribe(function(message) {
     }
     else if (message.type === COMMUNICATION) {
         $('#loading_modal').modal('hide');
-        var msg = JSON.parse(message.payload).message;
+        var payload = JSON.parse(message.payload);
+        var msg = payload.message;
         var bubble = $('#speech-bubble');
         if (bubble.is(':visible')) {
             bubble.stop(true).show().delay(3000 + msg.length * 50).fadeOut();
@@ -84,7 +85,15 @@ UI_feedback.subscribe(function(message) {
             bubble.fadeIn().delay(3000 + msg.length * 50).fadeOut();
         }
         bubble.text(msg);
-        responsiveVoice.speak(msg,"UK English Male", {pitch:9},{volume: 1},{rate: 10});
+        if(payload.speak === true) {
+            responsiveVoice.speak(msg, "UK English Male",  {pitch:9},{volume: 1},{rate: 10});
+        }
+    }
+    else if (message.type === RESET) {
+        $('#loading_modal').modal('hide');
+        $('#search_modal').modal('hide');
+        $('#result_modal').modal('hide');
+        $('#mic_icon').removeClass('blinking');
     }
 
 });
@@ -118,7 +127,6 @@ function searchButtonCallback()
         type: SEARCH_REQUEST,
         payload: JSON.stringify({
             "request": {
-                'author': '',
                 'title': textfield.val()
             }
         }) 
@@ -142,6 +150,10 @@ function createTable(books) {
         book = books[r];
         // Insert a row <tr></tr> for each book
         var row = tbody.insertRow(-1);
+
+        var cell = row.insertCell();
+        cell.setAttribute('class', 'align-middle thumbnail');
+        cell.innterHTML = "<img class='img-rounded img-responsive' src='" + book['thumbnail'] + "' >";
 
         var cell = row.insertCell();
         cell.setAttribute('class', 'align-middle title');
