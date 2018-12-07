@@ -43,6 +43,13 @@ img {
     color:#e06055;
 }
 
+#result_table{
+    display: block;
+    max-height: 60vh;
+    overflow-y: auto;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
 .bd-example-modal-lg .modal-dialog{
     display: table;
     position: relative;
