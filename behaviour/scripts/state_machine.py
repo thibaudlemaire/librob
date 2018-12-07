@@ -24,7 +24,7 @@ class InitState(State):
                     return MovingState(self.node, self.floor, goal)
                 except rospy.ServiceException:
                     print("Error during locator call !")
-                    self.node.feedback_message(Messages.LOCATOR_ERROR)
+                    self.node.feedback_message(Messages.LOCATOR_ERROR, True, '', '')
             else:
                 self.process_ui(ui_msg)
         return self
@@ -32,22 +32,25 @@ class InitState(State):
     def process_ui(self, ui_msg):
         payload = json.loads(ui_msg.payload) if ui_msg.payload != "" else {}
         if ui_msg.type == UI.SEARCH_REQUEST:
+            request = payload['request']
+            title = request.title
+            author = request.author
             self.node.feedback_message(Messages.SEARCHING, False)
             self.node.feedback_loading()
             try:
                 books = self.node.db_adapter_proxy(json.dumps(payload['request'])).books
                 if books == '{"books": []}':
-                    self.node.feedback_message(Messages.NOT_FOUND(payload['request']))
+                    self.node.feedback_message(Messages.NOT_FOUND, True, title, author)
                 else:
-                    self.node.feedback_message(Messages.FOUND(payload['request']))
+                    self.node.feedback_message(Messages.FOUND, True, title, author)
                     self.node.feedback_books(books)
             except rospy.ServiceException:
                 print("Error during db_adapter call !")
-                self.node.feedback_message(Messages.DB_ERROR)
+                self.node.feedback_message(Messages.DB_ERROR, True, '', '')
         elif ui_msg.type == UI.NOT_UNDERSTOOD:
-            self.node.feedback_message(Messages.NOT_UNDERSTOOD)
+            self.node.feedback_message(Messages.NOT_UNDERSTOOD, True, '', '')
         elif ui_msg.type == UI.SPEECH_TRIGGER:
-            self.node.feedback_message(Messages.HOW_TO_TALK)
+            self.node.feedback_message(Messages.HOW_TO_TALK, True, '', '')
 
 
 class MovingState(State):
@@ -67,12 +70,12 @@ class MovingState(State):
             self.current_goal = LIFT_GOAL
             self.substate = MovingState.TO_LIFT
         self.node.new_goal(self.current_goal)
-        self.node.feedback_message(Messages.FOLLOW_ME)
+        self.node.feedback_message(Messages.FOLLOW_ME, True)
         self.node.set_timer(2)
 
     def on_event(self, event):
         if isinstance(event, UI):
-            self.node.feedback_message(Messages.BUSY)
+            self.node.feedback_message(Messages.BUSY, True)
         elif isinstance(event, GOAL_REACHED_EVENT):
             if self.substate == MovingState.TO_BOOK:
                 return FinalState(self.node, self.floor)

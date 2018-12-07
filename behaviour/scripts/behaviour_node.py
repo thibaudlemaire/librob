@@ -33,10 +33,10 @@ class Behaviour:
         feedback_msg.payload = books_string
         self.ui_feedback_publisher.publish(feedback_msg)
 
-    def feedback_message(self, msg, speak=True):
+    def feedback_message(self, msg, speak, title, author):
         feedback_msg = UI_feedback()
         feedback_msg.type = UI_feedback.COMMUNICATION
-        feedback_msg.payload = json.dumps({'message': msg, 'speak': speak})
+        feedback_msg.payload = json.dumps({'type': msg, 'speak': speak, 'title': title, 'author': author})
         self.ui_feedback_publisher.publish(feedback_msg)
 
     def feedback_loading(self, state=True):
