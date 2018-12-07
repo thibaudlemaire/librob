@@ -26,14 +26,19 @@ class InitState(State):
     def process_ui(self, ui_msg):
         payload = json.loads(ui_msg.payload) if ui_msg.payload != "" else {}
         if ui_msg.type == UI.SEARCH_REQUEST:
-            self.node.feedback_message(Messages.SEARCHING + ' "' + payload['request'].get('title') + '"', False)
+            self.node.feedback_message(Messages.SEARCHING, False)
             self.node.feedback_loading()
+            search_text = ''
+            if 'title' in payload['request']:
+                search_text += ' about ' + payload['request'].get('title')
+            if 'author' in payload['request']:
+                search_text += ' by ' + payload['request'].get('author')
             try:
                 books = self.node.db_adapter_proxy(json.dumps(payload['request'])).books
                 if books == '{"books": []}':
-                    self.node.feedback_message(Messages.NOT_FOUND + ' "' + payload['request'].get('title') + '"')
+                    self.node.feedback_message(Messages.NOT_FOUND + search_text)
                 else:
-                    self.node.feedback_message(Messages.FOUND + ' "' + payload['request'].get('title') + '"')
+                    self.node.feedback_message(Messages.FOUND + search_text)
                     self.node.feedback_books(books)
             except rospy.ServiceException:
                 print("Error during db_adapter call !")
