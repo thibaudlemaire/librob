@@ -26,7 +26,7 @@ class InitState(State):
     def process_ui(self, ui_msg):
         payload = json.loads(ui_msg.payload) if ui_msg.payload != "" else {}
         if ui_msg.type == UI.SEARCH_REQUEST:
-            self.node.feedback_message(Messages.SEARCHING + ' "' + payload['request'].get('title') + '"')
+            self.node.feedback_message(Messages.SEARCHING + ' "' + payload['request'].get('title') + '"', False)
             self.node.feedback_loading()
             try:
                 books = self.node.db_adapter_proxy(json.dumps(payload['request'])).books
@@ -40,6 +40,8 @@ class InitState(State):
                 self.node.feedback_message(Messages.DB_ERROR)
         elif ui_msg.type == UI.NOT_UNDERSTOOD:
             self.node.feedback_message(Messages.NOT_UNDERSTOOD)
+        elif ui_msg.type == UI.SPEECH_TRIGGER:
+            self.node.feedback_message(Messages.HOW_TO_TALK)
 
 
 class MovingState(State):

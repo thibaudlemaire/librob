@@ -30,11 +30,11 @@ class DbAdapter:
                    'conVoc': 'true'
                    }
 
-        if request.get('title') != '' and request.get('author') != '':
+        if request.get('title', '') != '' and request.get('author', '') != '':
             payload['q'] = 'title,contains,%s,AND;author,contains,%s' % (request.get("title"), request.get("author"))
-        elif request.get('author') != '':
+        elif request.get('author', '') != '':
             payload['q'] = 'author,contains,%s' % (request.get("author"))
-        elif request.get('title') != '':
+        elif request.get('title', '') != '':
             payload['q'] = 'title,contains,%s' % (request.get("title"))
 
         resp = requests.get('https://api-eu.hosted.exlibrisgroup.com/primo/v1/search', params=payload)
