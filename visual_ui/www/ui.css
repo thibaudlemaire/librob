@@ -32,6 +32,13 @@ img {
 .thumbnail{
     min-width: 65px;
 }
+.code{
+    min-width: 150px;
+}
+
+.modal-lg{
+    max-width: 70vw!important;
+}
 
 #textbox{
     visibility: hidden;
@@ -40,7 +47,6 @@ img {
 #startDiv{
     visibility: visible;
 }
-
 
 #selector{
     color:#e06055;
