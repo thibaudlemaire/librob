@@ -3,6 +3,7 @@ from librarian_msgs.srv import *
 import rospy
 import requests
 import json
+import re
 
 
 class DbAdapter:
@@ -44,15 +45,16 @@ class DbAdapter:
 
         data = resp.json()
 
-        for i in range(len(data["docs"])):
+        for doc in data['docs']:
             book = dict()
-            if data["docs"][i]["delivery"]["bestlocation"]["subLocation"].startswith("L"):
-                book['title'] = data["docs"][i]["pnx"]["display"]["title"][0]
-                book['author'] = data["docs"][i]["pnx"]["sort"]["author"][0]
-                book['code'] = data["docs"][i]["delivery"]["bestlocation"]["callNumber"][1:-2]
-                book['floor'] = int(data["docs"][i]["delivery"]["bestlocation"]["subLocation"].split(" ")[1])                    
-                book['available'] = (data["docs"][i]["delivery"]["bestlocation"]["availabilityStatus"] == "available")
-                book_list["books"].append(book)
+            if doc.get("delivery", {}).get("bestlocation", {}).get("subLocation", '').startswith("L"):
+                book['title'] = doc.get("pnx", {}).get("display", {}).get("title", [''])[0]
+                book['author'] = doc.get("pnx", {}).get("sort", {}).get("author", [''])[0]
+                book['code'] = doc.get("delivery", {}).get("bestlocation", {}).get("callNumber", [''])[1:-2]
+                book['floor'] = int(doc.get("delivery", {}).get("bestlocation", {}).get("subLocation", 'Floor ?').split(" ")[1])
+                book['available'] = (doc.get("delivery", {}).get("bestlocation", {}).get("availabilityStatus", False) == "available")
+                if re.match('^[0-9]{1,3}(\.[0-9]{1,3}){0,2} [a-zA-Z]{3}$', book['code']):
+                    book_list["books"].append(book)
 
         dumped_list = json.dumps(book_list)
         print(dumped_list)
