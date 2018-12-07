@@ -54,9 +54,14 @@ class DbAdapter:
                 book['floor'] = int(doc.get("delivery", {}).get("bestlocation", {}).get("subLocation", 'Floor ?').split(" ")[1])
                 book['available'] = (doc.get("delivery", {}).get("bestlocation", {}).get("availabilityStatus", False) == "available")
                 links = doc.get('delivery', {}).get('link', {})
-                book['thumbnail'] = next(link.get("linkURL", '')
-                                         for link in links
-                                         if link.get("displayLabel", '') == 'thumbnail' and link.get("linkURL", '') != '')
+                try:
+                    book['thumbnail'] = next(link.get("linkURL", '')
+                                             for link in links
+                                             if link.get("displayLabel", '') == 'thumbnail'
+                                             and link.get("linkURL", '') != ''
+                                             and link.get("linkURL", '') != 'no_cover')
+                except StopIteration:
+                    book['thumbnail'] = ''
                 if re.match('^[0-9]{1,3}(\.[0-9]{1,3}){0,2} [a-zA-Z]{3}$', book['code']):
                     book_list["books"].append(book)
 
