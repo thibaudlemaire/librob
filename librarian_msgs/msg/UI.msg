@@ -9,3 +9,4 @@ int8 NOT_UNDERSTOOD = 30 # Used by speech node when it doesn't understand
 Header header
 int8 type       # Need a Type constant
 string payload  # Data, JSON formated
+
