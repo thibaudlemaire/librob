@@ -80,9 +80,9 @@ UI_feedback.subscribe(function(message) {
         var msg = payload.message;
         var bubble = $('#speech-bubble');
         if (bubble.is(':visible')) {
-            bubble.stop(true).show().delay(3000 + msg.length * 50).fadeOut();
+            bubble.stop(true).show().delay(3000 + msg.length * 100).fadeOut();
         } else {
-            bubble.fadeIn().delay(3000 + msg.length * 50).fadeOut();
+            bubble.fadeIn().delay(3000 + msg.length * 100).fadeOut();
         }
         bubble.text(msg);
         if(payload.speak === true) {

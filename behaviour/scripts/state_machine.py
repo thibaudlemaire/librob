@@ -2,15 +2,12 @@
 import json
 import rospy
 from messages import Messages
-from state import State
+from state import State, Goal
 from librarian_msgs.msg import UI
-from events import TimeOutEvent
+from events import *
 
-
-LIFT_GOAL = None
-STATION_GOAL = None
-DOOR_OPEN_EVENT = object
-GOAL_REACHED_EVENT = object
+LIFT_GOAL = Goal()
+STATION_GOAL = Goal()
 
 
 class InitState(State):
@@ -73,14 +70,14 @@ class MovingState(State):
     def on_event(self, event):
         if isinstance(event, UI):
             self.node.feedback_message(Messages.BUSY)
-        elif isinstance(event, GOAL_REACHED_EVENT):
+        elif isinstance(event, GoalReachedEvent):
             if self.substate == MovingState.TO_BOOK:
                 return FinalState(self.node, self.floor)
             elif self.substate == MovingState.TO_LIFT:
                 self.substate = MovingState.WAIT
             elif self.substate == MovingState.ENTER_LIFT:
                 self.substate = MovingState.ENTER_LIFT
-        elif isinstance(event, DOOR_OPEN_EVENT):
+        elif isinstance(event, FrontClearEvent):
             if self.substate == MovingState.WAIT:
                 self.current_goal = LIFT_GOAL
                 self.node.new_goal(self.current_goal)
