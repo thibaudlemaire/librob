@@ -4,6 +4,13 @@ import json
 from librarian_msgs.msg import UI, UI_feedback, lift  # from package import message
 import speech_recognition as sr
 from nlp import NLP
+from translate import Translator
+
+lang_maps = {
+    'en-US':'en',
+    'fr-FR':'fr',
+    'it-IT':'it'
+}
 
 
 # UI is the actual message
@@ -68,6 +75,9 @@ class Speech:
                 self.publish('ui_feedback', UI_feedback.LISTENING, json.dumps(False))
 
                 if recognised:
+                    if language != 'en-US':
+                        t = Translator(to_lang='en', from_lang=lang_maps[language])
+                        recog_txt = t.translate(recog_txt)
                     
                     print('You said: ', recog_txt)
                     # natural language processing

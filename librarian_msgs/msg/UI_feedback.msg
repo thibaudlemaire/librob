@@ -5,6 +5,7 @@ int8 COMMUNICATION = 3
 int8 DIRECTION = 6 # Payload must be a dict with a "direction" (JSON string) key
 int8 LISTENING = 7
 int8 RESET = 8
+int8 DISPLAY_GO = 9 #Payload is a bool
 
 
 # SEARCH_RESPONSE example payload :

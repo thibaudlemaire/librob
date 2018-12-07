@@ -2,11 +2,39 @@
 const SPEECH_TRIGGER = 1;
 const SEARCH_REQUEST = 10;
 const BOOK_CHOSEN = 20;
+const LETS_GO = 40;
 // UI_feedback
 const SEARCH_RESPONSE = 1;
 const LOADING = 2;
 const COMMUNICATION = 3;
 const LISTENING = 7;
+const RESET = 8;
+const DISPLAY_GO = 9;
+
+var COMMUNICATION_MESSAGE = {
+    'EN':{
+        'SEARCHING': "Hmm... let me think",
+        'DB_ERROR': "Sorry, I cannot request the database",
+        'LOCATOR_ERROR': "Sorry, I cannot find the location of this book",
+        'NOT_UNDERSTOOD': "Sorry, I did not understand what you said",
+        'FOLLOW_ME': "Let's go ! Please follow me",
+        'BUSY': "Sorry, I'm still moving and cannot process your request",
+        'HOW_TO_TALK': "I'm listening, what can I do for you ?",
+        'READY': "I'm ready !",
+        'TIME_OUT': "You've been too long...",
+    },
+    'FR':{
+        'SEARCHING': "Hmm... Laissez-moi voir",
+        'DB_ERROR': "Pardon, je n'arrive pas à accéder la base de données",
+        'LOCATOR_ERROR': "Pardon, je ne trouve pas la location de votre livre",
+        'NOT_UNDERSTOOD': "Pardon, je ne vous ai pas compris",
+        'FOLLOW_ME': "Allons-y! Veuillez me suivre s'il vous plait",
+        'BUSY': "Pardon, je suis en mouvement et ne peux pas traiter votre demande",
+        'HOW_TO_TALK': "Je vous écoute, que puis-je faire pour vous ?",
+        'READY': "Je suis prêt !",
+        'TIME_OUT': "Vous avez pris trop de temps...",
+    }
+}
 
 $('#speech-bubble').hide();
 
@@ -76,8 +104,21 @@ UI_feedback.subscribe(function(message) {
     }
     else if (message.type === COMMUNICATION) {
         $('#loading_modal').modal('hide');
-        var payload = JSON.parse(message.payload);
-        var msg = payload.message;
+        var payload = JSON.parse(message.payload); // keys: 'speak', 'title', 'author', 'type'
+        var type = payload.type;
+        var title = payload.title;
+        var author = paylod.author;
+
+        if (type == 'FOUND'){
+            var msg = foundMessage(language, title, author);
+        }
+        else if (type == 'NOT_FOUND'){
+            var msg = notFoundMessage(language, title, author);
+        }
+        else {
+            var msg = COMMUNICATION_MESSAGE.language.type
+        }
+     
         var bubble = $('#speech-bubble');
         if (bubble.is(':visible')) {
             bubble.stop(true).show().delay(3000 + msg.length * 50).fadeOut();
@@ -86,7 +127,14 @@ UI_feedback.subscribe(function(message) {
         }
         bubble.text(msg);
         if(payload.speak === true) {
-            responsiveVoice.speak(msg, "UK English Male",  {pitch:9},{volume: 1},{rate: 10});
+            var selector = document.getElementById('selector');
+            var language = selector.options[selector.selectedIndex].value;
+            if (language == 'en-US') {
+                responsiveVoice.speak(msg, "UK English Male",  {pitch:9},{volume: 1},{rate: 10});
+            }
+            else if (language == 'fr-FR') {
+                responsiveVoice.speak(msg, "French Male",  {pitch:9},{volume: 1},{rate: 10});
+            }
         }
     }
     else if (message.type === RESET) {
@@ -95,6 +143,11 @@ UI_feedback.subscribe(function(message) {
         $('#result_modal').modal('hide');
         $('#mic_icon').removeClass('blinking');
     }
+
+    /*
+    else if (message.type === DISPLAY_GO) {
+        
+    }*/
 
 });
 
@@ -205,4 +258,49 @@ function sendBookCode(code) {
     });
 
     UI.publish(UI_msg);
+}
+
+
+function foundMessage(language, title, author) {
+    if (language == 'en-US'){
+        var txt = 'Here is what I found';
+        if (title != ''){
+            txt += ' for ' + title;
+        }
+        if (author != ''){
+            txt += ' by ' + author;
+        }
+    }
+    else if (language == 'fr-FR'){
+        var txt = "Voici ce que j'ai trouvé";
+        if (title != ''){
+            txt += ' pour ' + title;
+        }
+        if (author != ''){
+            txt += ' de ' + author;
+        }
+    }
+    return txt;
+}
+
+function notFOundMessage(language, title, author){
+    if (language == 'en-US'){
+        var txt = 'Sorry, I did not find any book';
+        if (title != ''){
+            txt += ' for ' + title;
+        }
+        if (author != ''){
+            txt += ' by ' + author;
+        }
+    }
+    else if (language == 'fr-FR'){
+        var txt = "Pardon, je n'ai pas trouvé de livre";
+        if (title != ''){
+            txt += ' pour ' + title;
+        }
+        if (author != ''){
+            txt += ' de ' + author;
+        }
+    }
+    return txt;
 }
