@@ -29,6 +29,9 @@ img {
     max-height: 100%;
 }
 
+.thumbnail{
+    min-width: 65px;
+}
 
 #textbox{
     visibility: hidden;
