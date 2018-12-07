@@ -121,7 +121,6 @@ function searchButtonCallback()
         type: SEARCH_REQUEST,
         payload: JSON.stringify({
             "request": {
-                'author': '',
                 'title': textfield.val()
             }
         }) 
