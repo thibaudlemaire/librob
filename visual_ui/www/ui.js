@@ -12,32 +12,10 @@ const RESET = 8;
 const DISPLAY_GO = 9;
 
 
-
-var COMMUNICATION_MESSAGE = new Object();
-var ENGLISH_MESSAGES = new Object();
-var FRENCH_MESSAGES = new Object();
-ENGLISH_MESSAGES.SEARCHING = "Hmm... let me think";
-ENGLISH_MESSAGES.DB_ERROR = "Sorry, I cannot request the database";
-ENGLISH_MESSAGES.LOCATOR_ERROR = "Sorry, I cannot find the location of this book";
-ENGLISH_MESSAGES.NOT_UNDERSTOOD = "Sorry, I did not understand what you said";
-ENGLISH_MESSAGES.FOLLOW_ME = "Let's go ! Please follow me";
-ENGLISH_MESSAGES.BUSY = "Sorry, I'm still moving and cannot process your request";
-ENGLISH_MESSAGES.HOW_TO_TALK = "I'm listening, what can I do for you ?";
-ENGLISH_MESSAGES.READY = "I'm ready !";
-ENGLISH_MESSAGES.TIME_OUT = "You've been too long...";
-FRENCH_MESSAGES.SEARCHING = "Hmm... Laissez-moi voir";
-FRENCH_MESSAGES.DB_ERROR = "Pardon, je n'arrive pas à accéder la base de données";
-FRENCH_MESSAGES.LOCATOR_ERROR = "Pardon, je ne trouve pas la location de votre livre";
-FRENCH_MESSAGES.NOT_UNDERSTOOD = "Pardon, je ne vous ai pas compris";
-FRENCH_MESSAGES.FOLLOW_ME = "Allons-y! Veuillez me suivre s'il vous plait";
-FRENCH_MESSAGES.BUSY = "Pardon, je suis en mouvement et ne peux pas traiter votre demande";
-FRENCH_MESSAGES.HOW_TO_TALK = "Je vous écoute, que puis-je faire pour vous ?";
-FRENCH_MESSAGES.READY = "Je suis prêt !";
-FRENCH_MESSAGES.TIME_OUT = "Vous avez pris trop de temps..";
-COMMUNICATION_MESSAGE.en = ENGLISH_MESSAGES;
-COMMUNICATION_MESSAGE.fr = FRENCH_MESSAGES;
-
-
+var COMMUNICATION_MESSAGES;
+$.getJSON( "COMMUNICATION_MESSAGES.json", function( json ) {
+    COMMUNICATION_MESSAGES = json;
+});
 
 $('#speech-bubble').hide();
 
@@ -112,10 +90,10 @@ UI_feedback.subscribe(function(message) {
         var title = payload.title;
         var author = payload.author;
 
-        var msg = ''
         selector = document.getElementById('selector');
         language = selector.options[selector.selectedIndex].value;
 
+        var msg = ''
         if (type == 'FOUND'){
             msg = foundMessage(language, title, author);
         }
@@ -123,15 +101,8 @@ UI_feedback.subscribe(function(message) {
             msg = notFoundMessage(language, title, author);
         }
         else {
-            if (language == 'en-US') {
-                msg = COMMUNICATION_MESSAGE['en'][type];
-                console.log(msg)
-            }
-            else if (language == 'fr-FR') {
-                msg = COMMUNICATION_MESSAGE['fr'][type];
-            }
+            msg = COMMUNICATION_MESSAGES[language][type];
         }
-     
         var bubble = $('#speech-bubble');
         if (bubble.is(':visible')) {
             bubble.stop(true).show().delay(3000 + msg.length * 100).fadeOut();
@@ -139,12 +110,15 @@ UI_feedback.subscribe(function(message) {
             bubble.fadeIn().delay(3000 + msg.length * 100).fadeOut();
         }
         bubble.text(msg);
-        if(payload.speak === true) {
+        if (payload.speak === true) {
             if (language == 'en-US') {
                 responsiveVoice.speak(msg, "UK English Male",  {pitch:9},{volume: 1},{rate: 10});
             } 
             else if (language == 'fr-FR') {
                 responsiveVoice.speak(msg, "French Female",  {pitch:1.6},{volume: 1},{rate: 10});
+            }
+            else if (language == 'it-IT') {
+                responsiveVoice.speak(msg, "Italian Male",  {pitch:1.6},{volume: 1},{rate: 10});
             }
         }
     }
@@ -175,7 +149,6 @@ UI_feedback.subscribe(function(message) {
             'language': language
         })
     });
-
     UI.publish(UI_msg);
 
 }
@@ -194,8 +167,7 @@ function searchButtonCallback()
                 'title': textfield.val()
             }
         }) 
-    });
-    
+    });  
     UI.publish(UI_msg);
     textfield.val("");
 }
@@ -271,7 +243,6 @@ function sendBookCode(code) {
     UI.publish(UI_msg);
 }
 
-
 function foundMessage(language, title, author) {
     var txt = 'Here is what I found';
     if (language == 'en-US'){
@@ -289,6 +260,15 @@ function foundMessage(language, title, author) {
         }
         if (author != ''){
             txt += ' de ' + author;
+        }
+    }
+    else if (language == 'it-IT'){
+        var txt = "Questo è ciò che ho trovato";
+        if (title != ''){
+            txt += ' per ' + title;
+        }
+        if (author != ''){
+            txt += ' di ' + author;
         }
     }
     return txt;
@@ -313,5 +293,15 @@ function notFoundMessage(language, title, author){
             txt += ' de ' + author;
         }
     }
+    else if (language == 'it-IT'){
+        var txt = "Non ho trovato nulla";
+        if (title != ''){
+            txt += ' per ' + title;
+        }
+        if (author != ''){
+            txt += ' di ' + author;
+        }
+    }
     return txt;
 }
+
