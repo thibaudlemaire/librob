@@ -69,12 +69,11 @@ class MovingState(State):
             self.substate = MovingState.TO_LIFT
         self.node.new_goal(self.current_goal)
         self.node.feedback_message(Messages.FOLLOW_ME, True, '', '')
-        self.node.set_timer(2)
+        self.node.set_timer(5)
+
 
     def on_event(self, event):
         if isinstance(event, UI):
-            self.node.feedback_message(Messages.BUSY, True, '', '')
-        elif isinstance(event, GoalReachedEvent):
             self.node.feedback_message(Messages.BUSY, True, '', '')
         elif isinstance(event, GOAL_REACHED_EVENT):
             if self.substate == MovingState.TO_BOOK:
@@ -93,7 +92,7 @@ class MovingState(State):
                 self.node.new_goal(self.current_goal)
                 self.substate = MovingState.TO_BOOK
         elif isinstance(event, TimeOutEvent):
-            self.node.feedback_message(Messages.TIME_OUT)
+            self.node.feedback_message(Messages.TIME_OUT, True, '', '')
             return InitState(self.node, self.floor)
         return self
 
