@@ -11,30 +11,33 @@ const LISTENING = 7;
 const RESET = 8;
 const DISPLAY_GO = 9;
 
-var COMMUNICATION_MESSAGE = {
-    'EN':{
-        'SEARCHING': "Hmm... let me think",
-        'DB_ERROR': "Sorry, I cannot request the database",
-        'LOCATOR_ERROR': "Sorry, I cannot find the location of this book",
-        'NOT_UNDERSTOOD': "Sorry, I did not understand what you said",
-        'FOLLOW_ME': "Let's go ! Please follow me",
-        'BUSY': "Sorry, I'm still moving and cannot process your request",
-        'HOW_TO_TALK': "I'm listening, what can I do for you ?",
-        'READY': "I'm ready !",
-        'TIME_OUT': "You've been too long...",
-    },
-    'FR':{
-        'SEARCHING': "Hmm... Laissez-moi voir",
-        'DB_ERROR': "Pardon, je n'arrive pas à accéder la base de données",
-        'LOCATOR_ERROR': "Pardon, je ne trouve pas la location de votre livre",
-        'NOT_UNDERSTOOD': "Pardon, je ne vous ai pas compris",
-        'FOLLOW_ME': "Allons-y! Veuillez me suivre s'il vous plait",
-        'BUSY': "Pardon, je suis en mouvement et ne peux pas traiter votre demande",
-        'HOW_TO_TALK': "Je vous écoute, que puis-je faire pour vous ?",
-        'READY': "Je suis prêt !",
-        'TIME_OUT': "Vous avez pris trop de temps...",
-    }
-}
+
+
+var COMMUNICATION_MESSAGE = new Object();
+var ENGLISH_MESSAGES = new Object();
+var FRENCH_MESSAGES = new Object();
+ENGLISH_MESSAGES.SEARCHING = "Hmm... let me think";
+ENGLISH_MESSAGES.DB_ERROR = "Sorry, I cannot request the database";
+ENGLISH_MESSAGES.LOCATOR_ERROR = "Sorry, I cannot find the location of this book";
+ENGLISH_MESSAGES.NOT_UNDERSTOOD = "Sorry, I did not understand what you said";
+ENGLISH_MESSAGES.FOLLOW_ME = "Let's go ! Please follow me";
+ENGLISH_MESSAGES.BUSY = "Sorry, I'm still moving and cannot process your request";
+ENGLISH_MESSAGES.HOW_TO_TALK = "I'm listening, what can I do for you ?";
+ENGLISH_MESSAGES.READY = "I'm ready !";
+ENGLISH_MESSAGES.TIME_OUT = "You've been too long...";
+FRENCH_MESSAGES.SEARCHING = "Hmm... Laissez-moi voir";
+FRENCH_MESSAGES.DB_ERROR = "Pardon, je n'arrive pas à accéder la base de données";
+FRENCH_MESSAGES.LOCATOR_ERROR = "Pardon, je ne trouve pas la location de votre livre";
+FRENCH_MESSAGES.NOT_UNDERSTOOD = "Pardon, je ne vous ai pas compris";
+FRENCH_MESSAGES.FOLLOW_ME = "Allons-y! Veuillez me suivre s'il vous plait";
+FRENCH_MESSAGES.BUSY = "Pardon, je suis en mouvement et ne peux pas traiter votre demande";
+FRENCH_MESSAGES.HOW_TO_TALK = "Je vous écoute, que puis-je faire pour vous ?";
+FRENCH_MESSAGES.READY = "Je suis prêt !";
+FRENCH_MESSAGES.TIME_OUT = "Vous avez pris trop de temps..";
+COMMUNICATION_MESSAGE.en = ENGLISH_MESSAGES;
+COMMUNICATION_MESSAGE.fr = FRENCH_MESSAGES;
+
+
 
 $('#speech-bubble').hide();
 
@@ -107,16 +110,26 @@ UI_feedback.subscribe(function(message) {
         var payload = JSON.parse(message.payload); // keys: 'speak', 'title', 'author', 'type'
         var type = payload.type;
         var title = payload.title;
-        var author = paylod.author;
+        var author = payload.author;
+
+        var msg = ''
+        selector = document.getElementById('selector');
+        language = selector.options[selector.selectedIndex].value;
 
         if (type == 'FOUND'){
-            var msg = foundMessage(language, title, author);
+            msg = foundMessage(language, title, author);
         }
         else if (type == 'NOT_FOUND'){
-            var msg = notFoundMessage(language, title, author);
+            msg = notFoundMessage(language, title, author);
         }
         else {
-            var msg = COMMUNICATION_MESSAGE.language.type
+            if (language == 'en-US') {
+                msg = COMMUNICATION_MESSAGE['en'][type];
+                console.log(msg)
+            }
+            else if (language == 'fr-FR') {
+                msg = COMMUNICATION_MESSAGE['fr'][type];
+            }
         }
      
         var bubble = $('#speech-bubble');
@@ -127,13 +140,11 @@ UI_feedback.subscribe(function(message) {
         }
         bubble.text(msg);
         if(payload.speak === true) {
-            var selector = document.getElementById('selector');
-            var language = selector.options[selector.selectedIndex].value;
             if (language == 'en-US') {
                 responsiveVoice.speak(msg, "UK English Male",  {pitch:9},{volume: 1},{rate: 10});
-            }
+            } 
             else if (language == 'fr-FR') {
-                responsiveVoice.speak(msg, "French Male",  {pitch:9},{volume: 1},{rate: 10});
+                responsiveVoice.speak(msg, "French Female",  {pitch:1.6},{volume: 1},{rate: 10});
             }
         }
     }
@@ -262,8 +273,8 @@ function sendBookCode(code) {
 
 
 function foundMessage(language, title, author) {
+    var txt = 'Here is what I found';
     if (language == 'en-US'){
-        var txt = 'Here is what I found';
         if (title != ''){
             txt += ' for ' + title;
         }
@@ -283,9 +294,9 @@ function foundMessage(language, title, author) {
     return txt;
 }
 
-function notFOundMessage(language, title, author){
+function notFoundMessage(language, title, author){
+    var txt = 'Sorry, I did not find any book';
     if (language == 'en-US'){
-        var txt = 'Sorry, I did not find any book';
         if (title != ''){
             txt += ' for ' + title;
         }
