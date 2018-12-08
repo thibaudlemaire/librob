@@ -55,13 +55,12 @@ class Behaviour:
 
     def timeout_callback(self, event):
         self.timer = None
-        print("Time out !!")
         self.state_machine.on_event(TimeOutEvent())
 
     def set_timer(self, duration):
         if isinstance(self.timer, rospy.Timer):
             self.timer.shutdown()
-        self.timer = rospy.Timer(rospy.Duration(duration), self.timeout_callback, True)
+        self.timer = rospy.Timer(rospy.Duration(duration), self.timeout_callback)
 
     def spin_node(self):
         print("Behaviour ready !")

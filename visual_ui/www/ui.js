@@ -111,6 +111,7 @@ UI_feedback.subscribe(function(message) {
         }
         bubble.text(msg);
         if (payload.speak === true) {
+            
             if (language == 'en-US') {
                 responsiveVoice.speak(msg, "UK English Male",  {pitch:9},{volume: 1},{rate: 10});
             } 
@@ -129,10 +130,17 @@ UI_feedback.subscribe(function(message) {
         $('#mic_icon').removeClass('blinking');
     }
 
-    /*
+    
     else if (message.type === DISPLAY_GO) {
+        $('#go_modal').modal('show');
         
-    }*/
+        if (payload.display === true) {
+            $('#go_modal').modal('show');
+        }
+        else {
+            $('#go_modal').modal('hide');
+        }
+    }
 
 });
 
@@ -170,6 +178,13 @@ function searchButtonCallback()
     });  
     UI.publish(UI_msg);
     textfield.val("");
+}
+
+function goButtonCallBack(){
+    var UI_msg = new ROSLIB.Message({
+        type: LETS_GO
+    });
+    UI.publish(UI_msg);
 }
 
 
