@@ -65,7 +65,7 @@ class MovingState(State):
             self.substate = MovingState.TO_LIFT
         self.node.new_goal(self.current_goal)
         self.node.feedback_message(Messages.FOLLOW_ME)
-        self.node.set_timer(2)
+        self.node.set_timer(5)
 
     def on_event(self, event):
         if isinstance(event, UI):

@@ -25,3 +25,4 @@ class Messages:
         if 'author' in request_dict:
             search_text += ' by ' + request_dict.get('author')
         return search_text
+
