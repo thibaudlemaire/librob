@@ -37,6 +37,7 @@ class Behaviour:
         feedback_msg = UI_feedback()
         feedback_msg.type = UI_feedback.COMMUNICATION
         feedback_msg.payload = json.dumps({'type': msg, 'speak': speak, 'title': title, 'author': author})
+        print(feedback_msg)
         self.ui_feedback_publisher.publish(feedback_msg)
 
     def feedback_loading(self, state=True):

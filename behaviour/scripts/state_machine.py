@@ -33,9 +33,10 @@ class InitState(State):
         payload = json.loads(ui_msg.payload) if ui_msg.payload != "" else {}
         if ui_msg.type == UI.SEARCH_REQUEST:
             request = payload['request']
-            title = request.title
-            author = request.author
-            self.node.feedback_message(Messages.SEARCHING, False)
+            print(request)
+            title = request.get('title', '')
+            author = request.get('author', '')
+            self.node.feedback_message(Messages.SEARCHING, False, '', '')
             self.node.feedback_loading()
             try:
                 books = self.node.db_adapter_proxy(json.dumps(payload['request'])).books
