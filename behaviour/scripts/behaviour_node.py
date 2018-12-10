@@ -5,8 +5,10 @@ from librarian_msgs.msg import UI, UI_feedback
 from librarian_msgs.srv import *
 from geometry_msgs.msg import PoseStamped, Pose
 from state_machine import StateMachine
-from events import TimeOutEvent
-
+from events import TimeOutEvent, GoalReachedEvent
+import thread
+import actionlib
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 class Behaviour:
     def __init__(self):
@@ -14,6 +16,7 @@ class Behaviour:
         self.ui_feedback_publisher = rospy.Publisher('ui_feedback', UI_feedback, queue_size=10)
         self.simple_goal_publisher = rospy.Publisher('move_base_simple/goal', PoseStamped, queue_size=10)
         self.timer = None
+        self.ac_goal = actionlib.SimpleActionClient('move_base', MoveBaseAction)
         # Creation of service proxies
         print("Waiting for db_adapter and locator services...")
         rospy.wait_for_service('perform_database_request', timeout=10)
@@ -45,12 +48,21 @@ class Behaviour:
         feedback_msg.payload = json.dumps(state)
         self.ui_feedback_publisher.publish(feedback_msg)
 
+    def wait_reached_goal(self):
+        wait = self.ac_goal.wait_for_result()
+        if wait and self.ac_goal.get_result():
+            self.state_machine.on_event(GoalReachedEvent())
+
     def new_goal(self, book_location):
-        goal_msg = PoseStamped()
-        goal_msg.header.frame_id = "map"
-        goal_msg.header.stamp = rospy.Time.now()
-        goal_msg.pose = book_location.pose
-        self.simple_goal_publisher.publish(goal_msg)
+        print("Waiting for moving base actionlib to be available")
+        self.ac_goal.wait_for_server(rospy.Duration(5.0))
+        print("Action goal server found")
+        goal_msg = MoveBaseGoal()
+        goal_msg.target_pose.header.frame_id = "map"
+        goal_msg.target_pose.header.stamp = rospy.Time.now()
+        goal_msg.target_pose.pose = book_location.pose
+        self.ac_goal.send_goal(goal_msg)
+        thread.start_new_thread(self.wait_reached_goal, ())
         print("New goal set !")
 
     def timeout_callback(self, event):
