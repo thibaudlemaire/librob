@@ -33,7 +33,7 @@ class Behaviour:
         feedback_msg.payload = books_string
         self.ui_feedback_publisher.publish(feedback_msg)
 
-    def feedback_message(self, msg, speak, title, author):
+    def feedback_message(self, msg, speak=True, title='', author=''):
         feedback_msg = UI_feedback()
         feedback_msg.type = UI_feedback.COMMUNICATION
         feedback_msg.payload = json.dumps({'type': msg, 'speak': speak, 'title': title, 'author': author})
@@ -60,7 +60,7 @@ class Behaviour:
     def set_timer(self, duration):
         if isinstance(self.timer, rospy.Timer):
             self.timer.shutdown()
-        self.timer = rospy.Timer(rospy.Duration(duration), self.timeout_callback)
+        self.timer = rospy.Timer(rospy.Duration(duration), self.timeout_callback, True)
 
     def spin_node(self):
         print("Behaviour ready !")
