@@ -325,3 +325,11 @@ function notFoundMessage(language, title, author){
 $('#go_modal').on('hide.bs.modal', function (e) {
     e.preventdefault();
   })
+
+
+  $(document).ready(function(){
+    $('#textInput').keypress(function(e){
+      if(e.keyCode==13)
+      $('#searchButton').click();
+    });
+});
