@@ -116,7 +116,7 @@ UI_feedback.subscribe(function(message) {
                 responsiveVoice.speak(msg, "UK English Male",  {pitch:9},{volume: 1},{rate: 10});
             } 
             else if (language == 'fr-FR') {
-                responsiveVoice.speak(msg, "French Female",  {pitch:1.6},{volume: 1},{rate: 10});
+                responsiveVoice.speak(msg, "French Male",  {pitch:2.0},{volume: 1},{rate: 10});
             }
             else if (language == 'it-IT') {
                 responsiveVoice.speak(msg, "Italian Male",  {pitch:1.6},{volume: 1},{rate: 10});
@@ -132,8 +132,7 @@ UI_feedback.subscribe(function(message) {
 
     
     else if (message.type === DISPLAY_GO) {
-        $('#go_modal').modal('show');
-        
+        var payload = JSON.parse(message.payload);        
         if (payload.display === true) {
             $('#go_modal').modal('show');
         }
@@ -320,3 +319,7 @@ function notFoundMessage(language, title, author){
     return txt;
 }
 
+
+$('#go_modal').on('hide.bs.modal', function (e) {
+    e.preventdefault();
+  })
