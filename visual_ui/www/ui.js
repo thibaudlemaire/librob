@@ -93,32 +93,34 @@ UI_feedback.subscribe(function(message) {
         selector = document.getElementById('selector');
         language = selector.options[selector.selectedIndex].value;
 
-        var msg = ''
-        if (type == 'FOUND'){
+        var msg = '';
+        if (type === 'FOUND'){
             msg = foundMessage(language, title, author);
         }
-        else if (type == 'NOT_FOUND'){
+        else if (type === 'NOT_FOUND'){
             msg = notFoundMessage(language, title, author);
         }
         else {
             msg = COMMUNICATION_MESSAGES[language][type];
         }
         var bubble = $('#speech-bubble');
-        if (bubble.is(':visible')) {
-            bubble.stop(true).show().delay(3000 + msg.length * 100).fadeOut();
+        if (bubble.is(':visible') || bubble.is(':animated')) {
+            bubble.stop(true);
+            bubble.show().delay(5000 + msg.length * 200).fadeOut();
         } else {
-            bubble.fadeIn().delay(3000 + msg.length * 100).fadeOut();
+            bubble.fadeIn().delay(3000 + msg.length * 200).fadeOut();
         }
         bubble.text(msg);
         if (payload.speak === true) {
             
-            if (language == 'en-US') {
+            if (language === 'en-US') {
                 responsiveVoice.speak(msg, "UK English Male",  {pitch:9},{volume: 1},{rate: 10});
             } 
-            else if (language == 'fr-FR') {
-                responsiveVoice.speak(msg, "French Male",  {pitch:2.0},{volume: 1},{rate: 10});
+
+            else if (language === 'fr-FR') {
+                responsiveVoice.speak(msg, "French Female",  {pitch:1.6},{volume: 1},{rate: 10});
             }
-            else if (language == 'it-IT') {
+            else if (language === 'it-IT') {
                 responsiveVoice.speak(msg, "Italian Male",  {pitch:1.6},{volume: 1},{rate: 10});
             }
         }
