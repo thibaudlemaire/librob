@@ -87,6 +87,7 @@ class MovingState(State):
                 self.node.new_goal(self.current_goal)
                 self.substate = MovingState.ENTER_LIFT
             elif self.substate == MovingState.USING_LIFT:
+                self.floor = self.global_goal.floor
                 self.current_goal = self.global_goal
                 self.node.new_goal(self.current_goal)
                 self.substate = MovingState.TO_BOOK
@@ -107,7 +108,7 @@ class FinalState(State):
 class StateMachine(object):
     def __init__(self, behaviour_node):
         self.node = behaviour_node
-        self.current_state = InitState(self.node, 1)
+        self.current_state = InitState(self.node, 4)
 
     def on_event(self, event):
         self.current_state = self.current_state.on_event(event)
