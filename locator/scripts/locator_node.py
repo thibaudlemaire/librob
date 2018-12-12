@@ -15,7 +15,7 @@ class LocatorNode():
 		print("Getting location request for " + str(req))
 		location, orientation = self.locator.returnLocation(req.code)
 		response = book_locatorResponse()
-		response.floor = 5
+		response.floor = 4
 		response.pose = Pose()
 		response.pose.position = Point(location[0], location[1], location[2])
 		response.pose.orientation = Quaternion(orientation[0], orientation[1],
