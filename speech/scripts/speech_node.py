@@ -26,7 +26,6 @@ class Speech:
         with self.mic as source:
             self.r.adjust_for_ambient_noise(source)
         self.nlp = NLP()
-
         print('Speech node ready')
 
     def recognize(self, source, language):
