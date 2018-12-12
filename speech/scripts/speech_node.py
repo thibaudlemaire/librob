@@ -26,7 +26,6 @@ class Speech:
         with self.mic as source:
             self.r.adjust_for_ambient_noise(source)
         self.nlp = NLP()
-
         print('Speech node ready')
 
     def recognize(self, source, language):
@@ -80,6 +79,8 @@ class Speech:
                         recog_txt = t.translate(recog_txt)
                     
                     print('You said: ', recog_txt)
+                    self.publish('ui_command', UI.SEARCH_REQUEST, json.dumps({'request': recog_txt}))
+
                     # natural language processing
                     understood, nlp_txt = self.nlp.parse(recog_txt)
 
