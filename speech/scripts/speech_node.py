@@ -3,7 +3,7 @@ import rospy
 import json
 from librarian_msgs.msg import UI, UI_feedback, lift  # from package import message
 import speech_recognition as sr
-from nlp import NLP
+#from nlp import NLP
 from translate import Translator
 
 lang_maps = {
@@ -79,7 +79,10 @@ class Speech:
                         recog_txt = t.translate(recog_txt)
                     
                     print('You said: ', recog_txt)
+                    self.publish('ui_command', UI.SEARCH_REQUEST, json.dumps({'request': recog_txt}))
+
                     # natural language processing
+                    """
                     understood, nlp_txt = self.nlp.parse(recog_txt)
 
                     if understood:
@@ -88,6 +91,7 @@ class Speech:
                     else:
                         self.publish('ui_command', UI.NOT_UNDERSTOOD, '')
                         print('Natural Language Processing error: ', nlp_txt)
+                    """
 
                 else:
                     self.publish('ui_command', UI.NOT_UNDERSTOOD, '')
