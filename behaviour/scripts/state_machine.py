@@ -3,7 +3,7 @@ import json
 import rospy
 from messages import Messages
 from state import State, Goal
-from librarian_msgs.msg import UI
+from librarian_msgs.msg import UI, UI_feedback
 from events import *
 
 LIFT_GOAL = Goal()
@@ -18,7 +18,10 @@ class InitState(State):
                 payload = json.loads(ui_msg.payload) if ui_msg.payload != "" else {}
                 try:
                     goal = self.node.locator_proxy(payload['chosen_code'])
-                    return MovingState(self.node, self.floor, goal)
+                    if goal.pose.position == [0,0,0]:
+                        self.node.feedback_message(Messages.OUT_OF_RANGE)
+                    else:
+                        return MovingState(self.node, self.floor, goal)
                 except rospy.ServiceException:
                     print("Error during locator call !")
                     self.node.feedback_message(Messages.LOCATOR_ERROR)
@@ -69,52 +72,52 @@ class MovingState(State):
             self.substate = MovingState.TO_LIFT
         self.node.new_goal(self.current_goal)
         self.node.feedback_message(Messages.FOLLOW_ME)
-        self.node.set_timer(60)
 
     def on_event(self, event):
         if isinstance(event, UI):
+            ui_msg = event
+            if ui_msg.type == UI.LETS_GO:
+                if self.substate == MovingState.WAIT:
+                    self.current_goal = LIFT_GOAL
+                    self.node.new_goal(self.current_goal)
+                    self.substate = MovingState.ENTER_LIFT
+                elif self.substate == MovingState.USING_LIFT:
+                    self.current_goal = self.global_goal
+                    self.floor = current_goal.floor
+                    self.node.new_goal(self.current_goal)
+                    self.substate = MovingState.TO_BOOK
+            else:
             self.node.feedback_message(Messages.BUSY, True)
         elif isinstance(event, GoalReachedEvent):
             if self.substate == MovingState.TO_BOOK:
                 if global_goal == STATION_GOAL:
-                    return InitState
+                    return InitState(self.node, self.floor)
                 else:
                     return FinalState(self.node, self.floor)
             elif self.substate == MovingState.TO_LIFT:
                 self.substate = MovingState.WAIT
+                self.node.feedback_go()
             elif self.substate == MovingState.ENTER_LIFT:
-                self.substate = MovingState.ENTER_LIFT
-        elif isinstance(event, FrontClearEvent):
-            if self.substate == MovingState.WAIT:
-                self.current_goal = LIFT_GOAL
-                self.node.new_goal(self.current_goal)
-                self.substate = MovingState.ENTER_LIFT
-            elif self.substate == MovingState.USING_LIFT:
-                self.floor = self.global_goal.floor
-                self.current_goal = self.global_goal
-                self.node.new_goal(self.current_goal)
-                self.substate = MovingState.TO_BOOK
-        elif isinstance(event, TimeOutEvent):
-            self.node.feedback_message(Messages.TIME_OUT, True)
-            return InitState(self.node, self.floor)
+                self.substate = MovingState.USING_LIFT
+                self.node.feedback_go()
         return self
 
 
 class FinalState(State):
     def __init__(self, node, current_floor):
         super(FinalState, self).__init__(node, current_floor)
+        self.node.feedback_message(Messages.INDICATE, True)
         self.node.set_timer(5)
 
     def on_event(self, event):
         if isinstance(event, TimeOutEvent):
-            self.node.feedback_message(Messages.TIME_OUT, True)
-            return MovingState(self.node, current_floor, STATION_GOAL)
+            return MovingState(self.node, self.floor, STATION_GOAL)
 
 
 class StateMachine(object):
     def __init__(self, behaviour_node):
         self.node = behaviour_node
-        self.current_state = InitState(self.node, 4)
+        self.current_state = InitState(self.node, 1)
 
     def on_event(self, event):
         self.current_state = self.current_state.on_event(event)

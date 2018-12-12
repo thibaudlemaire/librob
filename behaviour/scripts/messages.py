@@ -10,3 +10,5 @@ class Messages:
     TIME_OUT = "TIME_OUT"
     NOT_FOUND = "NOT_FOUND"
     FOUND = "FOUND"
+    INDICATE = "BOOK_HERE"
+    OUT_OF_RANGE = 'OUT_OF_RANGE'
