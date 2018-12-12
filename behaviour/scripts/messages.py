@@ -11,3 +11,5 @@ class Messages:
     NOT_FOUND = "NOT_FOUND"
     FOUND = "FOUND"
     ARRIVED = "ARRIVED"
+    INDICATE = "BOOK_HERE"
+    OUT_OF_RANGE = 'OUT_OF_RANGE'
