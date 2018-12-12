@@ -10,3 +10,4 @@ class Messages:
     TIME_OUT = "TIME_OUT"
     NOT_FOUND = "NOT_FOUND"
     FOUND = "FOUND"
+    ARRIVED = "ARRIVED"

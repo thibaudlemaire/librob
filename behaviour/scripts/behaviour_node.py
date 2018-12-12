@@ -61,6 +61,7 @@ class Behaviour:
         goal_msg.target_pose.header.frame_id = "map"
         goal_msg.target_pose.header.stamp = rospy.Time.now()
         goal_msg.target_pose.pose = book_location.pose
+	print(book_location.pose)
         self.ac_goal.send_goal(goal_msg)
         thread.start_new_thread(self.wait_reached_goal, ())
         print("New goal set !")

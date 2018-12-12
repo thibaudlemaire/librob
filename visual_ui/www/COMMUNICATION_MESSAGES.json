@@ -9,7 +9,8 @@
         "BUSY": "Sorry, I'm still moving and cannot process your request",
         "HOW_TO_TALK": "I'm listening, what can I do for you ?",
         "READY": "I'm ready !",
-        "TIME_OUT": "You've been too long..."
+        "TIME_OUT": "You've been too long...",
+	"ARRIVED": "We have arrived at your book shelf !"
     },
     "fr-FR":
     {
@@ -21,7 +22,8 @@
         "BUSY": "Pardon, je suis en mouvement et ne peux pas traiter votre demande",
         "HOW_TO_TALK": "Je vous écoute, que puis-je faire pour vous ?",
         "READY": "Je suis prêt !",
-        "TIME_OUT": "Vous avez pris trop de temps..."
+        "TIME_OUT": "Vous avez pris trop de temps...",
+	"ARRIVED": "Nous avons atteint votre livre !"
     },
     "it-IT":
     {
@@ -33,7 +35,8 @@
         "BUSY": "Scusa sono impegnato non posso processare la tua richiesta ora",
         "HOW_TO_TALK": "Sono tutto orecchie. Cosa posso fare per te ?",
         "READY": "Sono pronto !",
-        "TIME_OUT": "Ci hai messo troppo tempo..."
+        "TIME_OUT": "Ci hai messo troppo tempo...",
+	"ARRIVED": "Siamo arrivati al tuo scaffale !"
     }
 }
   

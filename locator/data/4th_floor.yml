@@ -1,4 +1,7 @@
 # Imperial College Library allocation of books at the fifth floor
+000 AAA: #Fallback
+    - [0,0,0]
+    - [0,0,0,0]
 54 ACC:  # 1
     - [22.27, 14.5, 0]
     - [0, 0, 0.73, 0.67]
