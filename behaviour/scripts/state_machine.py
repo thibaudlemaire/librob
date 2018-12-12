@@ -69,14 +69,17 @@ class MovingState(State):
             self.substate = MovingState.TO_LIFT
         self.node.new_goal(self.current_goal)
         self.node.feedback_message(Messages.FOLLOW_ME)
-        self.node.set_timer(5)
+        self.node.set_timer(60)
 
     def on_event(self, event):
         if isinstance(event, UI):
             self.node.feedback_message(Messages.BUSY, True)
         elif isinstance(event, GoalReachedEvent):
             if self.substate == MovingState.TO_BOOK:
-                return FinalState(self.node, self.floor)
+                if global_goal == STATION_GOAL:
+                    return InitState
+                else:
+                    return FinalState(self.node, self.floor)
             elif self.substate == MovingState.TO_LIFT:
                 self.substate = MovingState.WAIT
             elif self.substate == MovingState.ENTER_LIFT:
@@ -100,9 +103,12 @@ class MovingState(State):
 class FinalState(State):
     def __init__(self, node, current_floor):
         super(FinalState, self).__init__(node, current_floor)
+        self.node.set_timer(5)
 
     def on_event(self, event):
-        pass
+        if isinstance(event, TimeOutEvent):
+            self.node.feedback_message(Messages.TIME_OUT, True)
+            return MovingState(self.node, current_floor, STATION_GOAL)
 
 
 class StateMachine(object):

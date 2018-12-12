@@ -14,14 +14,15 @@ class NLP():
         # create NLU Engine
         self.engine = SnipsNLUEngine(config=CONFIG_EN)
         # train engine
-        """
+       
+	""" 
         with io.open("snips/nlp_db.json") as f:
             dataset = json.load(f)
         print('start training')
         self.engine.fit(dataset=dataset)
         print('finished training')
         self.engine.persist('nlu_engine')
-        """  
+        """ 
         engine_location = rospy.get_param("~engine_location")
 
         self.engine = SnipsNLUEngine.from_path(engine_location)
