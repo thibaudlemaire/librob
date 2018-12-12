@@ -1,5 +1,5 @@
 {
-    "en-US":
+    en-US:
     {
         "SEARCHING": "Hmm... let me think",
         "DB_ERROR": "Sorry, I cannot request the database",
@@ -11,7 +11,7 @@
         "READY": "I'm ready !",
         "TIME_OUT": "You've been too long..."
     },
-    "fr-FR":
+    'fr-FR':
     {
         "SEARCHING": "Hmm... Laissez-moi réfléchir",
         "DB_ERROR": "Pardon, je n'arrive pas à accéder la base de données",
@@ -23,7 +23,7 @@
         "READY": "Je suis prêt !",
         "TIME_OUT": "Vous avez pris trop de temps..."
     },
-    "it-IT":
+    'it-IT':
     {
         "SEARCHING": "Hmm ..fammi pensare",
         "DB_ERROR": "Scusa, non riesco ad accedere al database",

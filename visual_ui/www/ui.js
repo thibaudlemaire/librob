@@ -11,11 +11,52 @@ const LISTENING = 7;
 const RESET = 8;
 const DISPLAY_GO = 9;
 
+const COMMUNICATION_MESSAGES = {
+    'en-US':
+    {
+        "SEARCHING": "Hmm... let me think",
+        "DB_ERROR": "Sorry, I cannot request the database",
+        "LOCATOR_ERROR": "Sorry, I cannot find the location of this book",
+        "NOT_UNDERSTOOD": "Sorry, I did not understand what you said",
+        "FOLLOW_ME": "Let's go ! Please follow me",
+        "BUSY": "Sorry, I'm still moving and cannot process your request",
+        "HOW_TO_TALK": "I'm listening, what can I do for you ?",
+        "READY": "I'm ready !",
+        "TIME_OUT": "You've been too long...",
+        "ARRIVED": "Here is your book !"
+    },
+    'fr-FR':
+    {
+        "SEARCHING": "Hmm... Laissez-moi réfléchir",
+        "DB_ERROR": "Pardon, je n'arrive pas à accéder la base de données",
+        "LOCATOR_ERROR": "Pardon, je ne trouve pas la location de votre livre",
+        "NOT_UNDERSTOOD": "Pardon, je ne vous ai pas compris",
+        "FOLLOW_ME": "Allons-y! Veuillez me suivre s'il vous plait",
+        "BUSY": "Pardon, je suis en mouvement et ne peux pas traiter votre demande",
+        "HOW_TO_TALK": "Je vous écoute, que puis-je faire pour vous ?",
+        "READY": "Je suis prêt !",
+        "TIME_OUT": "Vous avez pris trop de temps...",
+        "ARRIVED": "Voici votre livre !"
+    },
+    'it-IT':
+    {
+        "SEARCHING": "Hmm ..fammi pensare",
+        "DB_ERROR": "Scusa, non riesco ad accedere al database",
+        "LOCATOR_ERROR": "andiamo! Seguimi",
+        "NOT_UNDERSTOOD": "Scusa, non ho capito ciò che hai detto",
+        "FOLLOW_ME": "Andiamo! Seguimi",
+        "BUSY": "Scusa sono impegnato non posso processare la tua richiesta ora",
+        "HOW_TO_TALK": "Sono tutto orecchie. Cosa posso fare per te ?",
+        "READY": "Sono pronto !",
+        "TIME_OUT": "Ci hai messo troppo tempo..."
+    }
+};
 
-var COMMUNICATION_MESSAGES;
+
+/*var COMMUNICATION_MESSAGES;
 $.getJSON( "COMMUNICATION_MESSAGES.json", function( json ) {
     COMMUNICATION_MESSAGES = json;
-});
+});*/
 
 $('#speech-bubble').hide();
 

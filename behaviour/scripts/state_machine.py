@@ -5,9 +5,16 @@ from messages import Messages
 from state import State, Goal
 from librarian_msgs.msg import UI
 from events import *
+from geometry_msgs.msg import Pose
+
 
 LIFT_GOAL = Goal()
-STATION_GOAL = Goal()
+pose = Pose()
+pose.position.x = 28
+pose.position.y = 10
+pose.orientation.z = 0.67
+pose.orientation.z = 0.73
+STATION_GOAL = Goal(pose, 4)
 
 
 class InitState(State):
@@ -69,15 +76,15 @@ class MovingState(State):
             self.substate = MovingState.TO_LIFT
         self.node.new_goal(self.current_goal)
         self.node.feedback_message(Messages.FOLLOW_ME)
-        self.node.set_timer(60)
+        self.node.set_timer(120)
 
     def on_event(self, event):
         if isinstance(event, UI):
             self.node.feedback_message(Messages.BUSY, True)
         elif isinstance(event, GoalReachedEvent):
             if self.substate == MovingState.TO_BOOK:
-                if global_goal == STATION_GOAL:
-                    return InitState
+                if self.global_goal == STATION_GOAL:
+                    return InitState(self.node, self.floor)
                 else:
                     return FinalState(self.node, self.floor)
             elif self.substate == MovingState.TO_LIFT:
@@ -96,6 +103,7 @@ class MovingState(State):
                 self.substate = MovingState.TO_BOOK
         elif isinstance(event, TimeOutEvent):
             self.node.feedback_message(Messages.TIME_OUT, True)
+            print('Timeout while moving')
             return InitState(self.node, self.floor)
         return self
 
@@ -103,12 +111,13 @@ class MovingState(State):
 class FinalState(State):
     def __init__(self, node, current_floor):
         super(FinalState, self).__init__(node, current_floor)
-        self.node.set_timer(5)
+        self.node.feedback_message(Messages.ARRIVED, True)
+        self.node.set_timer(10)
 
     def on_event(self, event):
         if isinstance(event, TimeOutEvent):
             self.node.feedback_message(Messages.TIME_OUT, True)
-            return MovingState(self.node, current_floor, STATION_GOAL)
+            return MovingState(self.node, self.floor, STATION_GOAL)
 
 
 class StateMachine(object):

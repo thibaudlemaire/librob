@@ -51,6 +51,7 @@ class Behaviour:
     def wait_reached_goal(self):
         wait = self.ac_goal.wait_for_result()
         if wait and self.ac_goal.get_result():
+            print("Goal reached !")
             self.state_machine.on_event(GoalReachedEvent())
 
     def new_goal(self, book_location):
