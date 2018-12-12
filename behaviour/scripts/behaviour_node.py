@@ -19,8 +19,8 @@ class Behaviour:
         self.ac_goal = actionlib.SimpleActionClient('move_base', MoveBaseAction)
         # Creation of service proxies
         print("Waiting for db_adapter and locator services...")
-        rospy.wait_for_service('perform_database_request', timeout=10)
-        rospy.wait_for_service('locate_book', timeout=10)
+        rospy.wait_for_service('perform_database_request', timeout=20)
+        rospy.wait_for_service('locate_book', timeout=20)
         print("Services found, setting up proxies")
         try:
             self.db_adapter_proxy = rospy.ServiceProxy('perform_database_request', db_request)

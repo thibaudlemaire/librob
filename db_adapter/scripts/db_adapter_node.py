@@ -20,7 +20,7 @@ class DbAdapter:
                    'scope': 'LRSCOP_44IMP',
                    'lang': 'eng',
                    'offset': '0',
-                   'limit': '100',
+                   'limit': '20',
                    'sort': 'rank',
                    'inst': '44IMP',
                    'multiFacets': 'facet_library,include,44IMP_CENTRAL_LIB|,|facet_rtype,include,books',
@@ -44,7 +44,6 @@ class DbAdapter:
             raise Exception('GET /primo/v1/search/ {}'.format(resp.status_code))
 
         data = resp.json()
-
         for doc in data['docs']:
             book = dict()
             if doc.get("delivery", {}).get("bestlocation", {}).get("subLocation", '').startswith("L"):

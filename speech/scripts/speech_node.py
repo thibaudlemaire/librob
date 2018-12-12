@@ -79,7 +79,7 @@ class Speech:
                         recog_txt = t.translate(recog_txt)
                     
                     print('You said: ', recog_txt)
-                    self.publish('ui_command', UI.SEARCH_REQUEST, json.dumps({'request': recog_txt}))
+                    #self.publish('ui_command', UI.SEARCH_REQUEST, json.dumps({'request': recog_txt}))
 
                     # natural language processing
                     understood, nlp_txt = self.nlp.parse(recog_txt)

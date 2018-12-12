@@ -23,7 +23,9 @@ const COMMUNICATION_MESSAGES = {
         "HOW_TO_TALK": "I'm listening, what can I do for you ?",
         "READY": "I'm ready !",
         "TIME_OUT": "You've been too long...",
-        "ARRIVED": "Here is your book !"
+        "INDICATE": "Here is your book !",
+        "OUT_OF_RANGE": "Sorry, I can't go there",
+        "SEE_YOU": "See you soon"
     },
     'fr-FR':
     {
@@ -36,7 +38,9 @@ const COMMUNICATION_MESSAGES = {
         "HOW_TO_TALK": "Je vous écoute, que puis-je faire pour vous ?",
         "READY": "Je suis prêt !",
         "TIME_OUT": "Vous avez pris trop de temps...",
-        "ARRIVED": "Voici votre livre !"
+        "INDICATE": "Voici votre livre !",
+        "OUT_OF_RANGE": "Désolé, je ne peux pas aller là bas",
+        "SEE_YOU": "A bientôt"
     },
     'it-IT':
     {
@@ -48,7 +52,10 @@ const COMMUNICATION_MESSAGES = {
         "BUSY": "Scusa sono impegnato non posso processare la tua richiesta ora",
         "HOW_TO_TALK": "Sono tutto orecchie. Cosa posso fare per te ?",
         "READY": "Sono pronto !",
-        "TIME_OUT": "Ci hai messo troppo tempo..."
+        "TIME_OUT": "Ci hai messo troppo tempo...",
+        "INDICATE": "Here is your book !",
+        "OUT_OF_RANGE": "Sorry, I can't go there",
+        "SEE_YOU": "See you soon"
     }
 };
 

@@ -10,6 +10,6 @@ class Messages:
     TIME_OUT = "TIME_OUT"
     NOT_FOUND = "NOT_FOUND"
     FOUND = "FOUND"
-    ARRIVED = "ARRIVED"
-    INDICATE = "BOOK_HERE"
+    INDICATE = "INDICATE"
     OUT_OF_RANGE = 'OUT_OF_RANGE'
+    SEE_YOU = 'SEE_YOU'

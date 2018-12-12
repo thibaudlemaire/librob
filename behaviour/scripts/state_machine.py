@@ -25,7 +25,7 @@ class InitState(State):
                 payload = json.loads(ui_msg.payload) if ui_msg.payload != "" else {}
                 try:
                     goal = self.node.locator_proxy(payload['chosen_code'])
-                    if goal.pose.position == [0,0,0]:
+                    if goal.pose.position.x == 0 and goal.pose.position.y == 0 and goal.pose.position.z == 0:
                         self.node.feedback_message(Messages.OUT_OF_RANGE)
                     else:
                         return MovingState(self.node, self.floor, goal)
@@ -78,7 +78,8 @@ class MovingState(State):
             self.current_goal = LIFT_GOAL
             self.substate = MovingState.TO_LIFT
         self.node.new_goal(self.current_goal)
-        self.node.feedback_message(Messages.FOLLOW_ME)
+        if self.global_goal != STATION_GOAL:
+            self.node.feedback_message(Messages.FOLLOW_ME)
         self.node.set_timer(120)
 
     def on_event(self, event):
@@ -95,7 +96,7 @@ class MovingState(State):
                     self.node.new_goal(self.current_goal)
                     self.substate = MovingState.TO_BOOK
             else:
-            self.node.feedback_message(Messages.BUSY, True)
+                self.node.feedback_message(Messages.BUSY, True)
         elif isinstance(event, GoalReachedEvent):
             if self.substate == MovingState.TO_BOOK:
                 if self.global_goal == STATION_GOAL:
@@ -134,7 +135,7 @@ class FinalState(State):
 
     def on_event(self, event):
         if isinstance(event, TimeOutEvent):
-            self.node.feedback_message(Messages.TIME_OUT, True)
+            self.node.feedback_message(Messages.SEE_YOU, True)
             return MovingState(self.node, self.floor, STATION_GOAL)
 
 
