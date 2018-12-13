@@ -32,12 +32,14 @@ class Speech:
         print('Speech starts listening')
         try:
             audio = self.r.listen(source, timeout=2.0, phrase_time_limit=8.0)
-
+            self.publish('ui_feedback', UI_feedback.LISTENING, json.dumps(False))
+            self.publish('ui_feedback', UI_feedback.LOADING, json.dumps(True))
             print('Speech starts recognition')
             text = self.r.recognize_google(audio, language=language)
             print('Speech stops recognition')
             return True, text
         except Exception as e:
+            self.publish('ui_feedback', UI_feedback.LOADING, json.dumps(False))
             return False, e
 
     # function to publish a given message on a given topic
@@ -71,7 +73,6 @@ class Speech:
             with self.mic as source:
                 self.publish('ui_feedback', UI_feedback.LISTENING, json.dumps(True))
                 recognised, recog_txt = self.recognize(source, language)
-                self.publish('ui_feedback', UI_feedback.LISTENING, json.dumps(False))
 
                 if recognised:
                     if language != 'en-US':

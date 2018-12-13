@@ -25,7 +25,8 @@ const COMMUNICATION_MESSAGES = {
         "TIME_OUT": "You've been too long...",
         "INDICATE": "Here is your book !",
         "OUT_OF_RANGE": "Sorry, I can't go there",
-        "SEE_YOU": "See you soon"
+        "SEE_YOU": "See you soon",
+	"INSTRUCTIONS": "Tap the search icon to type in a title, or tap the mic icon for a spoken request"
     },
     'fr-FR':
     {
@@ -40,7 +41,8 @@ const COMMUNICATION_MESSAGES = {
         "TIME_OUT": "Vous avez pris trop de temps...",
         "INDICATE": "Voici votre livre !",
         "OUT_OF_RANGE": "Désolé, je ne peux pas aller là bas",
-        "SEE_YOU": "A bientôt"
+        "SEE_YOU": "A bientôt",
+	"INSTRUCTIONS": "Touchez l'icone de recherche pour entrer un titre, ou touchez l'icone du micro pour une demande vocale"
     },
     'it-IT':
     {
@@ -53,9 +55,10 @@ const COMMUNICATION_MESSAGES = {
         "HOW_TO_TALK": "Sono tutto orecchie. Cosa posso fare per te ?",
         "READY": "Sono pronto !",
         "TIME_OUT": "Ci hai messo troppo tempo...",
-        "INDICATE": "Here is your book !",
-        "OUT_OF_RANGE": "Sorry, I can't go there",
-        "SEE_YOU": "See you soon"
+        "INDICATE": "Ecco qui il tuo libro!",
+	"INSTRUCTIONS": "Clicca l'icona cerca per scrivere il titolo,oppure quella microfono per richiederlo vocalmente",
+        "OUT_OF_RANGE": "Scusami, non posso andare lì",
+        "SEE_YOU": "Ciao!"
     }
 };
 

@@ -3,7 +3,7 @@
     <arg name="coef" default="0.5"/>
     <arg name="p2os" default="true"/>
     <arg name="joy_port" default="/dev/input/js0"/>
-    <arg name="p2os_port" default="/dev/ttyUSB1" />
+    <arg name="p2os_port" default="/dev/ttyUSB0" />
 
     <node pkg="navigation" name="teleop" type="teleop.py">
         <param name="coef" value="$(arg coef)" />

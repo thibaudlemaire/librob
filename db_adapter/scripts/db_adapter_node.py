@@ -32,11 +32,14 @@ class DbAdapter:
                    }
 
         if request.get('title', '') != '' and request.get('author', '') != '':
-            payload['q'] = 'title,contains,%s,AND;author,contains,%s' % (request.get("title"), request.get("author"))
+            payload['q'] = 'any,contains,%s,OR;any,contains,%s' % (request.get("title"), request.get("author"))
+            #payload['q'] = 'title,contains,%s,OR;author,contains,%s' % (request.get("title"), request.get("author"))
         elif request.get('author', '') != '':
-            payload['q'] = 'author,contains,%s' % (request.get("author"))
+            payload['q'] = 'any,contains,%s' % (request.get("author"))
+            #payload['q'] = 'author,contains,%s' % (request.get("author"))
         elif request.get('title', '') != '':
-            payload['q'] = 'title,contains,%s' % (request.get("title"))
+            payload['q'] = 'any,contains,%s' % (request.get("title"))
+            #payload['q'] = 'title,contains,%s' % (request.get("title"))
 
         resp = requests.get('https://api-eu.hosted.exlibrisgroup.com/primo/v1/search', params=payload)
 
@@ -65,7 +68,7 @@ class DbAdapter:
                     book_list["books"].append(book)
 
         dumped_list = json.dumps(book_list)
-        print(dumped_list)
+        print("Books found : ", len(book_list["books"]))
 
         return db_requestResponse(dumped_list)
 
